@@ -1,0 +1,300 @@
+/*
+*   Custom CSS for the ETML doc site
+*   Dark theme final version
+*   Made by Viktor Stoimenovski, Ricardo de Almeida, Sebastien Duruz, Youness Takache
+*   27.08.2021 - by Viktor
+*/
+
+/* Change text color on the whole page */
+body{
+    color: #D8DEE9;
+}
+
+/* Import of the etml font */
+@font-face {
+  font-family: ETMLFont;
+  src: url(ETML-new.ttf);
+}
+
+/* Justify of all the  */
+p{
+    text-align: justify;
+}
+
+/* Remove the max width on the pages, so all the screen has text */
+.wy-nav-content{
+    max-width: none;
+}
+/* Change bg of the nav */
+.wy-nav-content-wrap{
+    background-color: #2E3440;
+}
+
+/*Change the background color of the title of the nav to the ETML color*/
+.wy-side-nav-search {
+    background-color: #004595;
+}
+
+/*Change the background color of the title of the nav to the ETML color*/
+.wy-nav-top{
+    background-color: #004595;
+}
+
+/* Change bg of the nav */
+.wy-nav-side {
+    background-color: #262b35;
+}
+
+/* Change bg of the nav */
+.highlight {
+    background-color: #262b35;
+}
+
+/* Changes the color of the button */
+.btn-neutral {
+    background-color: #D8DEE9!important;
+    color: #262b35!important;
+}
+
+/* Remove the shadow on the next page button */
+.btn{
+    box-shadow: none;
+}
+
+/* remove the color change on visited pages in the menu */
+.wy-menu-vertical a:visited{
+    color:#D8DEE9;
+}
+
+/* text color of the current class */
+.current{
+    color:#2E3440;
+}
+
+/* Change of the font size in the table on the main page */
+.field-name{
+    font-weight: bold!important;
+    font-size: 18px!important;
+}
+
+/* Change of the home icon in the breadcrumb into the ETML logo */
+.fa-home::before, .icon-home::before {
+    content: "ETML";
+    font-family: ETMLFont;
+    color: #D8DEE9;
+    letter-spacing: 1px;
+}
+
+/* Change of the home icon in the nav into the ETML logo */
+.wy-side-nav-search .icon-home::before {
+    content: "ETML";
+    font-family: ETMLFont;
+    color: white;
+    letter-spacing: 1px;
+    margin-right: 100px;
+}
+
+/* Change of all visited links on the website */
+a:visited {
+    color: #2980b9;
+  }
+
+/* change of visited color in the nav */  
+.wy-side-nav-search>a:visited {
+    color: white;
+  }
+
+.wy-side-nav-search input[type=text] {
+    border-radius: 8px;
+    border-color: #D8DEE9;
+}
+
+/* Change of the tables color */
+.row-even{
+    color: black;
+}
+
+.head{
+    color: #D8DEE9;
+}
+
+/* Fix of the img deformation */
+.rst-content img{
+    max-width: 100%!important;
+    height: auto!important;
+}
+
+/* color of a php element in the code blocks */
+.fm{
+    color: #05efc5;
+}
+
+/*Change nav color when selected*/
+
+.wy-menu-vertical li.current {
+    background: #4B505B;
+}
+
+/* Borders of the main list */
+.wy-menu-vertical li.toctree-l1.current>a {
+    border-bottom: 1px solid #363738;
+    border-top: 1px solid #363738;
+}
+
+/* First line of the multi list */
+.wy-menu-vertical li.current>a{
+    background: #2A2F39;
+    color: #d9d9d9;
+}
+
+/* Background color of the current l2 list title */
+.wy-menu-vertical li.toctree-l2.current>a{
+    background: #2E3440;
+}
+
+/* Background color of all the lists under the main one */
+.wy-menu-vertical li.toctree-l2 a, .wy-menu-vertical li.toctree-l3 a, .wy-menu-vertical li.toctree-l4 a, .wy-menu-vertical li.toctree-l5 a, .wy-menu-vertical li.toctree-l6 a, .wy-menu-vertical li.toctree-l7 a, .wy-menu-vertical li.toctree-l8 a, .wy-menu-vertical li.toctree-l9 a, .wy-menu-vertical li.toctree-l10 a{
+    color: #d9d9d9!important;
+    background: #2E3440!important;
+}
+
+/* Hover dans le menu */
+.reference.internal:hover{
+    background: #2E3440!important;
+}
+
+/* Changes current tab color in the nav */
+.reference.internal.current{
+    background: #484e5c!important;
+}
+
+/* Removes the black square behind images when hovering */
+image-reference:hover {
+    background-color: none;
+}
+
+/* Makes the expanding icon more visible */
+.toctree-expand{
+    color: #d9d9d9!important;
+}
+
+.answer-block {
+  margin: 1rem 0 2rem;
+}
+
+.answer-area {
+  width: 100%;
+  min-height: 9rem;
+  resize: vertical;
+  padding: 0.75rem 1rem;
+  border: 2px solid #9a3412; 
+  border-radius: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: #2d1b0f;
+  color: #fef3c7;     
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.answer-area:focus {
+  outline: none;
+  border-color: #f97316;   
+  background: #1c1917;     
+  font-size: 1.05rem;
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.5); 
+}
+
+.toctree-l3, .toctree-l4, .toctree-l5, .toctree-l6 { display: none; }
+/**/
+
+@media screen and (min-width: 1100px){
+    .wy-nav-content {
+        margin: 0;
+        background: #2E3440;
+    }   
+}
+
+@media screen and (max-width: 1100px){
+
+    /* Nav mobile sur écran plus petit */
+
+    /* Makes the nav a block element */
+    .wy-nav-top {
+        display: block;
+    }
+
+    /* Changes shift of the nav according to the screen size */
+    .wy-nav-side.shift {
+        width: 50%;
+        left: 0;
+    }
+
+    /* Position of the nav */
+    .wy-nav-content-wrap.shift {
+        position: fixed;
+        min-width: 100%;
+        left: 50%;
+        top: 0;
+        height: 100%;
+        overflow: hidden;
+        margin-left: 0;
+    }
+
+    /* Makes the nav disappear when the nav button is clicked */
+    .wy-nav-side {
+        left: -300px;
+    }
+
+    /* Removing the margin in the nav */
+    .wy-nav-content-wrap {
+        margin-left: 0px;
+    }
+
+    .wy-menu.wy-menu-vertical, .wy-side-nav-search, .wy-side-scroll {
+        width: auto;
+    }
+    /*---------------------------------*/
+    .wy-nav-top a:visited{
+        color: white;
+    }
+
+    /* enable block modifications to the field list */
+    .field-list{
+        display: block!important;
+    }
+
+    /* Changes the display type of the table to fit on smaller screens */
+    .td{
+        display: table-column-group;
+    }
+
+    /* Fixing of the tables issue when on a small screen */
+    html.writer-html5 .rst-content dl.field-list>dt{
+        margin-bottom: 10px;
+    }
+
+    /* Change the bg color of the main content page */
+    .wy-nav-content {
+        margin: 0;
+        background: #2E3440;
+    }   
+
+    @media screen and (max-width: 768px){
+
+    .wy-nav-side.shift {
+        width: 85%;
+        left: 0;
+    }
+
+    .wy-nav-content-wrap.shift {
+        position: fixed;
+        min-width: 100%;
+        left: 85%;
+        top: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    }
+}

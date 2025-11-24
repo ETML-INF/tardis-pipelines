@@ -1,0 +1,32 @@
+.hdr-wrap {
+  width: calc(100% - 24mm);
+  margin: 0 auto;
+  font-family: system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  font-size: 9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom: 0.5px solid #aaa;
+  padding-bottom: 3px;
+}
+
+.hdr-left, .hdr-right {
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.hdr-logo,
+.hdr-section-logo {
+  height:14px;
+}
+
+.hdr-module {
+  font-weight:600;
+}
+
+.hdr-title {
+  margin-left:8px;
+}
+
+.muted { opacity:.8 }

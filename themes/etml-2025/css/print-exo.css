@@ -1,0 +1,228 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
+
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+  color: #111111;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Arial, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.wy-body-for-nav,
+.rst-content {
+  background: #ffffff !important;
+}
+
+@media print {
+  .wy-nav-side,
+  .wy-side-scroll,
+  .wy-nav-top,
+  .wy-nav-content-wrap > footer,
+  .rst-footer-buttons,
+  .sphinxsidebar,
+  .sphinxsidebarwrapper,
+  .related,
+  .footer,
+  .toctree-wrapper,
+  .toc-backref,
+  .back-to-top,
+  [role="navigation"][aria-label="Page navigation"],
+  .print-hide {
+    display: none !important;
+  }
+
+  .wy-nav-content-wrap {
+    margin: 0 !important;
+  }
+
+  .wy-nav-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    background: #ffffff !important;
+  }
+
+  .document,
+  .rst-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  main,
+  section {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+}
+
+.print-show {
+  display: block !important;
+}
+
+.rst-content h1,
+.rst-content h2,
+.rst-content h3,
+.rst-content h4 {
+  font-family: inherit;
+  font-weight: 600;
+  color: #111111;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  page-break-after: avoid;
+}
+
+.rst-content h1 {
+  font-size: 1.4rem;
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 0.25rem;
+}
+
+.rst-content h2 {
+  font-size: 1.15rem;
+}
+
+.rst-content h3 {
+  font-size: 1rem;
+}
+
+.rst-content p,
+.rst-content li {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Évite de casser au milieu d’un titre + paragraphe */
+.rst-content h1,
+.rst-content h2,
+.rst-content h3 {
+  page-break-inside: avoid;
+}
+
+.rst-content ul,
+.rst-content ol {
+  margin-top: 0.2rem;
+  margin-bottom: 0.6rem;
+}
+
+.rst-content table.docutils {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.rst-content table.docutils th,
+.rst-content table.docutils td {
+  border: 1px solid #dddddd;
+  padding: 0.25rem 0.4rem;
+}
+
+.rst-content table.docutils thead th {
+  background: #f3f4f6;
+}
+
+.rst-content code {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.85rem;
+  background: #f4f4f5;
+  padding: 0.05rem 0.15rem;
+  border-radius: 2px;
+}
+
+.rst-content pre {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.85rem;
+  background: #f4f4f5;
+  padding: 0.4rem 0.6rem;
+  border-radius: 3px;
+  border: 1px solid #e4e4e7;
+  overflow: visible;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.qcm-block {
+  border: 1px solid #e5e7eb;
+  border-radius: 3px;
+  padding: 0.5rem 0.7rem;
+  margin: 0.6rem 0;
+  background: #f9fafb;
+  page-break-inside: avoid;
+}
+
+.qcm-question {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.qcm-propositions {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.qcm-proposition {
+  margin: 0.15rem 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Case vide imprimable devant les propositions */
+.qcm-proposition::before {
+  content: "□";
+  display: inline-block;
+  width: 1rem;
+  margin-right: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.monaco-mount,
+.CodeMirror,
+#export-answers {
+  display: none !important;
+}
+
+.answer-block {
+  margin: 0.6rem 0 0.9rem 0;
+}
+
+.answer-block textarea,
+.answer-block textarea.answer-area {
+  display: block;
+  width: 100%;
+  min-height: 5rem;
+  border: 1px solid #bbbbbb;
+  border-radius: 2px;
+  padding: 0.4rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: none;
+}
+
+/* liens complets pour la création du PDF (en cas d'impression) */
+a[href^="http"]::after {
+  content: " (" attr(href) ")";
+  font-size: 0.85em;
+}
+
+
+@media print {
+  .qcm-block,
+  .answer-block,
+  table,
+  pre {
+    page-break-inside: avoid;
+  }
+}

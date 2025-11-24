@@ -1,0 +1,30 @@
+.ftr-wrap {
+  width: calc(100% - 24mm);
+  margin: 0 auto;
+  font-family: system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  font-size: 9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-top: 0.5px solid #aaa;
+  padding-top: 3px;
+}
+
+.ftr-left {
+  width: 15%;
+}
+
+.ftr-center {
+  width: 70%;
+  text-align:center;
+}
+
+.ftr-right {
+  width: 15%;
+  text-align:right;
+}
+
+.muted { opacity:.8 }
+
+.pageNumber::before { content: counter(page); }
+.totalPages::before { content: counter(pages); }
