@@ -39,7 +39,7 @@ exclude_patterns = []
 
 # -- Options HTML --------------------------------------------------------------
 html_theme = "sphinx_rtd_theme"
-html_static_path = ["Theme_Sphinx_ETML", "assets"]
+html_static_path = ["themes", "Theme_Sphinx_ETML", "assets"]
 html_css_files = [
     "customLight.css",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/editor/editor.main.css",
