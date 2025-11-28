@@ -45,14 +45,14 @@ exclude_patterns = []
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["themes", "Theme_Sphinx_ETML", "assets"]
 html_css_files = [
-    "customLight.css",
+    "Theme_Sphinx_ETML/customLight.css",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/editor/editor.main.css",
 ]
 html_js_files = [
-    "customToggle.js",
+    "js/customToggle.js",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/loader.js",
-    "monaco-init.js",
-    "responses.js",
+    "js/monaco-init.js",
+    "js/responses.js",
 ]
 
 # -- Paths ---------------------------------------------------------------------
