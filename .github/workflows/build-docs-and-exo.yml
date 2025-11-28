@@ -24,24 +24,34 @@ jobs:
     env:
       ICT_MODULE: ${{ inputs.ict_module }}
       SPHINX_SRC_DIR: ${{ inputs.sphinx_src }}
+
     steps:
-      - uses: actions/checkout@v4
+      # 1) Repo APPELANT (le cours)
+      - name: Checkout cours (repo appelant)
+        uses: actions/checkout@v4
         with:
-          # Repo APPELANT (le cours)
           repository: ${{ github.repository }}
+
+      # 2) Repo tardis-pipelines (pour conf.py, extensions, requirements, thèmes…)
+      - name: Checkout tardis-pipelines
+        uses: actions/checkout@v4
+        with:
+          repository: ETML-INF/tardis-pipelines
+          path: tardis-pipelines
+          # plus tard: ref: v0
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Cache pip
+      - name: Cache pip (requirements TARDIS)
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('tardis-pipelines/requirements.txt') }}
           restore-keys: ${{ runner.os }}-pip-
 
-      - name: Install Python deps
+      - name: Install Python deps (TARDIS)
         run: |
           python -m pip install --upgrade pip
           pip install -r tardis-pipelines/requirements.txt
@@ -68,8 +78,10 @@ jobs:
       PDF_OUT_DIR: ${{ inputs.sphinx_src }}/_build/exo-pdf
       # Chemin complet vers le thème dans tardis-pipelines
       TARDIS_THEME_ROOT: ${{ github.workspace }}/tardis-pipelines/themes/${{ inputs.theme }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout cours (repo appelant)
+        uses: actions/checkout@v4
         with:
           repository: ${{ github.repository }}
 
@@ -78,7 +90,7 @@ jobs:
         with:
           repository: ETML-INF/tardis-pipelines
           path: tardis-pipelines
-          # plus tard tu mettras ici:  ref: v0  (ou v0.1.0, etc.)
+          # plus tard: ref: v0
 
       - uses: actions/setup-node@v4
         with:
