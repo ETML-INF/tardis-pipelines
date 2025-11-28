@@ -101,7 +101,7 @@ jobs:
       - name: Install Playwright deps
         working-directory: tardis-pipelines
         run: |
-          npm ci || npm install
+          npm ci
           npx playwright install --with-deps chromium
 
       - name: Build exercices PDF (Playwright)
