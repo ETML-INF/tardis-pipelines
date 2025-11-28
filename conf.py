@@ -9,8 +9,12 @@ author = "ETML (Section Informatique)"
 release = "1.0"
 version = "1.0"
 copyright = f"{datetime.now().year}, {author}"
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # -- Extensions Sphinx --------------------------------------------------------
+EXTENSIONS_DIR = os.path.join(BASE_DIR, "extensions")
+sys.path.insert(0, EXTENSIONS_DIR)
+
 extensions = [
     "myst_parser",
     "tardis_textarea",
