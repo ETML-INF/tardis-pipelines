@@ -39,6 +39,19 @@ jobs:
           repository: ETML-INF/tardis-pipelines
           path: tardis-pipelines
           # plus tard: ref: v0
+      - name: Debug listing tardis-pipelines
+        run: |
+          echo "-- Listing tardis-pipelines --"
+          ls -al .
+          echo ""
+          ls -al tardis-pipelines
+          echo ""
+          ls -al tardis-pipelines/scripts
+          echo ""
+          ls -al tardis-pipelines/extensions
+          echo ""
+          cat tardis-pipelines/requirements.txt || echo "requirements.txt introuvable"
+
 
       - uses: actions/setup-python@v5
         with:
