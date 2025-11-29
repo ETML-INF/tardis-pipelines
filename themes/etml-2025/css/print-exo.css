@@ -1,43 +1,45 @@
+/* ------------------------------------------------------------------
+   TARDIS – print-exo.css
+   Usage: injecté par Playwright pour générer les PDF d'exercices.
+   Objectifs:
+   - fond blanc, pas de chrome Sphinx
+   - marges gérées par @page dans le script (25mm)
+   - typographie sobre et lisible
+   - zones de réponse & QCM imprimables
+   ------------------------------------------------------------------ */
+
 @media print {
-  @page {
-    size: A4;
-    margin: 0;
+
+  /* ---- Base document ------------------------------------------------ */
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #111111;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.4;
   }
-}
 
-html,
-body {
-  margin: 0 !important;
-  padding: 0 !important;
-  background: #ffffff !important;
-  color: #111111;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Arial, sans-serif;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
+  /* ---- Nettoyage layout Sphinx RTD ---------------------------------- */
 
-.wy-body-for-nav,
-.rst-content {
-  background: #ffffff !important;
-}
-
-@media print {
   .wy-nav-side,
   .wy-side-scroll,
   .wy-nav-top,
-  .wy-nav-content-wrap > footer,
-  .rst-footer-buttons,
+  .wy-breadcrumbs,
+  .wy-footer,
   .sphinxsidebar,
   .sphinxsidebarwrapper,
   .related,
-  .footer,
-  .toctree-wrapper,
-  .toc-backref,
-  .back-to-top,
-  [role="navigation"][aria-label="Page navigation"],
-  .print-hide {
+  .rst-footer-buttons,
+  div[role="navigation"][aria-label="Page navigation"] {
     display: none !important;
+  }
+
+  .wy-grid-for-nav {
+    margin: 0 !important;
   }
 
   .wy-nav-content-wrap {
@@ -52,177 +54,203 @@ body {
   }
 
   .document,
-  .rst-content {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: #ffffff !important;
-  }
-
+  .rst-content,
   main,
   section {
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
+    box-shadow: none !important;
   }
-}
 
-.print-show {
-  display: block !important;
-}
+  /* ---- Typo générale ------------------------------------------------ */
 
-.rst-content h1,
-.rst-content h2,
-.rst-content h3,
-.rst-content h4 {
-  font-family: inherit;
-  font-weight: 600;
-  color: #111111;
-  margin-top: 1rem;
-  margin-bottom: 0.3rem;
-  page-break-after: avoid;
-}
+  .rst-content {
+    font-size: 11pt;
+    line-height: 1.45;
+  }
 
-.rst-content h1 {
-  font-size: 1.4rem;
-  border-bottom: 1px solid #cccccc;
-  padding-bottom: 0.25rem;
-}
+  .rst-content p {
+    margin: 0 0 0.6em 0;
+  }
 
-.rst-content h2 {
-  font-size: 1.15rem;
-}
+  .rst-content ul,
+  .rst-content ol {
+    margin: 0 0 0.8em 1.5em;
+    padding: 0;
+  }
 
-.rst-content h3 {
-  font-size: 1rem;
-}
+  .rst-content li {
+    margin: 0.1em 0;
+  }
 
-.rst-content p,
-.rst-content li {
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-/* Évite de casser au milieu d’un titre + paragraphe */
-.rst-content h1,
-.rst-content h2,
-.rst-content h3 {
-  page-break-inside: avoid;
-}
-
-.rst-content ul,
-.rst-content ol {
-  margin-top: 0.2rem;
-  margin-bottom: 0.6rem;
-}
-
-.rst-content table.docutils {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 0.9rem;
-}
-
-.rst-content table.docutils th,
-.rst-content table.docutils td {
-  border: 1px solid #dddddd;
-  padding: 0.25rem 0.4rem;
-}
-
-.rst-content table.docutils thead th {
-  background: #f3f4f6;
-}
-
-.rst-content code {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  font-size: 0.85rem;
-  background: #f4f4f5;
-  padding: 0.05rem 0.15rem;
-  border-radius: 2px;
-}
-
-.rst-content pre {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  font-size: 0.85rem;
-  background: #f4f4f5;
-  padding: 0.4rem 0.6rem;
-  border-radius: 3px;
-  border: 1px solid #e4e4e7;
-  overflow: visible;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.qcm-block {
-  border: 1px solid #e5e7eb;
-  border-radius: 3px;
-  padding: 0.5rem 0.7rem;
-  margin: 0.6rem 0;
-  background: #f9fafb;
-  page-break-inside: avoid;
-}
-
-.qcm-question {
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-}
-
-.qcm-propositions {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-.qcm-proposition {
-  margin: 0.15rem 0;
-  display: flex;
-  align-items: flex-start;
-}
-
-/* Case vide imprimable devant les propositions */
-.qcm-proposition::before {
-  content: "□";
-  display: inline-block;
-  width: 1rem;
-  margin-right: 0.3rem;
-  font-size: 0.9rem;
-}
-
-.monaco-mount,
-.CodeMirror,
-#export-answers {
-  display: none !important;
-}
-
-.answer-block {
-  margin: 0.6rem 0 0.9rem 0;
-}
-
-.answer-block textarea,
-.answer-block textarea.answer-area {
-  display: block;
-  width: 100%;
-  min-height: 5rem;
-  border: 1px solid #bbbbbb;
-  border-radius: 2px;
-  padding: 0.4rem;
-  font-family: inherit;
-  font-size: 0.9rem;
-  resize: none;
-}
-
-/* liens complets pour la création du PDF (en cas d'impression) */
-a[href^="http"]::after {
-  content: " (" attr(href) ")";
-  font-size: 0.85em;
-}
-
-
-@media print {
-  .qcm-block,
-  .answer-block,
-  table,
-  pre {
+  .rst-content h1,
+  .rst-content h2,
+  .rst-content h3,
+  .rst-content h4 {
+    page-break-after: avoid;
     page-break-inside: avoid;
+  }
+
+  .rst-content h1 {
+    font-size: 18pt;
+    margin: 0 0 0.8em 0;
+  }
+
+  .rst-content h2 {
+    font-size: 14pt;
+    margin: 1.2em 0 0.6em 0;
+  }
+
+  .rst-content h3 {
+    font-size: 12pt;
+    margin: 1em 0 0.4em 0;
+  }
+
+  .rst-content h4 {
+    font-size: 11pt;
+    margin: 0.8em 0 0.3em 0;
+    font-weight: 600;
+  }
+
+  /* ---- Blocs de code ------------------------------------------------ */
+
+  .rst-content pre {
+    background: #f5f5f5;
+    border: 0.5pt solid #dddddd;
+    border-radius: 3px;
+    padding: 6px 8px;
+    font-size: 9pt;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .rst-content code {
+    font-size: 9pt;
+  }
+
+  /* ---- Tables ------------------------------------------------------- */
+
+  .rst-content table.docutils,
+  .rst-content table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10pt;
+  }
+
+  .rst-content table.docutils th,
+  .rst-content table.docutils td,
+  .rst-content table th,
+  .rst-content table td {
+    border: 0.5pt solid #cccccc;
+    padding: 4px 6px;
+    vertical-align: top;
+  }
+
+  .rst-content table.docutils th,
+  .rst-content table th {
+    background: #f0f0f0;
+    font-weight: 600;
+  }
+
+  /* ---- Admonitions (notes, avertissements) -------------------------- */
+
+  .rst-content .admonition {
+    border-left: 3px solid #2563eb;
+    background: #f5f7ff;
+    padding: 6px 8px;
+    margin: 0 0 0.8em 0;
+    page-break-inside: avoid;
+  }
+
+  .rst-content .admonition.warning,
+  .rst-content .admonition.attention {
+    border-left-color: #b91c1c;
+    background: #fef2f2;
+  }
+
+  .rst-content .admonition-title {
+    font-weight: 600;
+    margin-bottom: 0.2em;
+  }
+
+  /* ---- Zones de réponse (textarea) --------------------------------- */
+
+  .answer-block textarea,
+  .tardis-textarea,
+  .tardis-answer-area {
+    display: block;
+    width: 100%;
+    min-height: 5rem;
+    border: 0.5pt solid #bbbbbb;
+    border-radius: 2px;
+    padding: 4px;
+    font-size: 10pt;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+
+  .answer-block {
+    margin: 0.6em 0 0.9em 0;
+  }
+
+  /* ---- QCM TARDIS --------------------------------------------------- */
+
+  .tardis-qcm {
+    margin: 0.6em 0 0.9em 0;
+    padding: 4px 6px;
+    border: 0.5pt solid #dddddd;
+    border-radius: 2px;
+  }
+
+  .tardis-qcm-question {
+    font-weight: 600;
+    margin-bottom: 0.3em;
+  }
+
+  .tardis-qcm-choices li {
+    list-style-type: none;
+    margin: 0.1em 0;
+  }
+
+  .tardis-qcm-choices input[type="checkbox"],
+  .tardis-qcm-choices input[type="radio"] {
+    margin-right: 4px;
+  }
+
+  /* ---- Masquer les contrôles web-only ------------------------------- */
+
+  .monaco-mount,
+  .CodeMirror,
+  #export-answers,
+  .tardis-toolbar,
+  .theme-toggle,
+  .header .theme-switch,
+  .wy-side-nav-search,
+  .skip-link {
+    display: none !important;
+  }
+
+  /* ---- Liens: URL explicites --------------------------------------- */
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+  }
+
+  /* ---- Utilitaires -------------------------------------------------- */
+
+  .print-hide {
+    display: none !important;
+  }
+
+  .print-show {
+    display: block !important;
+  }
+
+  /* Forcer une rupture de page si besoin */
+  .page-break {
+    page-break-before: always;
   }
 }
