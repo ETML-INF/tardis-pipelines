@@ -37,7 +37,7 @@ runs:
       shell: bash
       run: |
         echo "FTP_SERVER=${{ inputs.FTP_SERVER }}"
-        echo "FTP_USERNAME=${{ FTP_USERNAME }}"
+        echo "FTP_USERNAME=${{ inputs.FTP_USERNAME }}"
         echo "REMOTE_DIR=${{ inputs.server-dir }}"
         echo "STATE_NAME=${{ inputs.state-name }}"
 
