@@ -82,38 +82,7 @@ runs:
 
         echo "✅ Secrets FTP détectés."
 
-    - name: 🧱 Créer l'arborescence distante si nécessaire
-      shell: bash
-      env:
-        FTP_SERVER:   ${{ inputs.ftp-server }}
-        FTP_USERNAME: ${{ inputs.ftp-username }}
-        FTP_PASSWORD: ${{ inputs.ftp-password }}
-
-        ICTROOT:      ${{ inputs.ictroot-dir }}
-        ICTMODULE:    ${{ inputs.ictmodule-dir }}
-        CUSTOMDIR:    ${{ inputs.custom-dir }}
-      run: |
-        set -euo pipefail
-
-        echo "📁 Préparation de l'arborescence distante:"
-        echo "  /${ICTROOT}/${ICTMODULE}/${CUSTOMDIR}"
-
-        # On se place à la racine
-        CURL="curl -k --ssl-reqd --ftp-pasv --silent --show-error --user ${FTP_USERNAME}:${FTP_PASSWORD}"
-
-        # Aller dans la racine, puis ICTROOT
-        $CURL --quote "CWD /"                                            "ftp://${FTP_SERVER}/" || true
-        $CURL --quote "MKD ${ICTROOT}" --quote "CWD ${ICTROOT}"          "ftp://${FTP_SERVER}/" || true
-
-        # Aller dans ICTMODULE
-        $CURL --quote "MKD ${ICTMODULE}" --quote "CWD ${ICTMODULE}"      "ftp://${FTP_SERVER}/" || true
-
-        # Aller dans CUSTOMDIR
-        $CURL --quote "MKD ${CUSTOMDIR}" --quote "CWD ${CUSTOMDIR}"      "ftp://${FTP_SERVER}/" || true
-
-        echo "✅ Arborescence assurée."
-
-    - name: 📝 Créer placeholder state.json si nécessaire
+    - name: 📝 Créer placeholder state.json si nécessaire (et arborescence)
       shell: bash
       env:
         FTP_SERVER:   ${{ inputs.ftp-server }}
@@ -127,24 +96,27 @@ runs:
       run: |
         set -euo pipefail
 
-        TARGET_URL="ftp://${FTP_SERVER}/${ICTROOT}/${ICTMODULE}/${CUSTOMDIR}/${STATE_NAME}"
+        STATE_URL="ftp://${FTP_SERVER}/${ICTROOT}/${ICTMODULE}/${CUSTOMDIR}/${STATE_NAME}"
 
-        echo "🔍 Vérification du fichier state : ${TARGET_URL}"
+        echo "🔍 Vérification du fichier state : ${STATE_URL}"
 
+        # 1) HEAD sur le fichier distant (échoue si dossier ou fichier manquant)
         if ! curl -k --ssl-reqd --ftp-pasv \
           --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
-          --head "${TARGET_URL}" >/dev/null 2>&1; then
+          --head "${STATE_URL}" >/dev/null 2>&1; then
 
-          echo "📝 Création placeholder vide (${STATE_NAME})"
+          echo "📝 Fichier de state absent, création d'un placeholder vide..."
           echo "{}" > "${STATE_NAME}"
 
-          curl -k --ssl-reqd --ftp-pasv \
+          # 2) Upload avec création automatique de toute l'arborescence
+          curl -k --ssl-reqd --ftp-pasv --ftp-create-dirs \
             --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
             --upload-file "${STATE_NAME}" \
-            "${TARGET_URL}"
+            "${STATE_URL}"
         else
           echo "✅ Fichier de state déjà présent."
         fi
+
 
     - name: 📂 Sync via FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@v4.3.6
