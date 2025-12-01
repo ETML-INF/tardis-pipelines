@@ -21,6 +21,14 @@ inputs:
     description: "Timeout en ms"
     required: false
     default: "300000"
+  FTP_USERNAME:
+    required: true
+  FTP_SERVER:
+    required: true
+  FTP_PASSWORD:
+    required: true
+  
+
 
 runs:
   using: "composite"
@@ -28,8 +36,8 @@ runs:
     - name: 🧪 Debug FTP env (optionnel)
       shell: bash
       run: |
-        echo "FTP_SERVER=${FTP_SERVER:-<vide>}"
-        echo "FTP_USERNAME=${FTP_USERNAME:-<vide>}"
+        echo "FTP_SERVER=${{ inputs.FTP_SERVER }}"
+        echo "FTP_USERNAME=${{ FTP_USERNAME }}"
         echo "REMOTE_DIR=${{ inputs.server-dir }}"
         echo "STATE_NAME=${{ inputs.state-name }}"
 
