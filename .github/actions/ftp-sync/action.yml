@@ -53,6 +53,7 @@ runs:
         echo "🔍 Vérification du répertoire distant: ${REMOTE_DIR}"
 
         # 1) Tenter de lister le répertoire ; si ça échoue, on le crée
+        echo "ftp://${FTP_SERVER}:21/${REMOTE_DIR}/"
         if ! curl -k -sS --ftp-ssl \
           --user "${FTP_USER}:${FTP_PASS}" \
           "ftp://${FTP_SERVER}:21/${REMOTE_DIR}/" > /dev/null 2>&1; then
