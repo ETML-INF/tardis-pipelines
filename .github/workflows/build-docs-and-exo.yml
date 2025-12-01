@@ -176,7 +176,10 @@ jobs:
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
           local-dir:    site/
-          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_DOCS_DIR }}
+          description: 
+          ictroot-dir: ${{ vars.ICT_ROOT_FOLDER }}
+          ictmodule-dir: ${{ vars.ICT_MODULE }}
+          custom-dir:   ${{ vars.FTP_DOCS_DIR }}
           state-name:   ".ftp-sync-support.json"
           log-level:    "minimal"
           timeout:      "300000"
@@ -188,7 +191,9 @@ jobs:
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
           local-dir:    site-exo/exercices/
-          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}
+          ictroot-dir: ${{ vars.ICT_ROOT_FOLDER }}
+          ictmodule-dir: ${{ vars.ICT_MODULE }}
+          custom-dir:   ${{ vars.FTP_EXO_DIR }}
           state-name:   ".ftp-sync-exercices.json"
           log-level:    "minimal"
           timeout:      "300000"

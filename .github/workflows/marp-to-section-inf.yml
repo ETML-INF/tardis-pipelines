@@ -111,7 +111,9 @@ jobs:
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
           local-dir:    site/dist/html/
-          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_PRESENTATIONS_DIR }}
+          ictroot-dir: ${{ vars.ICT_ROOT_FOLDER }}
+          ictmodule-dir: ${{ vars.ICT_MODULE }}
+          custom-dir:   ${{ vars.FTP_PRESENTATIONS_DIR }}
           state-name:   ".ftp-sync-deck.json"
           log-level:    "minimal"
           timeout:      "300000"

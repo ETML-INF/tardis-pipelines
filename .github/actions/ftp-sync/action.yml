@@ -7,9 +7,17 @@ inputs:
     description: "Répertoire local à synchroniser"
     required: true
 
-  server-dir:
-    description: "Répertoire distant (FTP), ex: moduleICT/346/cours/"
+  custom-dir:
+    description: "Répertoire distant (FTP), ex: cours"
     required: true
+
+  ictroot-dir:
+    description: "Répertoire root des modules ICT, ex: moduleICT"
+    required: true  
+
+  ictmodule-dir:
+    description: "Le répertoire du module ICT, ex: 346"  
+    required: true  
 
   state-name:
     description: "Nom du fichier d'état pour le delta FTP"
@@ -74,38 +82,66 @@ runs:
 
         echo "✅ Secrets FTP détectés."
 
-
-    - name: 🧱 Créer le dossier distant + placeholder de state si nécessaire
+    - name: 🧱 Créer l'arborescence distante si nécessaire
       shell: bash
       env:
         FTP_SERVER:   ${{ inputs.ftp-server }}
         FTP_USERNAME: ${{ inputs.ftp-username }}
         FTP_PASSWORD: ${{ inputs.ftp-password }}
-        REMOTE_DIR:   ${{ inputs.server-dir }}
+
+        ICTROOT:      ${{ inputs.ictroot-dir }}
+        ICTMODULE:    ${{ inputs.ictmodule-dir }}
+        CUSTOMDIR:    ${{ inputs.custom-dir }}
+      run: |
+        set -euo pipefail
+
+        echo "📁 Préparation de l'arborescence distante:"
+        echo "  /${ICTROOT}/${ICTMODULE}/${CUSTOMDIR}"
+
+        # On se place à la racine
+        CURL="curl -k --ssl-reqd --ftp-pasv --silent --show-error --user ${FTP_USERNAME}:${FTP_PASSWORD}"
+
+        # Aller dans la racine, puis ICTROOT
+        $CURL --quote "CWD /"                                            "ftp://${FTP_SERVER}/" || true
+        $CURL --quote "MKD ${ICTROOT}" --quote "CWD ${ICTROOT}"          "ftp://${FTP_SERVER}/" || true
+
+        # Aller dans ICTMODULE
+        $CURL --quote "MKD ${ICTMODULE}" --quote "CWD ${ICTMODULE}"      "ftp://${FTP_SERVER}/" || true
+
+        # Aller dans CUSTOMDIR
+        $CURL --quote "MKD ${CUSTOMDIR}" --quote "CWD ${CUSTOMDIR}"      "ftp://${FTP_SERVER}/" || true
+
+        echo "✅ Arborescence assurée."
+
+    - name: 📝 Créer placeholder state.json si nécessaire
+      shell: bash
+      env:
+        FTP_SERVER:   ${{ inputs.ftp-server }}
+        FTP_USERNAME: ${{ inputs.ftp-username }}
+        FTP_PASSWORD: ${{ inputs.ftp-password }}
+
+        ICTROOT:      ${{ inputs.ictroot-dir }}
+        ICTMODULE:    ${{ inputs.ictmodule-dir }}
+        CUSTOMDIR:    ${{ inputs.custom-dir }}
         STATE_NAME:   ${{ inputs.state-name }}
       run: |
         set -euo pipefail
 
-        echo "URL = ftp://${FTP_SERVER}/${REMOTE_DIR}/"
+        TARGET_URL="ftp://${FTP_SERVER}/${ICTROOT}/${ICTMODULE}/${CUSTOMDIR}/${STATE_NAME}"
 
-        # 1) Tenter de lister le répertoire (et le faire créer au besoin)
-        curl -k --ssl-reqd --ftp-pasv \
-          --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
-          "ftp://${FTP_SERVER}/${REMOTE_DIR}/" || true
+        echo "🔍 Vérification du fichier state : ${TARGET_URL}"
 
-        # 2) Vérifier si le fichier de state existe déjà
-        echo "🔍 Vérification du fichier de state: ${STATE_NAME}"
         if ! curl -k --ssl-reqd --ftp-pasv \
           --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
-          --head "ftp://${FTP_SERVER}/${REMOTE_DIR}/${STATE_NAME}" \
-          >/dev/null 2>&1; then
-          echo "📝 Création d'un placeholder de state vide..."
+          --head "${TARGET_URL}" >/dev/null 2>&1; then
+
+          echo "📝 Création placeholder vide (${STATE_NAME})"
           echo "{}" > "${STATE_NAME}"
 
           curl -k --ssl-reqd --ftp-pasv \
             --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
             --upload-file "${STATE_NAME}" \
-            "ftp://${FTP_SERVER}/${REMOTE_DIR}/${STATE_NAME}"
+            "${TARGET_URL}"
         else
           echo "✅ Fichier de state déjà présent."
         fi
@@ -119,7 +155,7 @@ runs:
         protocol:   ftps
         port:       21
         local-dir:  ${{ inputs.local-dir }}
-        server-dir: ${{ inputs.server-dir }}/
+        server-dir: ${{ inputs.ictroot-dir }}/${{ inputs.ictmodule-dir}}/${{ inputs.custom-dir }}/
         state-name: ${{ inputs.state-name }}
         log-level:  ${{ inputs.log-level }}
         timeout:    ${{ inputs.timeout }}
