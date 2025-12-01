@@ -49,10 +49,11 @@ runs:
           REMOTE_DIR:  ${{ inputs.server-dir }}
           STATE_NAME:  ${{ inputs.state-name }}
       run: |
-        echo "URL = ftp://${{ env.FTP_SERVER }}:21/${{ env.REMOTE_DIR }}/"
-        curl -v -k --ftp-ssl --ftp-pasv \
-          --user "${{ env.FTP_USER }}:${{ env.FTP_PASS }}" \
-          "ftp://${{ env.FTP_SERVER }}:21/${{ env.REMOTE_DIR }}/"
+        echo "URL = ftp://${FTP_SERVER}/${REMOTE_DIR}/"
+        curl -v -k --ssl-reqd --ftp-pasv \
+          --user "${FTP_USER}:${FTP_PASS}" \
+          "ftp://${FTP_SERVER}/${REMOTE_DIR}/" || echo "ℹ️ Listing initial échoué (peut être normal si le dossier n'existe pas)"
+
 
 
   
