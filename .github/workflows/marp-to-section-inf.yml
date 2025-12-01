@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      ICT_MODULE: ${{ input.ICT_MODULE }}
+      ICT_MODULE: ${{ inputs.ICT_MODULE }}
     steps:
       - name: Check ICT_MODULE
         run: |
