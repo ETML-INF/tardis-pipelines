@@ -22,6 +22,16 @@ inputs:
     required: false
     default: "300000"
 
+  FTP_SERVER:   
+    description: "Nom de l'hôte FTP"
+    required: true
+  FTP_USERNAME: 
+    description: "Nom d'utilisateur ayant permission d'écriture sur le FTP
+    required: true
+  FTP_PASSWORD:
+    description: "Son mot de passe"
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -30,6 +40,7 @@ runs:
       run: |
         echo "FTP_SERVER=${FTP_SERVER:-<vide>}"
         echo "FTP_USERNAME length=${#FTP_USERNAME:-0}"
+        echo "FTP_USERNAME2 ${{ inputs.FTP_USERNAME}}"
         echo "REMOTE_DIR=${{ inputs.server-dir }}"
         echo "STATE_NAME=${{ inputs.state-name }}"
 
