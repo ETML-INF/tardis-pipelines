@@ -38,6 +38,24 @@ inputs:
 runs:
   using: "composite"
   steps:
+
+
+    - name: Debug curl path
+      shell: bash
+      env:
+          FTP_SERVER:  ${{ inputs.ftp-server }}
+          FTP_USER:    ${{ inputs.ftp-username }}
+          FTP_PASS:    ${{ inputs.ftp-password }}
+          REMOTE_DIR:  ${{ inputs.server-dir }}
+          STATE_NAME:  ${{ inputs.state-name }}
+      run: |
+        echo "URL = ftps://${{ env.FTP_SERVER }}:21/${{ env.REMOTE_DIR }}/"
+        curl -v -k --ftp-ssl --ftp-pasv \
+          --user "${FTP_USER}:${FTP_PASS}" \
+          "ftps://${FTP_SERVER}:21/${REMOTE_DIR}/"
+
+
+  
     - name: Ensure remote folder + state file exist
     # On crée le dossier distant si besoin puis un placeholder de state si absent
       shell: bash
