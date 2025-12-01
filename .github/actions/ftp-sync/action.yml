@@ -51,7 +51,7 @@ runs:
       run: |
         echo "URL = ftp://${{ env.FTP_SERVER }}:21/${{ env.REMOTE_DIR }}/"
         curl -v -k --ftp-ssl --ftp-pasv \
-          --user "${{ env.FTP_USER} }:${{ env.FTP_PASS }}" \
+          --user "${{ env.FTP_USER }}:${{ env.FTP_PASS }}" \
           "ftp://${{ env.FTP_SERVER }}:21/${{ env.REMOTE_DIR }}/"
 
 
