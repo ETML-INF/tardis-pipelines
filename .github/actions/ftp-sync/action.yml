@@ -49,10 +49,10 @@ runs:
           REMOTE_DIR:  ${{ inputs.server-dir }}
           STATE_NAME:  ${{ inputs.state-name }}
       run: |
-        echo "URL = ftps://${{ env.FTP_SERVER }}:21/${{ env.REMOTE_DIR }}/"
+        echo "URL = ftp://${{ env.FTP_SERVER }}:21/${{ env.REMOTE_DIR }}/"
         curl -v -k --ftp-ssl --ftp-pasv \
-          --user "${FTP_USER}:${FTP_PASS}" \
-          "ftps://${FTP_SERVER}:21/${REMOTE_DIR}/"
+          --user "${{ env.FTP_USER} }:${{ env.FTP_PASS }}" \
+          "ftp://${{ env.FTP_SERVER }}:21/${{ env.REMOTE_DIR }}/"
 
 
   
