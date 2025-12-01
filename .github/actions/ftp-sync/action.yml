@@ -96,7 +96,7 @@ runs:
         protocol:   ftps
         port:       21
         local-dir:  ${{ inputs.local-dir }}
-        server-dir: ${{ inputs.server-dir }}
+        server-dir: ${{ inputs.server-dir }}/
         state-name: ${{ inputs.state-name }}
         log-level:  ${{ inputs.log-level }}
         timeout:    ${{ inputs.timeout }}
