@@ -42,6 +42,10 @@ runs:
   using: "composite"
   steps:
     - name: 🔒 Vérification des secrets requis
+      env:
+        FTP_SERVER: ${{ inputs.ftp-server }}
+        FTP_USERNAME: ${{ inputs.ftp-username }}
+        FTP_PASSWORD: ${{ inputs.ftp-password }}
       shell: bash
       run: |
         set -euo pipefail
