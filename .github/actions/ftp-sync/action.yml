@@ -56,7 +56,7 @@ runs:
         echo "ftp://${FTP_SERVER}:21/${REMOTE_DIR}"
         if ! curl -k -sS --ftp-ssl \
           --user "${FTP_USER}:${FTP_PASS}" \
-          "ftp://${FTP_SERVER}:21/${REMOTE_DIR}" > /dev/null 2>&1; then
+          "ftp://${FTP_SERVER}:21/${REMOTE_DIR}/" > /dev/null 2>&1; then
           echo "📁 Répertoire inexistant, tentative de création..."
           curl -k -sS --ftp-ssl \
             --user "${FTP_USER}:${FTP_PASS}" \

@@ -148,7 +148,7 @@ jobs:
           ftp-username: ${{ secrets.FTP_USERNAME }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
           local-dir:    site/
-          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_DOCS_DIR }}/
+          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_DOCS_DIR }}
           state-name:   ".ftp-sync-support.json"
           log-level:    "minimal"
           timeout:      "300000"
@@ -160,7 +160,7 @@ jobs:
           ftp-username: ${{ secrets.FTP_USERNAME }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
           local-dir:    site-exo/exercices/
-          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}/
+          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}
           state-name:   ".ftp-sync-exercices.json"
           log-level:    "minimal"
           timeout:      "300000"
