@@ -124,7 +124,7 @@ jobs:
           retention-days: 7
 
       - name: 📂 Sync cours (HTML)
-        uses: ./.github/actions/ftp-sync
+        uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
           local-dir: site/
           server-dir: ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_DOCS_DIR }}/
@@ -133,7 +133,7 @@ jobs:
           timeout: 300000
 
       - name: 📂 Sync /exercices (PDF)
-        uses: ./.github/actions/ftp-sync
+        uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
           local-dir: exo-pdf/
           server-dir: ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}/
