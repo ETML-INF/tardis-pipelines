@@ -41,12 +41,12 @@ runs:
       run: |
         set -euo pipefail
 
-        echo "URL = ftp://${FTP_SERVER}/${REMOTE_DIR}/"
+        echo "URL = ftp://${FTP_SERVER}/${REMOTE_DIR}"
 
         # 1) Tenter de lister le répertoire (le serveur crée souvent auto les sous-dossiers manquants)
         curl -k --ssl-reqd --ftp-pasv \
           --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
-          "ftp://${FTP_SERVER}/${REMOTE_DIR}/" || true
+          "ftp://${FTP_SERVER}/${REMOTE_DIR}" || true
 
         # 2) Vérifier si le fichier de state existe déjà
         echo "🔍 Vérification du fichier de state: ${STATE_NAME}"
