@@ -122,3 +122,21 @@ jobs:
           path: ${{ env.PDF_OUT_DIR }}/**
           if-no-files-found: warn
           retention-days: 7
+
+      - name: 📂 Sync cours (HTML)
+        uses: ./.github/actions/ftp-sync
+        with:
+          local-dir: site/
+          server-dir: ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_DOCS_DIR }}/
+          state-name: .ftp-sync-support.json
+          log-level: minimal
+          timeout: 300000
+
+      - name: 📂 Sync /exercices (PDF)
+        uses: ./.github/actions/ftp-sync
+        with:
+          local-dir: exo-pdf/
+          server-dir: ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}/
+          state-name: .ftp-sync-exercices.json
+          log-level: minimal
+          timeout: 300000
