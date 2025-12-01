@@ -12,6 +12,16 @@ on:
         required: false
         default: "."
         type: string
+    secrets:
+      ftp_server:
+        description: "Host FTP (ex: enseignement.section-inf.ch)"
+        required: true
+      ftp_username:
+        description: "Compte FTP"
+        required: true
+      ftp_password:
+        description: "Mot de passe FTP"
+        required: true
 
 jobs:
   build:
