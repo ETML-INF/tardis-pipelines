@@ -123,7 +123,6 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-
   deploy:
     runs-on: ubuntu-latest
     needs: [build-docs, build-exo-pdf]
@@ -145,17 +144,23 @@ jobs:
       - name: 📂 Sync cours (HTML)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
-          local-dir: site/
-          server-dir: ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_DOCS_DIR }}/
-          state-name: .ftp-sync-support.json
-          log-level: minimal
-          timeout: 300000
+          ftp-server:   ${{ vars.FTP_SERVER }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          local-dir:    site/
+          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_DOCS_DIR }}/
+          state-name:   ".ftp-sync-support.json"
+          log-level:    "minimal"
+          timeout:      "300000"
 
       - name: 📂 Sync /exercices (PDF)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
-          local-dir: site-exo/exercices/
-          server-dir: ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}/
-          state-name: .ftp-sync-exercices.json
-          log-level: minimal
-          timeout: 300000
+          ftp-server:   ${{ vars.FTP_SERVER }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          local-dir:    site-exo/exercices/
+          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}/
+          state-name:   ".ftp-sync-exercices.json"
+          log-level:    "minimal"
+          timeout:      "300000"

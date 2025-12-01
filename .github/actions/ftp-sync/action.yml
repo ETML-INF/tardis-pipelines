@@ -1,116 +1,95 @@
 name: "FTP Sync (ETML)"
-description: "Synchronise un répertoire local vers le serveur FTP ETML, avec création conditionnelle du fichier d'état."
-author: "Section INF - ETML"
+description: "Synchronise un répertoire local vers le serveur FTP via SamKirkland/FTP-Deploy-Action"
+author: "Section INF"
 
 inputs:
+  ftp-server:
+    description: "Nom ou IP du serveur FTP (sans protocol)"
+    required: true
+  ftp-username:
+    description: "Utilisateur FTP"
+    required: true
+  ftp-password:
+    description: "Mot de passe FTP"
+    required: true
+
   local-dir:
     description: "Répertoire local à synchroniser"
     required: true
-
   server-dir:
-    description: "Répertoire distant FTP (chemin relatif depuis la racine FTP)"
+    description: "Répertoire distant (FTP, relatif à la racine du compte)"
     required: true
 
   state-name:
-    description: "Nom du fichier d’état servant au delta FTP"
+    description: "Nom du fichier d'état pour le delta FTP"
     required: false
     default: ".ftp-sync-state.json"
 
   log-level:
-    description: "Niveau de logs SamKirkland (minimal/basic/standard/verbose)"
+    description: "Niveau de logs (minimal/basic/standard/verbose)"
     required: false
     default: "minimal"
 
   timeout:
-    description: "Timeout en millisecondes"
+    description: "Timeout en ms"
     required: false
     default: "300000"
 
 runs:
   using: "composite"
   steps:
-
-    # --------------------------------------------------------------------
-    # 1) Création du dossier remote si absent
-    # --------------------------------------------------------------------
-    - name: Create remote folder if missing
+    - name: Ensure remote folder + state file exist
+    # On crée le dossier distant si besoin puis un placeholder de state si absent
       shell: bash
       env:
-        FTP_SERVER: ${{ vars.FTP_SERVER }}
-        FTP_USER:   ${{ secrets.FTP_USERNAME }}
-        FTP_PASS:   ${{ secrets.FTP_PASSWORD }}
+        FTP_SERVER:  ${{ inputs.ftp-server }}
+        FTP_USER:    ${{ inputs.ftp-username }}
+        FTP_PASS:    ${{ inputs.ftp-password }}
+        REMOTE_DIR:  ${{ inputs.server-dir }}
+        STATE_NAME:  ${{ inputs.state-name }}
       run: |
         set -euo pipefail
 
-        remote_dir="${{ inputs.server-dir }}"
+        echo "🔍 Vérification du répertoire distant: ${REMOTE_DIR}"
 
-        echo "📁 Vérification du dossier distant: ${remote_dir}"
-
-        # Test si dossier existant
-        if curl -sS --ftp-ssl --user "$FTP_USER:$FTP_PASS" \
-           "ftp://$FTP_SERVER/${remote_dir}/" > /dev/null 2>&1; then
-          echo "✔️ Dossier existe déjà : ${remote_dir}"
-        else
-          echo "📂 Création du dossier distant : ${remote_dir}"
-          curl -sS --ftp-ssl --user "$FTP_USER:$FTP_PASS" \
-            --quote "MKD ${remote_dir}" \
-            "ftp://$FTP_SERVER/"
-          echo "✔️ Dossier créé."
-        fi
-
-
-    # --------------------------------------------------------------------
-    # 2) Upload conditionnel du fichier de state
-    # --------------------------------------------------------------------
-    - name: Upload remote FTP state file if missing
-      shell: bash
-      env:
-        FTP_SERVER: ${{ vars.FTP_SERVER }}
-        FTP_USER:   ${{ secrets.FTP_USERNAME }}
-        FTP_PASS:   ${{ secrets.FTP_PASSWORD }}
-      run: |
-        set -euo pipefail
-
-        state_name="${{ inputs.state-name }}"
-        remote_dir="${{ inputs.server-dir }}"
-
-        echo "🔍 Vérification du fichier d'état sur le serveur : ${remote_dir}/${state_name}"
-
-        # Listing du dossier distant
-        listing=$(curl -sS --ftp-ssl \
-          --user "$FTP_USER:$FTP_PASS" \
-          "ftp://$FTP_SERVER/${remote_dir}/")
-
-        if echo "$listing" | grep -q "^${state_name}$"; then
-          echo "✔️ Fichier d'état déjà présent. Aucun upload nécessaire."
-        else
-          echo "📄 Fichier d'état manquant. Upload du placeholder vide."
-          echo "{}" > "$state_name"
-
+        # 1) Tenter de lister le répertoire ; si ça échoue, on le crée
+        if ! curl -sS --ftp-ssl \
+          --user "${FTP_USER}:${FTP_PASS}" \
+          "ftp://${FTP_SERVER}/${REMOTE_DIR}/" > /dev/null 2>&1; then
+          echo "📁 Répertoire inexistant, tentative de création..."
           curl -sS --ftp-ssl \
-            --user "$FTP_USER:$FTP_PASS" \
-            --upload-file "$state_name" \
-            "ftp://$FTP_SERVER/${remote_dir}/${state_name}"
-
-          echo "✔️ Placeholder uploadé sur le serveur."
+            --user "${FTP_USER}:${FTP_PASS}" \
+            -Q "MKD /${REMOTE_DIR}" \
+            "ftp://${FTP_SERVER}/" || echo "⚠️ MKD peut échouer si le dossier existe déjà (ok)"
+        else
+          echo "✅ Répertoire déjà présent."
         fi
 
+        # 2) Vérifier si le fichier de state est déjà là
+        echo "🔍 Vérification du fichier de state: ${STATE_NAME}"
+        if curl -sS --ftp-ssl \
+          --user "${FTP_USER}:${FTP_PASS}" \
+          "ftp://${FTP_SERVER}/${REMOTE_DIR}/" | grep -q "${STATE_NAME}"; then
+          echo "✅ Fichier de state déjà présent, rien à faire."
+        else
+          echo "📝 Création d'un placeholder de state vide..."
+          echo "{}" > "${STATE_NAME}"
+          curl -sS --ftp-ssl \
+            --user "${FTP_USER}:${FTP_PASS}" \
+            --upload-file "${STATE_NAME}" \
+            "ftp://${FTP_SERVER}/${REMOTE_DIR}/${STATE_NAME}"
+        fi
 
-    # --------------------------------------------------------------------
-    # 3) Synchronisation principale via FTP-Deploy-Action
-    # --------------------------------------------------------------------
-    - name: 📂 FTP Sync via FTP-Deploy-Action
+    - name: 📂 Sync via FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@v4.3.6
       with:
-        server:     ${{ vars.FTP_SERVER }}
-        username:   ${{ secrets.FTP_USERNAME }}
-        password:   ${{ secrets.FTP_PASSWORD }}
+        server:     ${{ inputs.ftp-server }}
+        username:   ${{ inputs.ftp-username }}
+        password:   ${{ inputs.ftp-password }}
         protocol:   ftps
         port:       21
-
         local-dir:  ${{ inputs.local-dir }}
         server-dir: ${{ inputs.server-dir }}
         state-name: ${{ inputs.state-name }}
-
         log-level:  ${{ inputs.log-level }}
         timeout:    ${{ inputs.timeout }}
