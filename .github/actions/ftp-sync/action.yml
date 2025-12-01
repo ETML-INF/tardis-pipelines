@@ -21,12 +21,6 @@ inputs:
     description: "Timeout en ms"
     required: false
     default: "300000"
-  FTP_USERNAME:
-    required: true
-  FTP_SERVER:
-    required: true
-  FTP_PASSWORD:
-    required: true
   
 
 
