@@ -123,6 +123,25 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build-docs, build-exo-pdf]
+    env:
+      ICT_MODULE: ${{ inputs.ict_module }}
+    steps:
+      - name: ⬇️ Download site HTML
+        uses: actions/download-artifact@v4
+        with:
+          name: site-html
+          path: site
+
+      - name: ⬇️ Download exercices PDF
+        uses: actions/download-artifact@v4
+        with:
+          name: exercices-pdf
+          path: site-exo/exercices
+
       - name: 📂 Sync cours (HTML)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
@@ -135,7 +154,7 @@ jobs:
       - name: 📂 Sync /exercices (PDF)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
-          local-dir: exo-pdf/
+          local-dir: site-exo/exercices/
           server-dir: ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}/
           state-name: .ftp-sync-exercices.json
           log-level: minimal
