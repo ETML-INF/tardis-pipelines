@@ -41,16 +41,35 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: 🧪 Debug FTP env (optionnel)
+    - name: 🔒 Vérification des secrets requis
       shell: bash
-      env:
-        FTP_SERVER:   ${{ inputs.ftp-server }}
-        FTP_USERNAME: ${{ inputs.ftp-username }}
       run: |
-        echo "FTP_SERVER=${FTP_SERVER:-<vide>}"
-        echo "FTP_USERNAME=${FTP_USERNAME:-<vide>}"
-        echo "REMOTE_DIR=${{ inputs.server-dir }}"
-        echo "STATE_NAME=${{ inputs.state-name }}"
+        set -euo pipefail
+
+        missing=0
+
+        if [[ -z "${FTP_SERVER:-}" ]]; then
+          echo "❌ ERREUR : La variable FTP_SERVER est vide ou absente."
+          missing=1
+        fi
+
+        if [[ -z "${FTP_USERNAME:-}" ]]; then
+          echo "❌ ERREUR : La variable FTP_USERNAME est vide ou absente."
+          missing=1
+        fi
+
+        if [[ -z "${FTP_PASSWORD:-}" ]]; then
+          echo "❌ ERREUR : La variable FTP_PASSWORD est vide ou absente."
+          missing=1
+        fi
+
+        if [[ "$missing" -eq 1 ]]; then
+          echo "⛔ Arrêt : Les secrets FTP ne sont pas transmis correctement depuis le workflow appelant."
+          exit 1
+        fi
+
+        echo "✅ Secrets FTP détectés."
+
 
     - name: 🧱 Créer le dossier distant + placeholder de state si nécessaire
       shell: bash
