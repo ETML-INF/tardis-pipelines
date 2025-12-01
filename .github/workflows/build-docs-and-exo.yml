@@ -143,24 +143,27 @@ jobs:
 
       - name: 📂 Sync cours (HTML)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
+        env:
+          FTP_SERVER:   ${{ vars.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         with:
           local-dir:    site/
           server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_DOCS_DIR }}
           state-name:   ".ftp-sync-support.json"
           log-level:    "minimal"
           timeout:      "300000"
-          FTP_SERVER:   ${{ vars.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
       - name: 📂 Sync /exercices (PDF)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
+        env:
+          FTP_SERVER:   ${{ vars.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        with:
         with:
           local-dir:    site-exo/exercices/
           server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_EXO_DIR }}
           state-name:   ".ftp-sync-exercices.json"
           log-level:    "minimal"
           timeout:      "300000"
-          FTP_SERVER:   ${{ vars.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}

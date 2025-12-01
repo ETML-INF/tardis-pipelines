@@ -30,8 +30,6 @@ runs:
     - name: 🧪 Debug FTP env (optionnel)
       shell: bash
       run: |
-        echo "FTP_SERVER=${{ env.FTP_SERVER }}"
-        echo "FTP_USERNAME=${{ env.FTP_USERNAME }}"
         echo "REMOTE_DIR=${{ inputs.server-dir }}"
         echo "STATE_NAME=${{ inputs.state-name }}"
 
@@ -41,7 +39,6 @@ runs:
         REMOTE_DIR: ${{ inputs.server-dir }}
         STATE_NAME: ${{ inputs.state-name }}
       run: |
-        set -euo pipefail
 
         echo "URL = ftp://${FTP_SERVER}/${REMOTE_DIR}/"
 
