@@ -46,7 +46,7 @@ async function main() {
   const template = await fs.readFile(TEMPLATE_PATH, "utf8");
 
   // 2) Lister PDFs
-  const exoDir = ROOT;
+  const exoDir = path.join(ROOT, "exercices");;
   const solDir = path.join(ROOT, "solutions");
 
   const exo = await listPdfs(exoDir);
@@ -54,7 +54,7 @@ async function main() {
 
   // 3) Construire sections HTML
   const exoSection = exo.length
-    ? buildListSection("Exercices", "./", exo)
+    ? buildListSection("Exercices", "./exercices", exo)
     : '<p class="exo-empty">Aucun exercice PDF disponible pour le moment.</p>';
 
   const solSection = sol.length
