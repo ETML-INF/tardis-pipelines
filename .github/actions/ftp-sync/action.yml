@@ -6,39 +6,62 @@ inputs:
   local-dir:
     description: "Répertoire local à synchroniser"
     required: true
+
   server-dir:
     description: "Répertoire distant (FTP), ex: moduleICT/346/cours/"
     required: true
+
   state-name:
     description: "Nom du fichier d'état pour le delta FTP"
     required: false
     default: ".ftp-sync-state.json"
+
   log-level:
     description: "Niveau de logs (minimal/basic/standard/verbose)"
     required: false
     default: "minimal"
+
   timeout:
     description: "Timeout en ms"
     required: false
     default: "300000"
-  
 
+  ftp-server:
+    description: "Nom du serveur FTP (ex: enseignement.section-inf.ch)"
+    required: true
+
+  ftp-username:
+    description: "Nom d'utilisateur FTP"
+    required: true
+
+  ftp-password:
+    description: "Mot de passe FTP"
+    required: true
 
 runs:
   using: "composite"
   steps:
     - name: 🧪 Debug FTP env (optionnel)
       shell: bash
+      env:
+        FTP_SERVER:   ${{ inputs.ftp-server }}
+        FTP_USERNAME: ${{ inputs.ftp-username }}
       run: |
+        echo "FTP_SERVER=${FTP_SERVER:-<vide>}"
+        echo "FTP_USERNAME=${FTP_USERNAME:-<vide>}"
         echo "REMOTE_DIR=${{ inputs.server-dir }}"
         echo "STATE_NAME=${{ inputs.state-name }}"
 
     - name: 🧱 Créer le dossier distant + placeholder de state si nécessaire
       shell: bash
       env:
-        REMOTE_DIR: ${{ inputs.server-dir }}
-        STATE_NAME: ${{ inputs.state-name }}
+        FTP_SERVER:   ${{ inputs.ftp-server }}
+        FTP_USERNAME: ${{ inputs.ftp-username }}
+        FTP_PASSWORD: ${{ inputs.ftp-password }}
+        REMOTE_DIR:   ${{ inputs.server-dir }}
+        STATE_NAME:   ${{ inputs.state-name }}
       run: |
+        set -euo pipefail
 
         echo "URL = ftp://${FTP_SERVER}/${REMOTE_DIR}/"
 
@@ -67,11 +90,11 @@ runs:
     - name: 📂 Sync via FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@v4.3.6
       with:
-        server:   ${{ env.FTP_SERVER }}
-        username: ${{ env.FTP_USERNAME }}
-        password: ${{ env.FTP_PASSWORD }}
-        protocol: ftps
-        port: 21
+        server:     ${{ inputs.ftp-server }}
+        username:   ${{ inputs.ftp-username }}
+        password:   ${{ inputs.ftp-password }}
+        protocol:   ftps
+        port:       21
         local-dir:  ${{ inputs.local-dir }}
         server-dir: ${{ inputs.server-dir }}
         state-name: ${{ inputs.state-name }}
