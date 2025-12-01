@@ -1,0 +1,120 @@
+name: Build and upload slides to section-inf
+
+on:
+  workflow_call:
+    inputs:
+      ict_module:
+        description: "Code du module ICT (ex: I346)"
+        required: true
+        type: string
+    secrets:
+      ftp_server:
+        description: "Host FTP (ex: enseignement.section-inf.ch)"
+        required: true
+      ftp_username:
+        description: "Compte FTP"
+        required: true
+      ftp_password:
+        description: "Mot de passe FTP"
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ICT_MODULE: ${{ input.ICT_MODULE }}
+    steps:
+      - name: Check ICT_MODULE
+        run: |
+          if [ -z "${ICT_MODULE}" ]; then
+            echo "::error::❌ ICT_MODULE non défini. Configurez-le dans Settings → Actions → Variables."
+            exit 1
+          else
+            echo "✅ ICT_MODULE=${ICT_MODULE}"
+          fi
+
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install marp-cli
+        run: npm i -g @marp-team/marp-cli
+
+      - name: Build slides (HTML)
+        run: |
+          set -euo pipefail
+          SRC_DIR="b-UnitesEnseignement/Presentations"
+          OUT_HTML="${SRC_DIR}/dist/html"
+          STYLE_DIR="${SRC_DIR}/style"
+          ASSETS_DIR="${SRC_DIR}/assets"
+          mkdir -p "${OUT_HTML}"
+
+          shopt -s nullglob
+          FILES=(${SRC_DIR}/*.md)
+          if [ ${#FILES[@]} -eq 0 ]; then
+            echo "::warning::Aucun fichier .md trouvé dans ${SRC_DIR}/"
+          fi
+
+          for f in "${FILES[@]}"; do
+            base="$(basename "${f%.md}")"
+            marp "${f}" --html --allow-local-files \
+              --theme-set "${STYLE_DIR}" \
+              --output "${OUT_HTML}/${base}.html"
+          done
+
+          ROOT_INDEX="${SRC_DIR}/index.php"
+          if [ -f "${ROOT_INDEX}" ]; then
+            echo "ℹ️  index.php détecté → copie dans ${OUT_HTML}/"
+            cp "${ROOT_INDEX}" "${OUT_HTML}/index.php"
+          else
+            echo "ℹ️  Aucun index.php à la racine de Presentations/"
+          fi
+
+          if [ -d "${STYLE_DIR}" ]; then
+            echo "ℹ️  Dossier style détecté → copie dans ${OUT_HTML}/"
+            cp -r "${STYLE_DIR}" "${OUT_HTML}/"
+          else
+            echo "ℹ️  Aucun dossier style à la racine de Presentations/"
+          fi
+
+          ASSETS_FOLDER="${SRC_DIR}/assets"
+          if [ -d "${ASSETS_DIR}" ]; then
+            echo "ℹ️  Dossier assets détecté → copie dans ${OUT_HTML}/"
+            cp -r "${ASSETS_DIR}" "${OUT_HTML}/"
+          else
+            echo "ℹ️  Aucun dossier assets à la racine de Presentations/"
+          fi
+
+      - name: Upload slides artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: slides-site
+          path: b-UnitesEnseignement/Presentations/dist/html/**
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: slides-site
+          path: site/dist/html
+
+      - name: 📂 Sync présentations (HTML)
+        uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
+        with:
+          local-dir:    site/dist/html/
+          server-dir:   ${{ vars.ICT_ROOT_FOLDER }}/${{ inputs.ict_module }}/${{ vars.FTP_PRESENTATIONS_DIR }}
+          state-name:   ".ftp-sync-deck.json"
+          log-level:    "minimal"
+          timeout:      "300000"
+          ftp-server:   ${{ vars.FTP_SERVER }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
