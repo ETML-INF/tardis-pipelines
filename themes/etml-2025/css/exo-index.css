@@ -1,0 +1,95 @@
+:root {
+  color-scheme: light dark;
+  --bg-body: #f7f7fb;
+  --bg-header: #0f172a;
+  --fg-header: #e2e8f0;
+  --fg-main: #111827;
+  --accent: #0ea5e9;
+  --border-subtle: #e5e7eb;
+  --radius: 6px;
+  --shadow-soft: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  background: var(--bg-body);
+  color: var(--fg-main);
+}
+
+.exo-header {
+  padding: 1rem 1.25rem;
+  background: var(--bg-header);
+  color: var(--fg-header);
+  box-shadow: var(--shadow-soft);
+}
+
+.exo-header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.exo-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 2rem;
+}
+
+.exo-section {
+  margin-bottom: 1.75rem;
+  padding: 1rem 1rem 0.75rem;
+  background: #ffffff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-subtle);
+}
+
+.exo-section h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.exo-section ul {
+  margin: 0.25rem 0 0.75rem 1.1rem;
+  padding: 0;
+  list-style-type: disc;
+}
+
+.exo-section li {
+  margin: 0.2rem 0;
+  font-size: 0.95rem;
+}
+
+.exo-section a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.exo-section a:hover {
+  text-decoration: underline;
+}
+
+.exo-empty {
+  opacity: 0.75;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .exo-main {
+    padding: 0.75rem 0.75rem 1.5rem;
+  }
+  .exo-section {
+    padding: 0.75rem 0.75rem 0.6rem;
+  }
+}

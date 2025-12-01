@@ -152,6 +152,26 @@ jobs:
           name: exercices-pdf
           path: site-exo/exercices
 
+      - name: Checkout tardis-pipelines (pour template index + CSS)
+        uses: actions/checkout@v4
+        with:
+          repository: ETML-INF/tardis-pipelines
+          path: tardis-pipelines
+          # plus tard: ref: v0
+
+      - name: Setup Node pour génération index
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Générer index.html + CSS pour /exercices
+        working-directory: ${{ github.workspace }}
+        env:
+          EXO_ROOT: site-exo/exercices
+          TARDIS_THEME_ROOT: ${{ github.workspace }}/tardis-pipelines/themes/${{ inputs.theme }}
+        run: |
+          node tardis-pipelines/scripts/build_exo_index.mjs    
+
       - name: 📂 Sync cours (HTML)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
