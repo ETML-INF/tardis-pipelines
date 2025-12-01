@@ -53,11 +53,11 @@ runs:
         echo "🔍 Vérification du répertoire distant: ${REMOTE_DIR}"
 
         # 1) Tenter de lister le répertoire ; si ça échoue, on le crée
-        if ! curl -sS --ftp-ssl \
+        if ! curl -k -sS --ftp-ssl \
           --user "${FTP_USER}:${FTP_PASS}" \
           "ftp://${FTP_SERVER}/${REMOTE_DIR}/" > /dev/null 2>&1; then
           echo "📁 Répertoire inexistant, tentative de création..."
-          curl -sS --ftp-ssl \
+          curl -k -sS --ftp-ssl \
             --user "${FTP_USER}:${FTP_PASS}" \
             -Q "MKD /${REMOTE_DIR}" \
             "ftp://${FTP_SERVER}/" || echo "⚠️ MKD peut échouer si le dossier existe déjà (ok)"
@@ -67,14 +67,14 @@ runs:
 
         # 2) Vérifier si le fichier de state est déjà là
         echo "🔍 Vérification du fichier de state: ${STATE_NAME}"
-        if curl -sS --ftp-ssl \
+        if curl -k -sS --ftp-ssl\
           --user "${FTP_USER}:${FTP_PASS}" \
           "ftp://${FTP_SERVER}/${REMOTE_DIR}/" | grep -q "${STATE_NAME}"; then
           echo "✅ Fichier de state déjà présent, rien à faire."
         else
           echo "📝 Création d'un placeholder de state vide..."
           echo "{}" > "${STATE_NAME}"
-          curl -sS --ftp-ssl \
+          curl -k -sS --ftp-ssl \
             --user "${FTP_USER}:${FTP_PASS}" \
             --upload-file "${STATE_NAME}" \
             "ftp://${FTP_SERVER}/${REMOTE_DIR}/${STATE_NAME}"
