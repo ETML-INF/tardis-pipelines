@@ -22,7 +22,6 @@ inputs:
     required: false
     default: "300000"
 
-
 runs:
   using: "composite"
   steps:
@@ -30,7 +29,7 @@ runs:
       shell: bash
       run: |
         echo "FTP_SERVER=${FTP_SERVER:-<vide>}"
-        echo "FTP_USERNAME length=${#FTP_USERNAME:-0}"
+        echo "FTP_USERNAME=${FTP_USERNAME:-<vide>}"
         echo "REMOTE_DIR=${{ inputs.server-dir }}"
         echo "STATE_NAME=${{ inputs.state-name }}"
 
@@ -42,12 +41,12 @@ runs:
       run: |
         set -euo pipefail
 
-        echo "URL = ftp://${FTP_SERVER}/${REMOTE_DIR}"
+        echo "URL = ftp://${FTP_SERVER}/${REMOTE_DIR}/"
 
-        # 1) Tenter de lister le répertoire (le serveur crée souvent auto les sous-dossiers manquants)
+        # 1) Tenter de lister le répertoire (et le faire créer au besoin)
         curl -k --ssl-reqd --ftp-pasv \
           --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
-          "ftp://${FTP_SERVER}/${REMOTE_DIR}" || true
+          "ftp://${FTP_SERVER}/${REMOTE_DIR}/" || true
 
         # 2) Vérifier si le fichier de state existe déjà
         echo "🔍 Vérification du fichier de state: ${STATE_NAME}"
