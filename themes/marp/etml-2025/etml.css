@@ -1,0 +1,363 @@
+/* @theme etml */
+
+/* ⚠ Important, ne modifiez pas etml.css, mais copiez-le si vous voulez faire votre propre thème.
+   Dans votre propre thème renommer le nom du style (par exemple : mystyle) en ligne 1 avec la directive @theme.
+
+   Cela permet à MARP d'enregistrer votre thème et de l'appliquer.
+*/
+
+/* ===== Constantes ===== 
+   Définissent entre autre les couleurs de base et les proportions.   
+*/
+:root{
+  
+  /* Palette modernisée (bleu électrique + orange contraste) */
+  --brand-primary:   #0f2a6d; /* accent bleu électrique */
+  --brand-secondary: #475569; /* bleu profond pour titres */
+  --brand-accent:    #ff7a1a; 
+
+  --text-main:  #0b1220;
+  --bg-slide:   #ffffff;
+
+  /* Barres */
+  --bar-bg:     #f2f6ff;
+  --bar-fg:     #0b1220;
+  --bar-border: #d6e2ff;
+
+  /* Code */
+  --code-bg: #0b1220;
+  --code-fg: #e5e7eb;
+
+  /* Layout */
+  --header-h: 8%;
+  --footer-h: 8%;
+  --text-left: 15%;
+  --text-left-small: 5%;
+  --text-width: 85%;
+  --text-right: 15%;
+  --text-right-small: 5%;
+  --font-ui: Tahoma, "Segoe UI", Arial, sans-serif;
+  --h1-shadow: 1px 2px 4px rgba(0,0,0,.15);
+}
+
+
+/* Commun : définition des styles de base */
+section{
+  position: relative;
+  box-sizing: border-box;
+  font-family: var(--font-ui);
+  color: var(--text-main);
+  background: repeating-linear-gradient(
+    0deg,
+    #f6f8fc,
+    #f6f8fc 3px,
+    #f8f9fb 3px,
+    #f8f9fb 6px
+  );
+  padding: 4rem 2.2rem;
+  padding-top: calc(var(--header-h) + 1.2rem);
+  padding-bottom: calc(var(--footer-h) + 1.2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+section header {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.4rem;
+  background: var(--bar-bg);
+  border-bottom: 1px solid var(--bar-border);
+  color: var(--bar-fg);
+}
+
+section header .left img{
+  display: block;
+  height: 28px; 
+  width: auto;
+}
+
+section footer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: var(--footer-h);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.4rem;
+  background: var(--bar-bg);
+  border-top: 1px solid var(--bar-border);
+  color: var(--bar-fg);
+}
+
+/* Titres */
+section h1{
+  font-size: 3.4rem;
+  color: var(--brand-primary);
+  font-weight: 700;
+  text-shadow: var(--h1-shadow);
+}
+section h2{ 
+  font-size: 1.9rem; 
+  color: var(--brand-secondary); 
+}
+section h3{ 
+  font-size: 1.2rem; 
+  color: var(--brand-secondary); 
+}
+
+section .badge{
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .25rem .6rem; border-radius: 999px;
+  background: #eaf2ff;               
+  color: var(--brand-secondary);
+  border: 1px solid rgba(37,99,255,.28);
+  font-weight: 600; font-size: 1.05rem; line-height: 1.2; white-space: nowrap;
+}
+
+
+/* =========================================
+   TEXTE PRINCIPAL (paragraphes et listes)
+   ========================================= */
+
+section p,
+section ul,
+section ol {
+  /* largeur et positionnement horizontal */
+  max-width: calc(100% - var(--text-left) - var(--text-right));
+  margin-left: var(--text-left);
+  margin-right: var(--text-right);
+  box-sizing: border-box;
+
+  /* style général */
+  font-size: 2rem;
+  line-height: 1.7;
+  margin-top: 0;
+  margin-bottom: 1.6rem;  
+}
+section li::marker{
+  color: var(--brand-secondary);
+}
+
+/* Listes : indentation interne pour les puces ou numéros */
+section ul,
+section ol {
+  padding-left: 1rem;
+}
+
+section li {
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0 0 1rem 0;
+}
+
+/* Liens (bleu électrique cohérent) */
+section a{
+  color: var(--brand-primary);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(37,99,255,.35);
+}
+section a:hover{ border-bottom-color: rgba(37,99,255,.7); }
+
+
+/* =========================================
+   Slides types : ici, on définit les types de slides. Le but est de définir un certain nombre de modèles de slide prêt à l'emploi avec
+   une utilité précise.
+
+   Slide "title" : le slide titre sans header ou footer
+   Slide "question" : permet de questionner la classe sur un point particulier (pour lancer un sujet ou pour vérifier la compréhension). On utilise h1 et h2
+   Slide "schema" : permet d'afficher une image en grand
+   Slide "concept" : permet de faire émerger un concept. Pour ne pas distraire les élèves, on utilise que h1 et on masquer header et footer. Utile pour amorcer un brainstorm au tableau
+   Slide "definition" : permet de poser une définition (recommandé : une définition par slide). Mise en évidence du titre par un "def."
+   Slide "example" : permet d'illustrer un exemple
+   Slide "check" : permet de lister (✅) les éléments vérifiés
+   Slide "warning" : met en évidence un point d'attention avec une couleur orange
+   Slide "summary" : résume les points importants
+   Slide "transition" : permet de créer des moments et de séparer les blocs
+   ========================================= */
+
+/* Title */   
+section.title{ display: grid; place-items: center; text-align: center; background: #ffffff; }
+section.title header, section.title footer, section.title::after {
+  display: none !important; content: none !important;
+}
+
+/* Question */
+section.question{ display: flex; align-items: center; justify-content: center; text-align: center; }
+
+/* Schéma */
+section.schema{ text-align: center; }
+section.schema img{ max-width: 92%; height: auto; }
+
+/* Citation */
+section.quote{ text-align: center; font-style: italic; }
+
+/* Concept */
+section.concept {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  /* fond : noir bleuté profond, léger dégradé radial */
+  background: radial-gradient(circle at center,
+              #1b1b1f 0%, #0a0a0d 80%, #000 100%);
+}
+section.concept h1 {
+  font-size: 7.5rem;
+  color: #f7e78d;                         /* blanc chaud légèrement doré */
+  background: rgba(20,20,20,0.7);         /* transparence noire sous le texte */
+  border: 4px solid #ffcc00;              /* jaune néon */
+  border-radius: 18px;
+  padding: 4rem 5rem;
+  max-width: 80%;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+  font-weight: lighter;
+
+  /* halo néon */
+  box-shadow:
+    0 0 20px rgba(255, 230, 120, 0.6),
+    0 0 40px rgba(255, 220, 90, 0.4),
+    inset 0 0 12px rgba(255, 230, 120, 0.2);
+
+  text-shadow:
+    0 0 8px rgba(255, 245, 150, 0.8),
+    0 0 16px rgba(255, 220, 80, 0.6);
+
+  animation: conceptPulse 6s ease-in-out infinite;
+}
+section.concept > :not(h1):not(header):not(footer) {
+  display: none !important;
+}
+section.concept header,
+section.concept footer,
+section.concept::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Animation : halo qui respire */
+@keyframes conceptPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(255, 230, 120, 0.5),
+      0 0 40px rgba(255, 220, 90, 0.3),
+      inset 0 0 10px rgba(255, 230, 120, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 28px rgba(255, 240, 160, 0.8),
+      0 0 60px rgba(255, 230, 120, 0.6),
+      inset 0 0 16px rgba(255, 240, 160, 0.25);
+  }
+}
+
+/* Définition */
+section.definition h1::before {
+  content: "(Def.) ";
+  color: var(--brand-primary);
+  font-weight: 600;
+  font-size: 1.6rem;
+  margin-right: 0.4rem;
+  opacity: 0.75;
+}
+section.definition{
+  border-left: 8px solid var(--brand-primary);
+  padding-left: 2rem;
+  
+}
+
+section.definition h1 {
+  font-style: italic;
+  text-transform: uppercase;
+  text-decoration: underline dotted;
+}
+
+/* Example */
+section.example pre{
+  background: var(--code-bg);
+  color: var(--code-fg);
+  border-radius: .5rem;
+  padding: 1rem 1.2rem;
+  font-size: 1.1rem;
+}
+
+/* Check */
+section.check ul{ list-style: "✅  "; }
+
+
+/* Warning */
+section.warning{
+  background: #fff4e6;
+  border: 16px solid var(--brand-accent);
+  box-sizing: border-box;
+  padding: 1.2rem 1.4rem;
+}
+section.warning h1{ color:#a14a00; margin-top:0; }
+
+/* Summary */
+section.summary{
+  background: #eef4ff;           
+  color: var(--text-main);
+  border-radius: .6rem;
+  padding: 1.2rem 1.4rem;
+}
+section.summary ul{ list-style: "◾ "; }
+
+
+/* Transition */
+section.transition {
+  display: grid;
+  place-items: center;
+  background: #f8fafc;
+  text-align: center;
+}
+
+section.transition h1 {
+  color: var(--brand-primary);
+  font-size: 10rem;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  opacity: 0;
+  animation: fadeInSlow 2s ease forwards;
+}
+
+@keyframes fadeInSlow {
+  from { opacity: 0; letter-spacing: 0.08em; }
+  to   { opacity: 1; letter-spacing: 0.04em; }
+}
+
+/* supprime header, footer et pagination */
+section.transition header, section.transition footer, section.transition::after {
+  display: none !important; content: none !important;
+}
+
+/* Activity */
+section.activity{ align-items:flex-start; background:#fff; }
+section.activity h1{
+  font-size:2.4rem; color:var(--brand-primary);
+  margin:0 0 .4rem 0; text-shadow:none;
+}
+section.activity h2{
+  font-size:1.4rem; color:var(--brand-secondary);
+  margin:1rem 0 .4rem 0; letter-spacing:.02em;
+  text-transform:uppercase; font-weight:700;
+}
+section.activity p,
+section.activity ul,
+section.activity ol{
+  margin-left:var(--text-left-small);
+  margin-right:var(--text-right-small);
+  font-size:1.3rem; line-height:1.5; margin-bottom:.6rem; box-sizing:border-box;
+}
+section.activity ul, section.activity ol{ padding-left:1rem; }
+section.activity li{ margin-bottom:.4rem; }

@@ -1,4 +1,4 @@
-name: Build and upload slides to section-inf
+name: TARDIS - Build marp presentations
 
 on:
   workflow_call:

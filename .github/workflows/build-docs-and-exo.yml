@@ -1,4 +1,4 @@
-name: TARDIS – Build docs & exercices PDF
+name: TARDIS – Build html & exercices PDF
 
 on:
   workflow_call:
@@ -12,8 +12,13 @@ on:
         required: false
         default: "b-UnitesEnseignement/Support"
         type: string
-      theme:
-        description: "Thème ETML (ex: etml-2025)"
+      sphinx_theme: 
+        description: "Thème ETML (ex: etml-2025) utilisé pour la génération des pages HTML"
+        required: false
+        default: "etml-2025"
+        type: string
+      pdf_theme: # Pas encore implémenté
+        description: "Thème ETML (ex: etml-2025) utilisé pour la génération des PDF"
         required: false
         default: "etml-2025"
         type: string
@@ -35,6 +40,7 @@ jobs:
     env:
       ICT_MODULE: ${{ inputs.ict_module }}
       SPHINX_SRC_DIR: ${{ inputs.sphinx_src }}
+      SPHINX_THEME: ${{ inputs.sphinx_theme }}
 
     steps:
       # 1) Repo APPELANT (le cours)

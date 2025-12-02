@@ -6,10 +6,9 @@ from datetime import datetime
 # -- Informations générales ---------------------------------------------------
 project = os.getenv("ICT_MODULE", "Module ICT non défini")
 author = "ETML (Section Informatique)"
-release = "1.0"
-version = "1.0"
 copyright = f"{datetime.now().year}, {author}"
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+SSPHINX_THEME  = os.getenv("SPHINX_THEME", "etml-2025")
 
 # -- Extensions Sphinx --------------------------------------------------------
 EXTENSIONS_DIR = os.path.join(BASE_DIR, "extensions")
@@ -43,16 +42,19 @@ exclude_patterns = []
 
 # -- Options HTML --------------------------------------------------------------
 html_theme = "sphinx_rtd_theme"
-html_static_path = ["themes", "Theme_Sphinx_ETML", "assets"]
+html_static_path = [
+    os.path.join("themes", "sphinx", SPHINX_THEME, "assets"),
+    os.path.join("themes", "sphinx", "js"),
+]
 html_css_files = [
-    "Theme_Sphinx_ETML/customLight.css",
+    "customLight.css",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/editor/editor.main.css",
 ]
 html_js_files = [
-    "js/customToggle.js",
+    "customToggle.js",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/loader.js",
-    "js/monaco-init.js",
-    "js/responses.js",
+    "monaco-init.js",
+    "responses.js",
 ]
 
 # -- Paths ---------------------------------------------------------------------
