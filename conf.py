@@ -8,7 +8,7 @@ project = os.getenv("ICT_MODULE", "Module ICT non défini")
 author = "ETML (Section Informatique)"
 copyright = f"{datetime.now().year}, {author}"
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-SSPHINX_THEME  = os.getenv("SPHINX_THEME", "etml-2025")
+SPHINX_THEME  = os.getenv("SPHINX_THEME", "etml-2025")
 
 # -- Extensions Sphinx --------------------------------------------------------
 EXTENSIONS_DIR = os.path.join(BASE_DIR, "extensions")
