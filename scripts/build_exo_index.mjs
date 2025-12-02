@@ -3,10 +3,13 @@ import { promises as fs } from "fs";
 import path from "path";
 
 const ROOT = process.env.EXO_ROOT || "site-exo/exercices";
-const THEME_ROOT = process.env.TARDIS_THEME_ROOT || "tardis-pipelines/themes/etml-2025";
 
-const TEMPLATE_PATH = path.join(THEME_ROOT, "templates", "exo-index.html");
-const CSS_SOURCE = path.join(THEME_ROOT, "css", "exo-index.css");
+const PDF_THEME_SELECTED = process.env.PDF_THEME
+  ?  path.join("tardis-pipelines", "themes", "pdf", process.env.PDF_THEME)
+  : path.join("tardis-pipelines", "themes", "pdf", "etml-2025");
+
+const TEMPLATE_PATH = path.join(PDF_THEME_SELECTED, "templates", "exo-index.html");
+const CSS_SOURCE = path.join(PDF_THEME_SELECTED, "css", "exo-index.css");
 const CSS_TARGET = path.join(ROOT, "exo-index.css"); // copié à côté de index.html
 
 async function listPdfs(dir) {
