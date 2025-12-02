@@ -95,6 +95,7 @@ jobs:
       SPHINX_SRC_DIR: ${{ inputs.sphinx_src }}
       HTML_OUT_DIR: ${{ inputs.sphinx_src }}/_build/html
       PDF_OUT_DIR: ${{ inputs.sphinx_src }}/_build/exo-pdf
+      PDF_THEME: ${{ inputs.pdf_theme }}
       # Chemin complet vers le thème dans tardis-pipelines
       TARDIS_THEME_ROOT: ${{ github.workspace }}/tardis-pipelines/themes/${{ inputs.theme }}
 

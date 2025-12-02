@@ -14,9 +14,9 @@ const PDF_OUT = process.env.PDF_OUT_DIR || path.join(SRC, "_build/exo-pdf");
 const ICT_MODULE = process.env.ICT_MODULE || "Module ICT";
 const TODAY = new Date().toLocaleDateString("fr-CH");
 
-const TARDIS_THEME_ROOT = process.env.TARDIS_THEME_ROOT
-  ? process.env.TARDIS_THEME_ROOT
-  : path.join("tardis-pipelines", "themes", "etml-2025");
+const PDF_THEME = process.env.PDF_THEME
+  ? process.env.PDF_THEME
+  : path.join("tardis-pipelines", "themes", "pdf", "etml-2025");
 
 // ---------------------------------------------------------------------------
 // UTILS
@@ -69,18 +69,18 @@ async function safeLoadBinaryDataURL(filePath, mime = "image/png") {
 }
 
 const headerCss = await safeLoad(
-  path.join(TARDIS_THEME_ROOT, "css", "header.css")
+  path.join(PDF_THEME, "css", "header.css")
 );
 const footerCss = await safeLoad(
-  path.join(TARDIS_THEME_ROOT, "css", "footer.css")
+  path.join(PDF_THEME, "css", "footer.css")
 );
 
 const LOGO_DATA = await safeLoadBinaryDataURL(
-  path.join(TARDIS_THEME_ROOT, "images", "etml_logo_complet.png")
+  path.join(PDF_THEME, "images", "etml_logo_complet.png")
 );
 
 const SECTION_LOGO_DATA = await safeLoadBinaryDataURL(
-  path.join(TARDIS_THEME_ROOT, "images", "section_info_logo.png")
+  path.join(PDF_THEME, "images", "section_info_logo.png")
 );
 
 // ---------------------------------------------------------------------------
