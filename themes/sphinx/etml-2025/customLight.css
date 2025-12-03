@@ -377,23 +377,33 @@ textarea:focus-visible {
 }
 
 /* ----------------------------------------------------------
-   Navigation – style "ghost buttons"
+   Navigation – Ghost buttons (palette moderne)
 ---------------------------------------------------------- */
 
-/* Reset léger des <li> pour éviter les styles hérités trop lourds */
+/* Fond général de la sidebar */
+.wy-nav-side {
+    background-color: #F8FAFC; /* neutre moderne */
+}
+
+/* Wrapper scrollable */
+.wy-side-scroll {
+    border-right: 1px solid #E2E8F0; /* séparation douce */
+}
+
+/* Items du menu */
 .wy-menu-vertical li {
-    margin: 0.2rem 0;
-    border-radius: 8px;          /* pastilles */
+    margin: 0.25rem 0;
+    border-radius: 8px;          /* pastille ghost */
     overflow: hidden;
 }
 
-/* Liens = boutons fantômes */
+/* Liens ghost */
 .wy-menu-vertical a {
     display: block;
-    padding: 0.35rem 0.9rem;
-    border: 1px solid transparent; /* contour invisible au repos */
+    padding: 0.45rem 0.9rem;
+    border: 1px solid transparent;
     border-radius: 8px;
-    color: #303030;
+    color: #1E293B;                /* texte neutre moderne */
     text-decoration: none;
     transition:
         background-color 0.15s ease,
@@ -402,37 +412,32 @@ textarea:focus-visible {
         transform 0.08s ease;
 }
 
-/* Hover : léger remplissage + contour bleu */
+/* Hover : léger remplissage + contour subtil */
 .wy-menu-vertical a:hover {
-    background-color: #e9eff8;     /* bleu très clair */
-    border-color: #b5c6e8;
-    transform: translateX(1px);    /* petit effet de "slide" */
+    background-color: #E2E8F0;     /* Slate-200 */
+    border-color: #CBD5E1;         /* Slate-300 */
+    transform: translateX(1px);
 }
 
-/* Élément courant (current) = ghost plus marqué */
+/* Élément actif (current) */
 .wy-menu-vertical li.current > a {
-    background-color: #dbe6f8;
-    border-color: #004595;         /* bleu ETML */
-    color: #002a5c;
+    background-color: #DCEBFF;     /* bleu moderne très doux */
+    border-color: #3B82F6;         /* Blue-500 */
+    color: #1E40AF;                /* Blue-800 */
     font-weight: 600;
 }
 
-/* Sous-niveaux (toctree-l1, l2) légèrement différenciés si besoin */
-.wy-menu-vertical li.toctree-l1 > a {
-    font-size: 0.98rem;
-}
-
+/* Sous-éléments */
 .wy-menu-vertical li.toctree-l2 > a {
     font-size: 0.9rem;
-    padding-left: 1.6rem;          /* léger retrait pour les sous-entrées */
+    padding-left: 1.6rem;
 }
 
-/* Focus clavier sur les liens du menu */
+/* Focus clavier */
 .wy-menu-vertical a:focus-visible {
-    outline: 2px solid #004595;
+    outline: 2px solid #3B82F6;
     outline-offset: 2px;
 }
-
 /* ----------------------------------------------------------
      8. Responsive
   ---------------------------------------------------------- */
