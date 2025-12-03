@@ -18,8 +18,6 @@ Dans `.github/workflows/` :
   > Build la doc Sphinx (HTML) + génère les PDF d’exercices via Playwright + déploie le tout par FTP.
 - `build-lessons-schedule.yml`  
   > Génère le manifeste TARDIS (tardis.yml / tardis.json) + déploie les manifests et les fichiers UI (index.html / styles.css).
-- `marp-to-github-pages.yml`  
-  > Build les présentations Marp et les publie sur GitHub Pages (pour la section ou un module).
 - `marp-to-section-inf.yml`  
   > Build les présentations Marp et les déploie sur le FTP de la section INF.
 
@@ -44,18 +42,49 @@ Dans `extensions/` :
 
 ### 1.4. Thèmes & assets
 
-Dans `themes/` :
+# 🎨 Thèmes & Assets — Synthèse
 
-- `etml-2025/`
-  - `css/`
-    - `print-exo.css` : feuille de style impression des exercices (Playwright).
-    - `header.css` / `footer.css` : styles d’en-tête/pied de page PDF (injectés par le script Playwright).
-  - `images/`
-    - `etml_logo_complet.png`
-    - `section_info_logo.png`
-- `Theme_Sphinx_ETML/`
-  - `customLight.css`, `customDark.css`, `customToggle.js`, polices ETML, etc.
-  > Utilisés comme thème Sphinx commun pour les supports HTML.
+Le dossier `themes/` contient le **thème par défaut `etml-2025`**, utilisé dans l’ensemble de la chaîne TARDIS :
+
+- **MARP** (présentations)
+- **PDF / Playwright** (supports & exercices)
+- **Sphinx** (documentation HTML)
+- **TARDIS Frontend** (landing pages des modules)
+
+Chaque pipeline charge ce thème via un paramètre (ex. `THEME=etml-2025`).
+
+## 💡 Personnalisation
+
+Pour créer une variante visuelle :
+
+1. Copier le dossier `etml-2025`
+2. Le renommer (ex. `etml-darklab`, `dev-blue`, `retro-ghosts`)
+3. Adapter les CSS / polices / images
+4. Passer le nouveau nom au workflow GitHub Actions
+
+L’ensemble du système TARDIS basculera automatiquement sur le thème choisi.
+
+## 🔧 Exemple d’utilisation (workflow)
+
+```yaml
+with:
+  sphinx_theme: "etml-2025"
+```
+
+Il suffit de remplacer par votre thème :
+
+```yaml
+with:
+  sphinx_theme: "dev-blue"
+```
+
+---
+
+Ce mécanisme permet :
+- une identité graphique cohérente pour toute la section INF  
+- des déclinaisons modulaires et réutilisables  
+- une intégration simple dans les pipelines GitHub  
+
 
 ### 1.5. Scripts
 
@@ -67,6 +96,10 @@ Dans `scripts/` :
   - charge la version HTML Sphinx correspondante,
   - applique une feuille de style print dédiée,
   - génère les PDF (exercices + solutions) avec header/footer ETML.
+
+- `build_exo_index.mjs`
+  Script Node qui :
+  - Construit la page d'index des exercices et solutions à partir des PDF générés.  
 
 ---
 
@@ -80,16 +113,10 @@ Dans `scripts/` :
 ### 2.2. Dans chaque dépôt de cours
 
 Exemple : `ETML-INF/I346-concevoir-et-realiser-des-solutions-cloud`
-
-- Arborescence minimale :
-  - `a-IdentificationModule/`
-    - `index.html`
-    - `styles.css`
   - `b-UnitesEnseignement/`
     - `Support/`
       - `index.md` + autres `.md`
       - sous-dossiers `objX-.../exercices/` contenant les `.md` d’exercices et un éventuel `solutions/`
-- Fichier `requirements.txt` minimal côté repo de cours (ou dépend uniquement de `tardis-pipelines`).
 
 ### 2.3. Secrets / Variables GitHub
 
@@ -98,16 +125,8 @@ Dans le dépôt **de cours** (Settings → Secrets and variables → Actions) :
 **Variables (Repository variables)**
 
 - `ICT_MODULE` : ex. `346`
-- `ICT_ROOT_FOLDER` : ex. `moduleICT`
-- `FTP_DOCS_DIR` : ex. `cours`
-- `FTP_EXO_DIR` : ex. `exercices`
-- `FTP_TARDIS_DIR` : ex. `tardis`
-- `FTP_SERVER` : ex. `enseignement.section-inf.ch`
 
-**Secrets (Repository secrets)**
-
-- `FTP_USERNAME`
-- `FTP_PASSWORD`
+*Votre dépôt utilisera aussi les variables et secrets définis au niveau de l'organisation (FTP_PASSWORD, ...)*
 
 ---
 
@@ -115,24 +134,26 @@ Dans le dépôt **de cours** (Settings → Secrets and variables → Actions) :
 
 ### 3.1. Build docs + PDF d’exercices
 
-Dans le dépôt du module, créer `.github/workflows/build-docs-and-exo.yml` (le nom vous appartient) :
+*Si vous avez créé votre dépôt à partir du template, regardez dans votre dossier .github/workflows si vous n'avez pas déjà les workflows déjà préparés*
+
+Dans le dépôt du module, créer `.github/workflows/ref-build-docs-and-exo.yml` (le nom vous appartient) :
 
 ```yaml
-name: Build docs & exercices PDF (TARDIS pipelines)
+name: (Ref) Build docs & exercices PDF (TARDIS pipelines)
 
 on:
   push:
     branches: [ "main" ]
     paths:
       - "b-UnitesEnseignement/Support/**"
-      - ".github/workflows/build-docs-and-exo.yml"
+      - ".github/workflows/ref-build-docs-and-exo.yml"
   workflow_dispatch:
 
 jobs:
   build:
     uses: ETML-INF/tardis-pipelines/.github/workflows/build-docs-and-exo.yml@v0.1
     with:
-      ict_module: "346"                         # ou ${{ vars.ICT_MODULE }}
+      ict_module: ${{ vars.ICT_MODULE }}
       sphinx_src: "b-UnitesEnseignement/Support"
       theme: "etml-2025"
 ```
@@ -151,9 +172,9 @@ Ce workflow va :
 8. Uploader l’artefact `exercices-pdf`.
 9. Déployer par FTP (HTML + exercices) via l’action composite `ftp-sync`.
 
-### 3.2. Build manifeste TARDIS + UI
+### 3.2. Build manifest TARDIS + UI
 
-Dans le dépôt du module, créer `.github/workflows/build-lessons-schedule.yml` :
+Dans le dépôt du module, créer `.github/workflows/ref-build-lessons-schedule.yml` :
 
 ```yaml
 name: Build Lessons Schedule (TARDIS pipelines)
@@ -163,15 +184,14 @@ on:
     branches: [ "main" ]
     paths:
       - "b-UnitesEnseignement/**"
-      - ".github/workflows/build-lessons-schedule.yml"
+      - ".github/workflows/ref-build-lessons-schedule.yml"
   workflow_dispatch:
 
 jobs:
   build:
-    uses: ETML-INF/tardis-pipelines/.github/workflows/build-lessons-schedule.yml@v0.1
+    uses: ETML-INF/tardis-pipelines/.github/workflows/ref-build-lessons-schedule.yml@v0.1
     with:
-      # ict_module peut être passé en dur ou via vars.ICT_MODULE
-      ict_module: "346"
+      ict_module: ${{ vars.ICT_MODULE }}
 ```
 
 Ce workflow va :
@@ -250,10 +270,10 @@ inputs:
 - **v0.2**
   - Génération d’index HTML (exercices, présentations) à partir de templates versionnés dans `tardis-pipelines` (HTML + CSS dédiés).
   - Thèmes multiples (ex: `etml-2025`, `minimal`, `dark`, etc.), avec sélection par input.
+  - Thèmes confort
 
 - **v1.0**
   - Stabilisation des contrats (inputs, chemins).
-  - Documentation complète FR/EN.
   - Exemple de repo de cours “template” pour onboarding des nouveaux collègues.
 
 ---

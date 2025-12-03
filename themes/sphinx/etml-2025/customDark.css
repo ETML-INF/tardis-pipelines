@@ -1,334 +1,501 @@
 /*
 *   Custom CSS for the ETML doc site
-*   Dark theme final version
-*   Made by Viktor Stoimenovski, Ricardo de Almeida, Sebastien Duruz, Youness Takache
-*   27.08.2021 - by Viktor
+*   Dark theme - Standard (Lexend)
+*   - Mode sombre lisible
+*   - Sidebar ghost moderne
+*   - Stabilo sur le gras (p + li)
 */
 
+/* ----------------------------------------------------------
+   1. Polices
+---------------------------------------------------------- */
 
-
-/* Import of the etml font */
 @font-face {
-  font-family: ETMLFont;
-  src: url('fonts/ETML-new.ttf');
+    font-family: 'Lexend';
+    src:
+        url('fonts/Lexend-Regular.woff2') format('woff2'),
+        url('fonts/Lexend-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lexend';
-  src: url('fonts/Lexend-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Lexend';
+    src:
+        url('fonts/Lexend-Medium.woff2') format('woff2'),
+        url('fonts/Lexend-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lexend';
-  src: url('fonts/Lexend-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Lexend';
+    src:
+        url('fonts/Lexend-Bold.woff2') format('woff2'),
+        url('fonts/Lexend-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lexend';
-  src: url('fonts/Lexend-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+    font-family: ETMLFont;
+    src: url('fonts/ETML-new.ttf');
 }
 
-/* Change text color on the whole page */
-body{
-    color: #D8DEE9;
+
+/* ----------------------------------------------------------
+   2. Base typographique & structure
+---------------------------------------------------------- */
+
+body {
+    color: #E5E7EB;                      /* gris clair */
+    background: #020617;                 /* slate-950 */
     font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
+/* Appliquer Lexend uniformément */
 .rst-content,
+.wy-nav-content,
 .wy-menu-vertical a,
+.wy-side-nav-search input,
+table,
+button,
+input,
+textarea {
+    font-family: 'Lexend', system-ui, sans-serif;
+}
+
+/* Paragraphes */
+p,
+.rst-content p {
+    text-align: left;
+    margin-bottom: 1em;
+}
+
+/* Titres */
+.rst-content h1,
+.rst-content h2,
+.rst-content h3,
+.rst-content h4 {
+    font-family: 'Lexend', system-ui, sans-serif;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+    color: #F9FAFB;
+}
+
+/* Hiérarchie */
+.rst-content h1 { font-size: 1.9rem; }
+.rst-content h2 { font-size: 1.6rem; }
+.rst-content h3 { font-size: 1.3rem; font-weight: 600; }
+.rst-content h4 { font-size: 1.1rem; font-weight: 600; }
+
+/* Moins de blanc sur le premier h1 */
+.rst-content h1:first-of-type {
+    margin-top: 0.5rem;
+}
+
+/* Zone de contenu */
 .wy-nav-content {
-  font-family: 'Lexend', system-ui, sans-serif;
+    width: 70%;                 /* env. 2/3 d'écran */
+    max-width: 110ch;
+    min-width: 60ch;
+    margin-left: 2.5rem;
+    margin-right: auto;
+    padding: 2rem 2.5rem;
+    background: #020617;
+}
+
+.wy-nav-content-wrap {
+    background: #020617;
+}
+
+/* Séparation nav / contenu */
+.wy-side-scroll {
+    border-right: 1px solid #1F2937; /* slate-800 */
 }
 
 
-/* Justify of all the  */
-p{
-    text-align: justify;
-}
+/* ----------------------------------------------------------
+   3. Header & recherche
+---------------------------------------------------------- */
 
-/* Remove the max width on the pages, so all the screen has text */
-.wy-nav-content{
-    max-width: none;
-}
-/* Change bg of the nav */
-.wy-nav-content-wrap{
-    background-color: #2E3440;
-}
-
-/*Change the background color of the title of the nav to the ETML color*/
-.wy-side-nav-search {
+.wy-side-nav-search,
+.wy-nav-top {
     background-color: #004595;
 }
 
-/*Change the background color of the title of the nav to the ETML color*/
-.wy-nav-top{
-    background-color: #004595;
+/* Champ recherche */
+.wy-side-nav-search input[type=text] {
+    border-radius: 8px;
+    border-color: #1F2937;
+    background: #020617;
+    color: #E5E7EB;
 }
 
-/* Change bg of the nav */
-.wy-nav-side {
-    background-color: #262b35;
+.wy-side-nav-search input[type=text]::placeholder {
+    color: #6B7280;
 }
 
-/* Change bg of the nav */
-.highlight {
-    background-color: #262b35;
-}
-
-/* Changes the color of the button */
-.btn-neutral {
-    background-color: #D8DEE9!important;
-    color: #262b35!important;
-}
-
-/* Remove the shadow on the next page button */
-.btn{
-    box-shadow: none;
-}
-
-/* remove the color change on visited pages in the menu */
-.wy-menu-vertical a:visited{
-    color:#D8DEE9;
-}
-
-/* text color of the current class */
-.current{
-    color:#2E3440;
-}
-
-/* Change of the font size in the table on the main page */
-.field-name{
-    font-weight: bold!important;
-    font-size: 18px!important;
-}
-
-/* Change of the home icon in the breadcrumb into the ETML logo */
-.fa-home::before, .icon-home::before {
+/* Logo ETML breadcrumb */
+.fa-home::before,
+.icon-home::before {
     content: "ETML";
     font-family: ETMLFont;
-    color: #D8DEE9;
+    color: #E5E7EB;
     letter-spacing: 1px;
 }
 
-/* Change of the home icon in the nav into the ETML logo */
+/* Logo ETML zone recherche */
 .wy-side-nav-search .icon-home::before {
     content: "ETML";
     font-family: ETMLFont;
-    color: white;
+    color: #F9FAFB;
     letter-spacing: 1px;
     margin-right: 100px;
 }
 
-/* Change of all visited links on the website */
-a:visited {
-    color: #2980b9;
-  }
 
-/* change of visited color in the nav */  
-.wy-side-nav-search>a:visited {
-    color: white;
-  }
+/* ----------------------------------------------------------
+   4. Navigation – Ghost dark
+---------------------------------------------------------- */
 
-.wy-side-nav-search input[type=text] {
+/* Fond sidebar */
+.wy-nav-side {
+    background-color: #020617;
+}
+
+/* Items du menu */
+.wy-menu-vertical li {
+    margin: 0.25rem 0;
     border-radius: 8px;
-    border-color: #D8DEE9;
+    overflow: visible;
 }
 
-/* Change of the tables color */
-.row-even{
-    color: black;
+/* Liens ghost */
+.wy-menu-vertical a {
+    display: block;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #E5E7EB;
+    text-decoration: none;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.08s ease;
+
+    /* Ne pas tronquer le texte des items */
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: break-word;
 }
 
-.head{
-    color: #D8DEE9;
+/* Hover */
+.wy-menu-vertical a:hover {
+    background-color: #111827;     /* slate-900 */
+    border-color: #374151;         /* slate-700 */
+    transform: translateX(1px);
 }
 
-/* Fix of the img deformation */
-.rst-content img{
-    max-width: 100%!important;
-    height: auto!important;
+/* Élément actif */
+.wy-menu-vertical li.current > a {
+    background-color: #1E293B;     /* slate-800 */
+    border-color: #3B82F6;         /* blue-500 */
+    color: #BFDBFE;                /* bleu clair */
+    font-weight: 600;
 }
 
-/* color of a php element in the code blocks */
-.fm{
-    color: #05efc5;
+/* Sous-éléments */
+.wy-menu-vertical li.toctree-l2 > a {
+    font-size: 0.9rem;
+    padding-left: 1.6rem;
 }
 
-/*Change nav color when selected*/
-
-.wy-menu-vertical li.current {
-    background: #4B505B;
+/* Focus clavier */
+.wy-menu-vertical a:focus-visible {
+    outline: 2px solid #F9FAFB;
+    outline-offset: 2px;
 }
 
-/* Borders of the main list */
-.wy-menu-vertical li.toctree-l1.current>a {
-    border-bottom: 1px solid #363738;
-    border-top: 1px solid #363738;
+/* Masquage des titres profonds (conservé) */
+.toctree-l3,
+.toctree-l4,
+.toctree-l5,
+.toctree-l6 {
+    display: none;
 }
 
-/* First line of the multi list */
-.wy-menu-vertical li.current>a{
-    background: #2A2F39;
-    color: #d9d9d9;
+
+/* ----------------------------------------------------------
+   5. Liens & focus généraux
+---------------------------------------------------------- */
+
+a {
+    color: #60A5FA; /* blue-400 */
+    text-decoration: none;
 }
 
-/* Background color of the current l2 list title */
-.wy-menu-vertical li.toctree-l2.current>a{
-    background: #2E3440;
+a:hover {
+    text-decoration: underline;
 }
 
-/* Background color of all the lists under the main one */
-.wy-menu-vertical li.toctree-l2 a, .wy-menu-vertical li.toctree-l3 a, .wy-menu-vertical li.toctree-l4 a, .wy-menu-vertical li.toctree-l5 a, .wy-menu-vertical li.toctree-l6 a, .wy-menu-vertical li.toctree-l7 a, .wy-menu-vertical li.toctree-l8 a, .wy-menu-vertical li.toctree-l9 a, .wy-menu-vertical li.toctree-l10 a{
-    color: #d9d9d9!important;
-    background: #2E3440!important;
+a:visited {
+    color: #93C5FD; /* blue-300 */
 }
 
-/* Hover dans le menu */
-.reference.internal:hover{
-    background: #2E3440!important;
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #F9FAFB;
+    outline-offset: 2px;
 }
 
-/* Changes current tab color in the nav */
-.reference.internal.current{
-    background: #484e5c!important;
+
+/* ----------------------------------------------------------
+   6. Tables, images, code
+---------------------------------------------------------- */
+
+/* Wrapper responsive */
+.wy-table-responsive {
+    margin: 1.2rem 0;
+    border: 0;
+    background: transparent;
 }
 
-/* Removes the black square behind images when hovering */
-image-reference:hover {
-    background-color: none;
+/* Tables docutils */
+.wy-table-responsive table.docutils.align-default,
+.rst-content table.docutils.align-default {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background: #020617;
+    color: #E5E7EB;
 }
 
-/* Makes the expanding icon more visible */
-.toctree-expand{
-    color: #d9d9d9!important;
+/* Cellules */
+.wy-table-responsive table.docutils.align-default th,
+.wy-table-responsive table.docutils.align-default td,
+.rst-content table.docutils.align-default th,
+.rst-content table.docutils.align-default td {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #374151;   /* slate-700 */
+    vertical-align: top;
+    white-space: normal !important;
+    word-break: break-word;
 }
+
+/* En-têtes : bleu ETML */
+.wy-table-responsive table.docutils.align-default th,
+.rst-content table.docutils.align-default th {
+    background: #004595;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: left;
+}
+
+/* Zébrage léger */
+.wy-table-responsive table.docutils.align-default tr:nth-child(even),
+.rst-content table.docutils.align-default tr:nth-child(even) {
+    background: #020617;
+}
+
+/* Survol (desktop) */
+@media (hover: hover) {
+  .wy-table-responsive table.docutils.align-default tr:hover,
+  .rst-content table.docutils.align-default tr:hover {
+      background: #111827;
+  }
+}
+
+/* Légende de table */
+.rst-content table.docutils.align-default caption {
+    caption-side: top;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #E5E7EB;
+}
+
+/* Images */
+.rst-content img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Petit accent code */
+.fm {
+    color: #34D399; /* green-400 */
+}
+
+.image-reference:hover {
+    background-color: transparent;
+}
+
+.reference.internal:hover {
+    background: #0B1120 !important;
+}
+
+.toctree-expand {
+    color: #E5E7EB !important;
+}
+
+
+/* ----------------------------------------------------------
+   7. Zones de réponse
+---------------------------------------------------------- */
 
 .answer-block {
-  margin: 1rem 0 2rem;
+    margin: 1rem 0 2rem;
 }
 
 .answer-area {
-  width: 100%;
-  min-height: 9rem;
-  resize: vertical;
-  padding: 0.75rem 1rem;
-  border: 2px solid #9a3412; 
-  border-radius: 10px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  background: #2d1b0f;
-  color: #fef3c7;     
-  font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+    width: 100%;
+    min-height: 9rem;
+    resize: vertical;
+    padding: 0.75rem 1rem;
+    border: 2px solid #F97316;       /* orange-500 */
+    border-radius: 10px;
+    font-family: 'Lexend';
+    background: #0B1120;            /* très sombre mais pas noir */
+    color: #F9FAFB;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
 }
 
 .answer-area:focus {
-  outline: none;
-  border-color: #f97316;   
-  background: #1c1917;     
-  font-size: 1.05rem;
-  box-shadow: 0 0 0 3px rgba(249,115,22,0.5); 
+    outline: none;
+    border-color: #FDBA74;          /* orange-300 */
+    background: #020617;
+    font-size: 1.05rem;
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.35);
 }
 
-.toctree-l3, .toctree-l4, .toctree-l5, .toctree-l6 { display: none; }
-/**/
-
-@media screen and (min-width: 1100px){
-    .wy-nav-content {
-        margin: 0;
-        background: #2E3440;
-    }   
+/* Bouton export */
+.export-btn {
+    display: inline-block;
+    padding: 0.7rem 1.2rem;
+    margin: 1.5rem 0;
+    border: 2px solid #22C55E;      /* green-500 */
+    border-radius: 10px;
+    background: #022C22;            /* vert très sombre */
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #BBF7D0;                 /* green-200 */
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 
-@media screen and (max-width: 1100px){
+.export-btn:hover {
+    background: #064E3B;            /* green-800 */
+    transform: translateY(-1px);
+}
 
-    /* Nav mobile sur écran plus petit */
+/* Monaco : monospace inchangé */
+.answer-block .monaco-editor,
+.answer-block .monaco-editor .view-lines {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
 
-    /* Makes the nav a block element */
+.answer-block .monaco-editor .margin .line-numbers {
+    font-size: 16px !important;
+}
+
+
+/* ----------------------------------------------------------
+   8. Stabilo sur le gras (p + li) – dark
+---------------------------------------------------------- */
+
+/* Stabilo : fond vert foncé + texte clair */
+.rst-content p strong,
+.rst-content p b,
+.rst-content li strong,
+.rst-content li b {
+    background-color: #14532D;   /* vert profond */
+    color: #ECFDF3;              /* texte très clair dans la zone */
+    padding: 0.08em 0.18em;
+    border-radius: 3px;
+}
+
+/* Pas de stabilo dans les titres ni dans le code */
+.rst-content h1 strong,
+.rst-content h2 strong,
+.rst-content h3 strong,
+.rst-content h4 strong,
+.rst-content h1 b,
+.rst-content h2 b,
+.rst-content h3 b,
+.rst-content h4 b,
+.rst-content code strong,
+.rst-content code b,
+.rst-content pre strong,
+.rst-content pre b {
+    background: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+}
+
+
+/* ----------------------------------------------------------
+   9. Responsive
+---------------------------------------------------------- */
+
+@media screen and (max-width: 1100px) {
+
     .wy-nav-top {
         display: block;
     }
 
-    /* Changes shift of the nav according to the screen size */
     .wy-nav-side.shift {
         width: 50%;
         left: 0;
     }
 
-    /* Position of the nav */
     .wy-nav-content-wrap.shift {
         position: fixed;
         min-width: 100%;
         left: 50%;
-        top: 0;
         height: 100%;
         overflow: hidden;
-        margin-left: 0;
     }
 
-    /* Makes the nav disappear when the nav button is clicked */
     .wy-nav-side {
         left: -300px;
     }
 
-    /* Removing the margin in the nav */
     .wy-nav-content-wrap {
-        margin-left: 0px;
+        margin-left: 0;
     }
 
-    .wy-menu.wy-menu-vertical, .wy-side-nav-search, .wy-side-scroll {
+    .wy-menu.wy-menu-vertical,
+    .wy-side-nav-search,
+    .wy-side-scroll {
         width: auto;
     }
-    /*---------------------------------*/
-    .wy-nav-top a:visited{
-        color: white;
+
+    .field-list {
+        display: block !important;
     }
 
-    /* enable block modifications to the field list */
-    .field-list{
-        display: block!important;
-    }
-
-    /* Changes the display type of the table to fit on smaller screens */
-    .td{
+    .td {
         display: table-column-group;
     }
 
-    /* Fixing of the tables issue when on a small screen */
-    html.writer-html5 .rst-content dl.field-list>dt{
+    html.writer-html5 .rst-content dl.field-list>dt {
         margin-bottom: 10px;
-    }
 
-    /* Change the bg color of the main content page */
-    .wy-nav-content {
-        margin: 0;
-        background: #2E3440;
-    }   
-
-    @media screen and (max-width: 768px){
-
-    .wy-nav-side.shift {
-        width: 85%;
-        left: 0;
-    }
-
-    .wy-nav-content-wrap.shift {
-        position: fixed;
-        min-width: 100%;
-        left: 85%;
-        top: 0;
-        height: 100%;
-        overflow: hidden;
-    }
-
-    }
-}
+::contentReference[oaicite:0]{index=0}

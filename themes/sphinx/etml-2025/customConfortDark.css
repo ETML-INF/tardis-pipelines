@@ -1,326 +1,510 @@
 /*
 *   Custom CSS for the ETML doc site
 *   Dark theme - Confort (OpenDyslexic)
-*   Variante centrée sur le confort de lecture en mode sombre
+*   - Police dyslexie-friendly
+*   - Menu large avec grosses cases
+*   - Lisibilité renforcée en mode sombre
 */
 
 /* ----------------------------------------------------------
    1. Polices
 ---------------------------------------------------------- */
 
-/* OpenDyslexic */
 @font-face {
-  font-family: 'OpenDyslexic';
-  src: url('fonts/OpenDyslexic-Regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'OpenDyslexic';
-  src: url('fonts/OpenDyslexic-Bold.otf') format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'OpenDyslexic';
-  src: url('fonts/OpenDyslexic-Italic.otf') format('opentype');
-  font-weight: normal;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'OpenDyslexic';
-  src: url('fonts/OpenDyslexic-BoldItalic.otf') format('opentype');
-  font-weight: bold;
-  font-style: italic;
+    font-family: 'OpenDyslexic';
+    src:
+      url('fonts/OpenDyslexic-Regular.woff2') format('woff2'),
+      url('fonts/OpenDyslexic-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
-/* ETML font (logo uniquement) */
 @font-face {
-  font-family: ETMLFont;
-  src: url('fonts/ETML-new.ttf');
+    font-family: 'OpenDyslexic';
+    src:
+      url('fonts/OpenDyslexic-Bold.woff2') format('woff2'),
+      url('fonts/OpenDyslexic-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src:
+      url('fonts/OpenDyslexic-Italic.woff2') format('woff2'),
+      url('fonts/OpenDyslexic-Italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src:
+      url('fonts/OpenDyslexic-BoldItalic.woff2') format('woff2'),
+      url('fonts/OpenDyslexic-BoldItalic.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* ETML logo */
+@font-face {
+    font-family: ETMLFont;
+    src: url('fonts/ETML-new.ttf');
 }
 
 
 /* ----------------------------------------------------------
-   2. Base typographique confort en mode sombre
+   2. Base typographique & structure
 ---------------------------------------------------------- */
 
 body {
-    background-color: #1b1c1f;
-    color: #e5e5e5;
-    font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-body,
-.rst-content {
+    color: #E5E7EB; /* gris très clair */
+    background: #020617;
+    font-family: 'OpenDyslexic', system-ui, sans-serif;
     font-size: 17px;
-    line-height: 1.8;
-    letter-spacing: 0.03em;
-    word-spacing: 0.12em;
+    line-height: 1.9;
 }
 
-/* Titres lisibles */
-.rst-content h1,
-.rst-content h2,
-.rst-content h3,
-.rst-content h4 {
-    font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-weight: 700;
-    text-transform: none;
-    margin-top: 1.2em;
-    margin-bottom: 0.4em;
+/* Appliquer OpenDyslexic globalement */
+.rst-content,
+.wy-nav-content,
+.wy-menu-vertical a,
+.wy-side-nav-search input,
+table,
+button,
+input,
+textarea {
+    font-family: 'OpenDyslexic', system-ui, sans-serif;
 }
 
-/* Texte aligné à gauche */
+/* Paragraphes */
 p,
 .rst-content p {
     text-align: left;
     margin-bottom: 1em;
-    line-height: 1.72;   
+    letter-spacing: 0.03em;
+    word-spacing: 0.12em;
 }
 
-/* Neutralisation italique/souligné */
-em, i {
-    font-style: normal;
-    font-weight: 600;
+/* Titres */
+.rst-content h1,
+.rst-content h2,
+.rst-content h3,
+.rst-content h4 {
+    font-family: 'OpenDyslexic';
+    font-weight: 700;
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+    text-transform: none;
+    color: #F9FAFB;
 }
-u {
-    text-decoration: none;
-    font-weight: 600;
+
+.rst-content h1 { font-size: 1.9rem; }
+.rst-content h2 { font-size: 1.6rem; }
+.rst-content h3 { font-size: 1.3rem; }
+.rst-content h4 { font-size: 1.1rem; }
+
+.rst-content h1:first-of-type {
+    margin-top: 0.5rem;
 }
 
-/* Zone de contenu */
-.rst-content {
-    font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: #e5e5e5;
-}
-
-
-/* ----------------------------------------------------------
-   3. Confort visuel : largeur de ligne et fonds
----------------------------------------------------------- */
-
+/* Zone centrale de lecture */
 .wy-nav-content {
-    max-width: 75ch;                 /* ~60–75 caractères */
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    background-color: #1b1c1f;
+    width: 70%;
+    max-width: 100ch;
+    min-width: 55ch;
+    margin-left: 2.5rem;
+    margin-right: auto;
+    padding: 2rem 2.5rem;
+    background: #020617; /* slate-950 */
 }
 
 .wy-nav-content-wrap {
-    background-color: #1b1c1f;
+    background: #020617;
+}
+
+/* Séparation nav / contenu */
+.wy-side-scroll {
+    border-right: 2px solid #4B5563; /* anthracite */
 }
 
 
 /* ----------------------------------------------------------
-   4. Navigation / structure Sphinx
+   3. Navigation & header (dark confort)
 ---------------------------------------------------------- */
 
-.wy-side-nav-search {
-    background-color: #00306d;
+@media screen and (min-width: 1100px) {
+    .wy-nav-side {
+        width: 350px;
+    }
+    .wy-nav-content-wrap {
+        margin-left: 350px;
+    }
 }
 
+.wy-side-nav-search,
 .wy-nav-top {
-    background-color: #00306d;
+    background-color: #004595;
 }
 
+/* Sidebar fond sombre mais pas noir pur */
 .wy-nav-side {
-    background-color: #2a2c30;
+    background-color: #020617;
 }
 
-.highlight {
-    background-color: #2a2c30;
+/* Champ de recherche */
+.wy-side-nav-search input[type=text] {
+    border-radius: 8px;
+    border-color: #1F2937;
+    background: #020617;
+    color: #E5E7EB;
 }
 
-/* Boutons */
-.btn-neutral {
-    background-color: #3f4757!important;
-    color: #f0f0f0!important;
-}
-.btn {
-    box-shadow: none;
+.wy-side-nav-search input[type=text]::placeholder {
+    color: #6B7280;
 }
 
-/* Liens */
-a:link,
-a:visited {
-    color: #6ab8ff;
-}
-
-.wy-menu-vertical a:visited,
-.wy-menu-vertical a {
-    color:#e5e5e5;
-    font-family: 'OpenDyslexic';
-}
-
-/* Élément actif */
-.current {
-    color:#a8c4ff;
-}
-
-/* Home icon avec logo ETML */
-.fa-home::before, .icon-home::before {
+/* Logos ETML */
+.fa-home::before,
+.icon-home::before {
     content: "ETML";
     font-family: ETMLFont;
-    color: #e5e5e5;
+    color: #E5E7EB;
     letter-spacing: 1px;
 }
+
 .wy-side-nav-search .icon-home::before {
-    content: "ETML";
-    font-family: ETMLFont;
-    color: white;
-    letter-spacing: 1px;
+    color: #F9FAFB;
     margin-right: 100px;
 }
 
-/* Inputs */
-.wy-side-nav-search input[type=text] {
-    border-radius: 8px;
-    border-color: #555;
-    background: #2f3136;
-    color: #fafafa;
-}
-
-/* Tables */
-.row-even {
-    color: #e5e5e5;
-}
-.head {
-    color: #a8c4ff;
-}
-
-table.docutils td {
-  white-space: normal !important;
-  word-break: break-word;
-}
-
 
 /* ----------------------------------------------------------
-   5. Images / références
+   4. Navigation – grosses cases rassurantes
 ---------------------------------------------------------- */
 
-.rst-content img {
-    max-width: 100%!important;
-    height: auto!important;
+.wy-menu-vertical li {
+    margin: 0.35rem 0;
+    border-radius: 10px;
+    overflow: visible;
 }
 
-.fm {
-    color: #05efc5;
+/* Liens = grosses cases à bordure claire sur fond sombre */
+.wy-menu-vertical a {
+    display: block;
+    padding: 0.6rem 1rem;
+    border: 2px solid #E5E7EB;      /* bordure claire rassurante */
+    border-radius: 10px;
+    background-color: #020617;      /* fond sombre */
+    color: #E5E7EB;
+    text-decoration: none;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.08s ease;
+    
+    /* Ne jamais tronquer les textes du menu */
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: break-word;
 }
 
-image-reference:hover {
-    background-color: none;
+/* Hover : case légèrement renforcée */
+.wy-menu-vertical a:hover {
+    background-color: #111827;      /* slate-900 */
+    border-color: #F9FAFB;
+    transform: translateX(1px);
 }
 
-.reference.internal:hover {
-    background: #003c79!important;
+/* Élément actif (current) */
+.wy-menu-vertical li.current > a {
+    background-color: #1E293B;      /* slate-800 */
+    border-color: #F9FAFB;
+    color: #BFDBFE;                 /* bleu clair */
+    font-weight: 700;
 }
 
-.toctree-expand {
-    color: #ffffff!important;
+/* Sous-éléments */
+.wy-menu-vertical li.toctree-l2 > a {
+    padding-left: 1.8rem;
 }
 
-.wy-menu-vertical li.current {
-    background-color: #3a3d44;
+/* Focus clavier */
+.wy-menu-vertical a:focus-visible {
+    outline: 3px solid #F9FAFB;
+    outline-offset: 3px;
 }
 
-
-/* ----------------------------------------------------------
-   6. Zones de réponse (OpenDyslexic)
----------------------------------------------------------- */
-
-.answer-block {
-  margin: 1rem 0 2rem;
-}
-
-.answer-area {
-  width: 100%;
-  min-height: 9rem;
-  resize: vertical;
-  padding: 0.75rem 1rem;
-  border: 2px solid #fdba74;
-  border-radius: 10px;
-  font-family: 'OpenDyslexic';
-  background: #2b2d31;
-  color: #ffe5c3;
-  font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
-}
-
-.answer-area:focus {
-  outline: none;
-  border-color: #f97316;
-  background: #383b40;
-  font-size: 1.05rem;
-  box-shadow: 0 0 0 3px rgba(249,115,22,0.4);
-}
-
-.export-btn {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.6rem 1rem;
-  border: 2px solid #00c060;
-  border-radius: 8px;
-  background: #00391d;
-  cursor: pointer;
-  font-weight: 600;
-  color: #d9ffe8;
-}
-
-.export-btn:hover {
-  background: #005228;
-}
-
-/* Monaco Editor reste monospace */
-.answer-block .monaco-editor,
-.answer-block .monaco-editor .view-lines {
-  font-size: 16px !important;
-  line-height: 1.6 !important;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-.answer-block .monaco-editor .margin .line-numbers {
-  font-size: 16px !important;
-}
-
-
-/* ----------------------------------------------------------
-   7. Navigation avancée
----------------------------------------------------------- */
-
-.toctree-l3, .toctree-l4, .toctree-l5, .toctree-l6 {
+/* Masquage des titres profonds */
+.toctree-l3,
+.toctree-l4,
+.toctree-l5,
+.toctree-l6 {
     display: none;
 }
 
 
 /* ----------------------------------------------------------
-   8. Media queries
+   5. Listes très espacées
 ---------------------------------------------------------- */
 
-@media screen and (min-width: 1100px){
-    .wy-nav-content {
-        max-width: 75ch;
-        margin: 0 auto;
-        background: #1b1c1f;
-    }
+.rst-content ul li,
+.rst-content ol li {
+    margin-bottom: 0.8rem;
+    line-height: 1.7;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
 }
 
-@media screen and (max-width: 1100px){
+.rst-content ul,
+.rst-content ol {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.rst-content ul li::marker,
+.rst-content ol li::marker {
+    font-size: 1.2em;
+}
+
+
+/* ----------------------------------------------------------
+   6. Liens & focus
+---------------------------------------------------------- */
+
+a {
+    color: #60A5FA; /* blue-400 */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #93C5FD; /* blue-300 */
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #F9FAFB;
+    outline-offset: 2px;
+}
+
+
+/* ----------------------------------------------------------
+   7. Tables, images, code
+---------------------------------------------------------- */
+
+.wy-table-responsive {
+    margin: 1.2rem 0;
+    border: 0;
+    background: transparent;
+}
+
+/* Table principale */
+.wy-table-responsive table.docutils.align-default,
+.rst-content table.docutils.align-default {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background: #020617;
+    color: #E5E7EB;
+}
+
+/* Cellules */
+.wy-table-responsive table.docutils.align-default th,
+.wy-table-responsive table.docutils.align-default td,
+.rst-content table.docutils.align-default th,
+.rst-content table.docutils.align-default td {
+    padding: 0.6rem 0.9rem;
+    border: 1px solid #374151; /* slate-700 */
+    vertical-align: top;
+    white-space: normal !important;
+    word-break: break-word;
+}
+
+/* En-têtes */
+.wy-table-responsive table.docutils.align-default th,
+.rst-content table.docutils.align-default th {
+    background: #004595;
+    color: #FFFFFF;
+    font-weight: 700;
+    text-align: left;
+}
+
+/* Zébrage */
+.wy-table-responsive table.docutils.align-default tr:nth-child(even),
+.rst-content table.docutils.align-default tr:nth-child(even) {
+    background: #020617;
+}
+
+/* Survol (desktop) */
+@media (hover: hover) {
+  .wy-table-responsive table.docutils.align-default tr:hover,
+  .rst-content table.docutils.align-default tr:hover {
+      background: #111827;
+  }
+}
+
+/* Légende */
+.rst-content table.docutils.align-default caption {
+    caption-side: top;
+    text-align: left;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: #E5E7EB;
+}
+
+/* Images */
+.rst-content img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Minuscule coloration code */
+.fm {
+    color: #34D399; /* green-400 */
+}
+
+.image-reference:hover {
+    background-color: transparent;
+}
+
+.reference.internal:hover {
+    background: #0B1120 !important;
+}
+
+.toctree-expand {
+    color: #E5E7EB !important;
+}
+
+
+/* ----------------------------------------------------------
+   8. Zones de réponse
+---------------------------------------------------------- */
+
+.answer-block {
+    margin: 1rem 0 2rem;
+}
+
+.answer-area {
+    width: 100%;
+    min-height: 9rem;
+    resize: vertical;
+    padding: 0.75rem 1rem;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    font-family: 'OpenDyslexic', system-ui, sans-serif;
+    background: #020617;
+    color: #E5E7EB;
+    font-size: 1rem;
+    line-height: 1.6;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.answer-area:focus {
+    outline: none;
+    border-color: #F9FAFB;
+    box-shadow: 0 0 0 3px rgba(249,250,251,0.25);
+}
+
+/* Bouton d’export */
+.export-btn {
+    display: inline-block;
+    padding: 0.7rem 1.2rem;
+    margin: 1.5rem 0;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    background: #020617;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #E5E7EB;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.export-btn:hover {
+    background: #111827;
+    transform: translateY(-1px);
+}
+
+/* Monaco : rester en monospace classique */
+.answer-block .monaco-editor,
+.answer-block .monaco-editor .view-lines {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.answer-block .monaco-editor .margin .line-numbers {
+    font-size: 16px !important;
+}
+
+
+/* ----------------------------------------------------------
+   9. Stabilo sur le gras (p + li) – adapté au dark
+---------------------------------------------------------- */
+
+/* Fond vert foncé + texte clair pour garder un contraste suffisant */
+.rst-content p strong,
+.rst-content p b,
+.rst-content li strong,
+.rst-content li b {
+    background-color: #14532D;   /* vert profond stabilo */
+    color: #ECFDF3;              /* texte très clair dans le stabilo */
+    padding: 0.08em 0.18em;
+    border-radius: 3px;
+}
+
+/* Pas de stabilo dans les titres ni dans le code */
+.rst-content h1 strong,
+.rst-content h2 strong,
+.rst-content h3 strong,
+.rst-content h4 strong,
+.rst-content h1 b,
+.rst-content h2 b,
+.rst-content h3 b,
+.rst-content h4 b,
+.rst-content code strong,
+.rst-content code b,
+.rst-content pre strong,
+.rst-content pre b {
+    background: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+}
+
+
+/* ----------------------------------------------------------
+   10. Responsive
+---------------------------------------------------------- */
+
+@media screen and (max-width: 1100px) {
 
     .wy-nav-top {
         display: block;
     }
 
     .wy-nav-side.shift {
-        width: 50%;
+        width: 60%;
         left: 0;
     }
 
     .wy-nav-content-wrap.shift {
         position: fixed;
         min-width: 100%;
-        left: 50%;
-        top: 0;
+        left: 60%;
         height: 100%;
         overflow: hidden;
     }
@@ -339,34 +523,30 @@ image-reference:hover {
         width: auto;
     }
 
-    .wy-nav-top a:visited {
-        color: white;
-    }
-
     .field-list {
-        display: block!important;
+        display: block !important;
     }
 
     .td {
         display: table-column-group;
     }
 
-    html.writer-html5 .rst-content dl.field-list>dt{
+    html.writer-html5 .rst-content dl.field-list>dt {
         margin-bottom: 10px;
     }
 
-    /* Confort conservé sur mobile */
     .wy-nav-content {
-        max-width: 75ch;
-        margin: 0 auto;
-        background: #1b1c1f;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 1rem;
+        background: #020617;
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 768px) {
 
         .wy-nav-side.shift {
             width: 85%;
-            left: 0;
         }
 
         .wy-nav-content-wrap.shift {
@@ -377,20 +557,25 @@ image-reference:hover {
 
 
 /* ----------------------------------------------------------
-   9. Impression
+   11. Impression
 ---------------------------------------------------------- */
 
 @media print {
-  #export-answers { display: none; }
-  body,
-  .rst-content {
-    background: #ffffff;
-    color: #000000;
-  }
-  .answer-area {
-    border-color: #999;
-    background: #fff;
-    min-height: 6rem;
-    color: #000;
-  }
+    #export-answers {
+        display: none;
+    }
+
+    body,
+    .wy-nav-content,
+    .wy-nav-content-wrap {
+        background: #FFFFFF;
+        color: #111827;
+    }
+
+    .answer-area {
+        border-color: #4B5563;
+        background: #fff;
+        min-height: 6rem;
+        color: #111827;
+    }
 }

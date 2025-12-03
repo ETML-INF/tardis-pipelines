@@ -3,7 +3,9 @@
 *   Light theme - Confort (OpenDyslexic)
 *   - Police dyslexie-friendly
 *   - Menu plus large
-*   - Cases du menu bien délimitées (bordures anthracite)
+*   - Cases du menu bien délimitées
+*   - Gros espacement des listes
+*   - Stabilo sur le gras (hors titres)
 */
 
 /* ----------------------------------------------------------
@@ -18,9 +20,9 @@
     font-weight: 400;
     font-style: normal;
     font-display: swap;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: 'OpenDyslexic';
     src:
       url('fonts/OpenDyslexic-Bold.woff2') format('woff2'),
@@ -28,9 +30,9 @@
     font-weight: 700;
     font-style: normal;
     font-display: swap;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: 'OpenDyslexic';
     src:
       url('fonts/OpenDyslexic-Italic.woff2') format('woff2'),
@@ -38,9 +40,9 @@
     font-weight: 400;
     font-style: italic;
     font-display: swap;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: 'OpenDyslexic';
     src:
       url('fonts/OpenDyslexic-BoldItalic.woff2') format('woff2'),
@@ -48,427 +50,334 @@
     font-weight: 700;
     font-style: italic;
     font-display: swap;
-  }
-  
-  /* ETML logo */
-  @font-face {
+}
+
+/* ETML logo */
+@font-face {
     font-family: ETMLFont;
     src: url('fonts/ETML-new.ttf');
-  }
-  
-  
-  /* ----------------------------------------------------------
-     2. Base typographique & structure
-  ---------------------------------------------------------- */
-  
-  body {
-      color: #111827; /* gris très sombre, bon contraste */
-      font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 17px;          /* un cran au-dessus du standard */
-      line-height: 1.9;        
-  }
-  
-  /* Appliquer OpenDyslexic sur les éléments principaux */
-  .rst-content,
-  .wy-nav-content,
-  .wy-menu-vertical a,
-  .wy-side-nav-search input,
-  table,
-  button,
-  input,
-  textarea {
-      font-family: 'OpenDyslexic', system-ui, sans-serif;
-  }
-  
-  /* Paragraphes lisibles */
-  p,
-  .rst-content p {
-      text-align: left;
-      margin-bottom: 1em;
-      letter-spacing: 0.03em;   /* +3% espacement lettres */
-      word-spacing: 0.12em;     /* ~4x l’espacement lettres */
-  }
-  
-  /* Titres */
-  .rst-content h1,
-  .rst-content h2,
-  .rst-content h3,
-  .rst-content h4 {
-      font-family: 'OpenDyslexic', system-ui, sans-serif;
-      font-weight: 700;
-      line-height: 1.9;
-      letter-spacing: 0.02em;
-      margin-top: 1.5rem;
-      margin-bottom: 0.6rem;
-      text-transform: none;
-  }
-  
-  .rst-content h1 {
-      font-size: 1.9rem;
-  }
-  
-  .rst-content h2 {
-      font-size: 1.6rem;
-  }
-  
-  .rst-content h3 {
-      font-size: 1.3rem;
-      font-weight: 700;
-  }
-  
-  .rst-content h4 {
-      font-size: 1.1rem;
-      font-weight: 700;
-  }
-  
-  /* Premier titre de page : moins de blanc */
-  .rst-content h1:first-of-type {
-      margin-top: 0.5rem;
-  }
-  
-  /* Contenu : toujours aligné sur la nav, mais un peu plus “caisse de lecture” */
-  .wy-nav-content {
-      width: 70%;
-      max-width: 100ch;
-      min-width: 55ch;
-      margin-left: 2.5rem;
-      margin-right: auto;
-      padding: 2rem 2.5rem;
-      background: #F9FAFB; /* fond très clair, moins agressif que blanc pur */
-  }
-  
-  /* Fond autour du contenu */
-  .wy-nav-content-wrap {
-      background: #F3F4F6;
-  }
-  
-  /* Séparation colonne nav / contenu (accentuée) */
-  .wy-side-scroll {
-      border-right: 2px solid #4B5563; /* gris anthracite */
-  }
-  
-  
-  /* ----------------------------------------------------------
-     3. Navigation & header (confort)
-  ---------------------------------------------------------- */
-  
-  /* Menu plus large sur desktop */
-  @media screen and (min-width: 1100px) {
-    .wy-nav-side {
-        width: 280px;              /* plus large que le thème standard */
-    }
-  
-    .wy-nav-content-wrap {
-        margin-left: 280px;        /* aligner le contenu sur la nouvelle largeur */
-    }
-  }
-  
-  /* Bandeau haut et zone de recherche */
-  .wy-side-nav-search,
-  .wy-nav-top {
-      background-color: #004595;
-  }
-  
-  /* Fond général de la sidebar (claire mais pas blanche) */
-  .wy-nav-side {
-      background-color: #E5E7EB; /* gris clair */
-  }
-  
-  /* Champ de recherche */
-  .wy-side-nav-search input[type=text] {
-      border-radius: 8px;
-      border-color: #D1D5DB;
-  }
-  
-  /* Logo ETML dans le breadcrumb */
-  .fa-home::before,
-  .icon-home::before {
-      content: "ETML";
-      font-family: ETMLFont;
-      color: #111827;
-      letter-spacing: 1px;
-  }
-  
-  /* Logo ETML dans la zone recherche */
-  .wy-side-nav-search .icon-home::before {
-      content: "ETML";
-      font-family: ETMLFont;
-      color: white;
-      letter-spacing: 1px;
-      margin-right: 100px;
-  }
-  
-  
-  /* ----------------------------------------------------------
-     4. Navigation – “grosses cases” rassurantes
-  ---------------------------------------------------------- */
-  
-  /* Items du menu : blocs bien délimités */
-  .wy-menu-vertical li {
-      margin: 0.35rem 0;
-      border-radius: 10px;
-      overflow: hidden;
-  }
-  
-  /* Liens = grosses cases à bordure anthracite */
-  .wy-menu-vertical a {
-      display: block;
-      padding: 0.6rem 1rem;
-      border: 2px solid #111827;      /* bordure épaisse anthracite */
-      border-radius: 10px;
-      background-color: #F9FAFB;      /* fond très clair */
-      color: #111827;
-      text-decoration: none;
-      transition:
-          background-color 0.15s ease,
-          border-color 0.15s ease,
-          transform 0.08s ease;
-  }
-  
-  /* Hover : case légèrement renforcée */
-  .wy-menu-vertical a:hover {
-      background-color: #E5E7EB;
-      border-color: #111827;
-      transform: translateX(1px);
-  }
-  
-  /* Élément actif (current) : case remplie mais bordure sombre conservée */
-  .wy-menu-vertical li.current > a {
-      background-color: #DBEAFE;      /* bleu très doux */
-      border-color: #111827;          /* bordure toujours anthracite */
-      color: #1E3A8A;
-      font-weight: 700;
-  }
-  
-  /* Sous-éléments un peu indentés */
-  .wy-menu-vertical li.toctree-l2 > a {
-      padding-left: 1.8rem;
-  }
-  
-  /* Focus clavier bien visible */
-  .wy-menu-vertical a:focus-visible {
-      outline: 3px solid #111827;
-      outline-offset: 3px;
-  }
-  
-  /* Masquage des titres profonds (conservé) */
-  .toctree-l3,
-  .toctree-l4,
-  .toctree-l5,
-  .toctree-l6 {
-      display: none;
-  }
+}
 
-  /* ----------------------------------------------------------
-   Listes très espacées (confort)
+
+/* ----------------------------------------------------------
+   2. Base typographique & structure
 ---------------------------------------------------------- */
 
-/* Espacement vertical généreux entre les items */
+body {
+    color: #111827;
+    font-family: 'OpenDyslexic', system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.9;
+}
+
+/* Appliquer OpenDyslexic globalement */
+.rst-content,
+.wy-nav-content,
+.wy-menu-vertical a,
+.wy-side-nav-search input,
+table,
+button,
+input,
+textarea {
+    font-family: 'OpenDyslexic', system-ui, sans-serif;
+}
+
+/* Paragraphes */
+p,
+.rst-content p {
+    text-align: left;
+    margin-bottom: 1em;
+    letter-spacing: 0.03em;
+    word-spacing: 0.12em;
+}
+
+/* Titres */
+.rst-content h1,
+.rst-content h2,
+.rst-content h3,
+.rst-content h4 {
+    font-family: 'OpenDyslexic';
+    font-weight: 700;
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+    text-transform: none;
+}
+
+.rst-content h1 { font-size: 1.9rem; }
+.rst-content h2 { font-size: 1.6rem; }
+.rst-content h3 { font-size: 1.3rem; }
+.rst-content h4 { font-size: 1.1rem; }
+
+.rst-content h1:first-of-type {
+    margin-top: 0.5rem;
+}
+
+/* Zone centrale */
+.wy-nav-content {
+    width: 70%;
+    max-width: 100ch;
+    min-width: 55ch;
+    margin-left: 2.5rem;
+    margin-right: auto;
+    padding: 2rem 2.5rem;
+    background: #F9FAFB;
+}
+
+.wy-nav-content-wrap {
+    background: #F3F4F6;
+}
+
+/* Séparation nav / contenu */
+.wy-side-scroll {
+    border-right: 2px solid #4B5563;
+}
+
+
+/* ----------------------------------------------------------
+   3. Navigation & header
+---------------------------------------------------------- */
+
+@media screen and (min-width: 1100px) {
+    .wy-nav-side {
+        width: 350px;
+    }
+    .wy-nav-content-wrap {
+        margin-left: 350px;
+    }
+}
+
+.wy-side-nav-search,
+.wy-nav-top {
+    background-color: #004595;
+}
+
+.wy-nav-side {
+    background-color: #E5E7EB;
+}
+
+.wy-side-nav-search input[type=text] {
+    border-radius: 8px;
+    border-color: #D1D5DB;
+}
+
+/* Logos ETML */
+.fa-home::before,
+.icon-home::before {
+    content: "ETML";
+    font-family: ETMLFont;
+    color: #111827;
+    letter-spacing: 1px;
+}
+
+.wy-side-nav-search .icon-home::before {
+    color: white;
+    margin-right: 100px;
+}
+
+
+/* ----------------------------------------------------------
+   4. Navigation – Cases rassurantes
+---------------------------------------------------------- */
+
+.wy-menu-vertical li {
+    margin: 0.35rem 0;
+    border-radius: 10px;
+    overflow: visible;
+}
+
+/* IMPORTANT : NE JAMAIS TRONQUER LE TEXTE */
+.wy-menu-vertical a {
+    display: block;
+    padding: 0.6rem 1rem;
+    border: 2px solid #111827;
+    border-radius: 10px;
+    background-color: #F9FAFB;
+    color: #111827;
+    text-decoration: none;
+    transition: background-color .15s, border-color .15s, transform .08s;
+    
+    /* Détruit toute troncature RTD */
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: break-word;
+}
+
+/* Hover */
+.wy-menu-vertical a:hover {
+    background-color: #E5E7EB;
+    border-color: #111827;
+    transform: translateX(1px);
+}
+
+/* Élément actif */
+.wy-menu-vertical li.current > a {
+    background-color: #DBEAFE;
+    border-color: #111827;
+    color: #1E3A8A;
+    font-weight: 700;
+}
+
+/* Sous-niveaux */
+.wy-menu-vertical li.toctree-l2 > a {
+    padding-left: 1.8rem;
+}
+
+/* Focus clavier */
+.wy-menu-vertical a:focus-visible {
+    outline: 3px solid #111827;
+    outline-offset: 3px;
+}
+
+/* Pas de titres profonds */
+.toctree-l3,
+.toctree-l4,
+.toctree-l5,
+.toctree-l6 {
+    display: none;
+}
+
+
+/* ----------------------------------------------------------
+   5. Listes très espacées
+---------------------------------------------------------- */
+
 .rst-content ul li,
 .rst-content ol li {
-    margin-bottom: 0.8rem;      
-    line-height: 1.7;           
-    padding-top: 0.2rem;         
+    margin-bottom: 0.8rem;
+    line-height: 1.7;
+    padding-top: 0.2rem;
     padding-bottom: 0.2rem;
 }
 
-/* Espacement autour des listes */
 .rst-content ul,
 .rst-content ol {
     margin-top: 1rem;
     margin-bottom: 1.5rem;
 }
 
-/* Puces légèrement agrandies pour la lisibilité */
 .rst-content ul li::marker,
 .rst-content ol li::marker {
     font-size: 1.2em;
 }
-  
-  
-  /* ----------------------------------------------------------
-     5. Liens, focus & interactifs généraux
-  ---------------------------------------------------------- */
-  
-  a {
-      color: #1D4ED8;
-      text-decoration: none;
-  }
-  
-  a:hover {
-      text-decoration: underline;
-  }
-  
-  a:visited {
-      color: #1E3A8A;
-  }
-  
-  /* Focus visible (hors menu déjà géré) */
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible {
-      outline: 2px solid #111827;
-      outline-offset: 2px;
-  }
-  
-  
-  /* ----------------------------------------------------------
-     6. Tables, images, code
-  ---------------------------------------------------------- */
-  
-  /* Wrapper responsive */
-  .wy-table-responsive {
-      margin: 1.2rem 0;
-      border: 0;
-      background: transparent;
-  }
-  
-  /* Table principale */
-  .wy-table-responsive table.docutils.align-default,
-  .rst-content table.docutils.align-default {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-      background: #FFFFFF;
-  }
-  
-  /* Cellules */
-  .wy-table-responsive table.docutils.align-default th,
-  .wy-table-responsive table.docutils.align-default td,
-  .rst-content table.docutils.align-default th,
-  .rst-content table.docutils.align-default td {
-      padding: 0.6rem 0.9rem;
-      border: 1px solid #9CA3AF;
-      vertical-align: top;
-      white-space: normal !important;
-      word-break: break-word;
-  }
-  
-  /* En-têtes */
-  .wy-table-responsive table.docutils.align-default th,
-  .rst-content table.docutils.align-default th {
-      background: #004595;
-      color: #ffffff;
-      font-weight: 700;
-      text-align: left;
-  }
-  
-  /* Zébrage léger */
-  .wy-table-responsive table.docutils.align-default tr:nth-child(even),
-  .rst-content table.docutils.align-default tr:nth-child(even) {
-      background: #F3F4F6;
-  }
-  
-  /* Survol (desktop) */
-  @media (hover: hover) {
-    .wy-table-responsive table.docutils.align-default tr:hover,
-    .rst-content table.docutils.align-default tr:hover {
-        background: #E5E7EB;
-    }
-  }
-  
-  /* Légende */
-  .rst-content table.docutils.align-default caption {
-      caption-side: top;
-      text-align: left;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-      color: #111827;
-  }
-  
-  /* Images */
-  .rst-content img {
-      max-width: 100% !important;
-      height: auto !important;
-  }
-  
-  /* Code color minor */
-  .fm {
-      color: #059669;
-  }
-  
-  .image-reference:hover {
-      background-color: transparent;
-  }
-  
-  .reference.internal:hover {
-      background: #E0F2FE !important;
-  }
-  
-  .toctree-expand {
-      color: #111827 !important;
-  }
-  
-  
-  /* ----------------------------------------------------------
-     7. Zones de réponse
-  ---------------------------------------------------------- */
-  
-  .answer-block {
-      margin: 1rem 0 2rem;
-  }
-  
-  .answer-area {
-      width: 100%;
-      min-height: 9rem;
-      resize: vertical;
-      padding: 0.75rem 1rem;
-      border: 2px solid #4B5563;
-      border-radius: 10px;
-      font-family: 'OpenDyslexic', system-ui, sans-serif;
-      background: #FFFFFF;
-      color: #111827;
-      font-size: 1rem;
-      line-height: 1.6;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .answer-area:focus {
-      outline: none;
-      border-color: #111827;
-      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.3);
-  }
-  
-  /* Bouton d’export : simple, lisible */
-  .export-btn {
-      display: inline-block;
-      padding: 0.7rem 1.2rem;
-      margin: 1.5rem 0;
-      border: 2px solid #111827;
-      border-radius: 10px;
-      background: #F9FAFB;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: #111827;
-      transition: background 0.2s ease, transform 0.1s ease;
-  }
-  
-  .export-btn:hover {
-      background: #E5E7EB;
-      transform: translateY(-1px);
-  }
-  
-  /* Monaco : rester en monospace classique */
-  .answer-block .monaco-editor,
-  .answer-block .monaco-editor .view-lines {
-      font-size: 16px !important;
-      line-height: 1.6 !important;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  }
-  
-  .answer-block .monaco-editor .margin .line-numbers {
-      font-size: 16px !important;
-  }
 
-  /* ----------------------------------------------------------
-   Effet stabilo sur le gras dans le texte (paragraphes + listes)
-   - Appliqué au thème normal ET au thème confort
-   - Pas d'effet dans les titres ni dans le code
+
+/* ----------------------------------------------------------
+   6. Liens généraux
 ---------------------------------------------------------- */
 
-/* Gras dans paragraphes et listes => stabilo vert */
+a { color: #1D4ED8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:visited { color: #1E3A8A; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #111827;
+    outline-offset: 2px;
+}
+
+
+/* ----------------------------------------------------------
+   7. Tables, images, code
+---------------------------------------------------------- */
+
+.wy-table-responsive {
+    margin: 1.2rem 0;
+    background: transparent;
+}
+
+.wy-table-responsive table.docutils.align-default,
+.rst-content table.docutils.align-default {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.wy-table-responsive table.docutils.align-default td,
+.wy-table-responsive table.docutils.align-default th,
+.rst-content table.docutils.align-default td,
+.rst-content table.docutils.align-default th {
+    padding: 0.6rem 0.9rem;
+    border: 1px solid #9CA3AF;
+}
+
+.wy-table-responsive table.docutils.align-default th {
+    background: #004595;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.wy-table-responsive table.docutils.align-default tr:nth-child(even) {
+    background: #F3F4F6;
+}
+
+@media (hover: hover) {
+    .wy-table-responsive table.docutils.align-default tr:hover {
+        background: #E5E7EB;
+    }
+}
+
+.rst-content img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+
+/* ----------------------------------------------------------
+   8. Zones de réponse
+---------------------------------------------------------- */
+
+.answer-block {
+    margin: 1rem 0 2rem;
+}
+
+.answer-area {
+    width: 100%;
+    min-height: 9rem;
+    resize: vertical;
+    padding: 0.75rem 1rem;
+    border: 2px solid #4B5563;
+    border-radius: 10px;
+    background: #fff;
+    color: #111827;
+    font-family: 'OpenDyslexic';
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.answer-area:focus {
+    outline: none;
+    border-color: #111827;
+    box-shadow: 0 0 0 3px rgba(17,24,39,0.3);
+}
+
+/* Bouton export */
+.export-btn {
+    display: inline-block;
+    padding: 0.7rem 1.2rem;
+    margin: 1.5rem 0;
+    border: 2px solid #111827;
+    border-radius: 10px;
+    background: #F9FAFB;
+    cursor: pointer;
+    font-weight: 700;
+    color: #111827;
+}
+
+.export-btn:hover {
+    background: #E5E7EB;
+    transform: translateY(-1px);
+}
+
+
+/* ----------------------------------------------------------
+   9. Stabilo sur le gras (p + li)
+---------------------------------------------------------- */
+
 .rst-content p strong,
 .rst-content p b,
 .rst-content li strong,
@@ -478,7 +387,6 @@
     border-radius: 3px;
 }
 
-/* Pas de stabilo dans les titres, même si quelqu'un met du <strong> dedans */
 .rst-content h1 strong,
 .rst-content h2 strong,
 .rst-content h3 strong,
@@ -486,13 +394,7 @@
 .rst-content h1 b,
 .rst-content h2 b,
 .rst-content h3 b,
-.rst-content h4 b {
-    background: none;
-    padding: 0;
-    border-radius: 0;
-}
-
-/* Pas de stabilo dans le code / blocs techniques */
+.rst-content h4 b,
 .rst-content code strong,
 .rst-content code b,
 .rst-content pre strong,
@@ -501,91 +403,29 @@
     padding: 0;
     border-radius: 0;
 }
-  
-  
-  /* ----------------------------------------------------------
-     8. Responsive
-  ---------------------------------------------------------- */
-  
-  @media screen and (max-width: 1100px) {
-  
-      .wy-nav-top {
-          display: block;
-      }
-  
-      .wy-nav-side.shift {
-          width: 60%;
-          left: 0;
-      }
-  
-      .wy-nav-content-wrap.shift {
-          position: fixed;
-          min-width: 100%;
-          left: 60%;
-          height: 100%;
-          overflow: hidden;
-      }
-  
-      .wy-nav-side {
-          left: -300px;
-      }
-  
-      .wy-nav-content-wrap {
-          margin-left: 0;
-      }
-  
-      .wy-menu.wy-menu-vertical,
-      .wy-side-nav-search,
-      .wy-side-scroll {
-          width: auto;
-      }
-  
-      .field-list {
-          display: block !important;
-      }
-  
-      .td {
-          display: table-column-group;
-      }
-  
-      html.writer-html5 .rst-content dl.field-list>dt {
-          margin-bottom: 10px;
-      }
-  
-      .wy-nav-content {
-          width: 100%;
-          max-width: 100%;
-          margin: 0;
-          padding: 1rem;
-          background: #F9FAFB;
-      }
-  
-      @media screen and (max-width: 768px) {
-  
-          .wy-nav-side.shift {
-              width: 85%;
-          }
-  
-          .wy-nav-content-wrap.shift {
-              left: 85%;
-          }
-      }
-  }
-  
-  
-  /* ----------------------------------------------------------
-     9. Impression
-  ---------------------------------------------------------- */
-  
-  @media print {
-      #export-answers {
-          display: none;
-      }
-  
-      .answer-area {
-          border-color: #4B5563;
-          background: #fff;
-          min-height: 6rem;
-      }
-  }
-  
+
+
+/* ----------------------------------------------------------
+   10. Responsive
+---------------------------------------------------------- */
+
+@media screen and (max-width: 1100px) {
+    .wy-nav-side.shift { width: 60%; left: 0; }
+    .wy-nav-content-wrap.shift { left: 60%; }
+    .wy-nav-content { width: 100%; max-width: 100%; padding: 1rem; }
+}
+
+@media screen and (max-width: 768px) {
+    .wy-nav-side.shift { width: 85%; }
+    .wy-nav-content-wrap.shift { left: 85%; }
+}
+
+
+/* ----------------------------------------------------------
+   11. Impression
+---------------------------------------------------------- */
+
+@media print {
+    #export-answers { display: none; }
+    .answer-area { border-color: #4B5563; background: #fff; }
+}
