@@ -114,11 +114,12 @@ p,
 
 /* Contenu aligné à gauche, pas centré dans le viewport */
 .wy-nav-content {
-    max-width: 75ch;
-    margin-left: 2.5rem;
-    /* Ancrage visuel */
+    width: 70%;                
+    max-width: 110ch;           
+    min-width: 60ch;            
+    margin-left: 2.5rem;        
     margin-right: auto;
-    padding: 1.5rem;
+    padding: 2rem 2.5rem;       
     background: #FCFAFF;
 }
 
@@ -489,9 +490,10 @@ textarea:focus-visible {
 
     /* Option A : le contenu reste aligné à gauche */
     .wy-nav-content {
-        max-width: 75ch;
-        margin-left: 1.5rem;
-        margin-right: auto;
+        width: 100%;
+        max-width: 90ch;     
+        margin-left: 1rem;
+        margin-right: 1rem;
         padding: 1rem;
         background: #FCFAFF;
     }
