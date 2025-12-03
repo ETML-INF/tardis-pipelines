@@ -376,6 +376,41 @@ textarea:focus-visible {
     font-size: 16px !important;
 }
 
+/* ----------------------------------------------------------
+   Navigation – items avec bordure pour meilleure lisibilité
+---------------------------------------------------------- */
+
+.wy-menu-vertical li {
+    border: 1px solid #d5d9e2;     /* gris bleuté doux */
+    border-radius: 6px;
+    margin: 0.3rem 0;              /* espacement vertical */
+    overflow: hidden;              /* pour éviter les glitchs de hover */
+}
+
+/* Liens dans le menu */
+.wy-menu-vertical a {
+    display: block;
+    padding: 0.45rem 0.75rem;
+    color: #303030;
+}
+
+/* Effet hover lisible mais subtil */
+.wy-menu-vertical li:hover {
+    background: #e9eff8;           /* bleu très clair */
+    border-color: #004595;         /* plus structurant */
+}
+
+/* Élément actif (current) */
+.wy-menu-vertical li.current {
+    background: #dbe6f8;           /* bleu pâle */
+    border-color: #004595;
+}
+
+/* Garde le texte actif lisible */
+.wy-menu-vertical li.current > a {
+    font-weight: 600;
+}
+
 
 /* ----------------------------------------------------------
      8. Responsive
