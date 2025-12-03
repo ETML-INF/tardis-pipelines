@@ -4,28 +4,29 @@
 *   Variante centrée sur le confort de lecture
 */
 
-/* Import of the dyslexia-friendly font */
+/* ----------------------------------------------------------
+   1. Polices
+---------------------------------------------------------- */
+
+/* OpenDyslexic */
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('OpenDyslexic-Regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('OpenDyslexic-Bold.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('OpenDyslexic-Italic.otf') format('opentype');
   font-weight: normal;
   font-style: italic;
 }
-
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('OpenDyslexic-BoldItalic.otf') format('opentype');
@@ -33,99 +34,132 @@
   font-style: italic;
 }
 
-/* Import of the etml font (pour le logo uniquement) */
+/* ETML font (logo uniquement) */
 @font-face {
   font-family: ETMLFont;
   src: url(ETML-new.ttf);
 }
 
-/* Change text color + police par défaut sur toute la page */
-body{
+
+/* ----------------------------------------------------------
+   2. Base typographique confort
+---------------------------------------------------------- */
+
+body {
     color: #303030;
     font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Justify of all the paragraphs */
-p{
-    text-align: justify;
+body,
+.rst-content {
+    font-size: 17px;
+    line-height: 1.6;
+    letter-spacing: 0.03em;
+    word-spacing: 0.12em;
 }
 
-/* Appliquer aussi OpenDyslexic sur la zone de contenu principale */
+/* Titres lisibles */
+.rst-content h1,
+.rst-content h2,
+.rst-content h3,
+.rst-content h4 {
+    font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 700;
+    text-transform: none;
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
+}
+
+/* Texte aligné à gauche */
+p,
+.rst-content p {
+    text-align: left;
+    margin-bottom: 1em;
+}
+
+/* Neutralisation italique/souligné */
+em, i {
+    font-style: normal;
+    font-weight: 600;
+}
+u {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Zone de contenu */
 .rst-content {
     font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Remove the max width on the pages, so all the screen has text */
-.wy-nav-content{
-    max-width: none;
-    background-color:  #FCFAFF;
-}
-/* Change bg of the nav */
-.wy-nav-content-wrap{
-    background-color: #FCFAFF;
+
+/* ----------------------------------------------------------
+   3. Confort visuel : largeur de ligne et fond doux
+---------------------------------------------------------- */
+
+.wy-nav-content {
+    max-width: 75ch;                 /* environ 60–75 caractères */
+    margin: 0 auto;                  /* centrage */
+    padding: 0 1.5rem;
+    background-color: #F7F3FF;       /* off-white adouci */
 }
 
-/*Change the background color of the title of the nav to the ETML color*/
+.wy-nav-content-wrap {
+    background-color: #F7F3FF;
+}
+
+
+/* ----------------------------------------------------------
+   4. Navigation / structure Sphinx (identique à la version standard)
+---------------------------------------------------------- */
+
 .wy-side-nav-search {
     background-color: #004595;
 }
 
-/*Change the background color of the title of the nav to the ETML color*/
-.wy-nav-top{
+.wy-nav-top {
     background-color: #004595;
 }
 
-/* Change bg of the nav */
 .wy-nav-side {
     background-color: #efedf1;
 }
 
-/* Change bg of the nav */
 .highlight {
     background-color: #efedf1;
 }
 
-/* Changes the color of the button */
+/* Boutons */
 .btn-neutral {
     background-color: #D8DEE9!important;
     color: #262b35!important;
 }
-
-/* Remove the shadow on the next page button */
-.btn{
+.btn {
     box-shadow: none;
 }
 
-/* remove the color change on visited pages in the menu */
-.wy-menu-vertical a:visited{
+/* Liens */
+a:visited {
+    color: #2980b9;
+}
+.wy-menu-vertical a:visited,
+.wy-menu-vertical a {
     color:#303030;
+    font-family: 'OpenDyslexic';
 }
 
-.wy-menu-vertical a{
-    color:#303030;
-    font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-/* text color of the current class */
-.current{
+/* Élément actif */
+.current {
     color:#D8DEE9;
 }
 
-/* Change of the font size in the table on the main page */
-.field-name{
-    font-weight: bold!important;
-    font-size: 18px!important;
-}
-
-/* Change of the home icon in the breadcrumb into the ETML logo */
+/* Home icon avec logo ETML */
 .fa-home::before, .icon-home::before {
     content: "ETML";
     font-family: ETMLFont;
     color: #303030;
     letter-spacing: 1px;
 }
-
-/* Change of the home icon in the nav into the ETML logo */
 .wy-side-nav-search .icon-home::before {
     content: "ETML";
     font-family: ETMLFont;
@@ -134,57 +168,18 @@ p{
     margin-right: 100px;
 }
 
-/* Change of all visited links on the website */
-a:visited {
-    color: #2980b9;
-}
-
-/* change of visited color in the nav */  
-.wy-side-nav-search>a:visited {
-    color: white;
-}
-
+/* Inputs */
 .wy-side-nav-search input[type=text] {
     border-radius: 8px;
     border-color: #D8DEE9;
 }
 
-/* Change of the tables color */
-.row-even{
+/* Tables */
+.row-even {
     color: black;
 }
-
-.head{
+.head {
     color: #D8DEE9;
-}
-
-/* Fix of the img deformation */
-.rst-content img{
-    max-width: 100%!important;
-    height: auto!important;
-}
-
-/* color of a php element in the code blocks */
-.fm{
-    color: #05efc5;
-}
-
-/* Removes the black square behind images when hovering */
-image-reference:hover {
-    background-color: none;
-}
-
-.reference.internal:hover{
-    background: #d8eaff!important;
-}
-
-/* Makes the expanding icon more visible */
-.toctree-expand{
-    color: black!important;
-}
-
-.wy-menu-vertical li.current{
-    background-color: #dbdbdb;
 }
 
 table.docutils td {
@@ -192,7 +187,41 @@ table.docutils td {
   word-break: break-word;
 }
 
-/* Bloc de réponse : on le met aussi en OpenDyslexic (ce n'est pas du code) */
+
+/* ----------------------------------------------------------
+   5. Images / références
+---------------------------------------------------------- */
+
+.rst-content img {
+    max-width: 100%!important;
+    height: auto!important;
+}
+
+.fm {
+    color: #05efc5;
+}
+
+image-reference:hover {
+    background-color: none;
+}
+
+.reference.internal:hover {
+    background: #d8eaff!important;
+}
+
+.toctree-expand {
+    color: black!important;
+}
+
+.wy-menu-vertical li.current {
+    background-color: #dbdbdb;
+}
+
+
+/* ----------------------------------------------------------
+   6. Zones de réponse (OpenDyslexic)
+---------------------------------------------------------- */
+
 .answer-block {
   margin: 1rem 0 2rem;
 }
@@ -202,11 +231,11 @@ table.docutils td {
   min-height: 9rem;
   resize: vertical;
   padding: 0.75rem 1rem;
-  border: 2px solid #fdba74; 
+  border: 2px solid #fdba74;
   border-radius: 10px;
-  font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #fff7ed; 
-  color: #431407;      
+  font-family: 'OpenDyslexic';
+  background: #fff7ed;
+  color: #431407;
   font-size: 1rem;
   transition: all 0.2s ease-in-out;
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
@@ -214,10 +243,10 @@ table.docutils td {
 
 .answer-area:focus {
   outline: none;
-  border-color: #f97316;  
-  background: #ffffff;     
+  border-color: #f97316;
+  background: #ffffff;
   font-size: 1.05rem;
-  box-shadow: 0 0 0 3px rgba(249,115,22,0.4); 
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.4);
 }
 
 .export-btn {
@@ -235,8 +264,8 @@ table.docutils td {
   background: #d6ffe6;
 }
 
-/* On laisse la police monospace dans Monaco pour le code (lisibilité logique / dev) */
-.answer-block .monaco-editor, 
+/* Monaco Editor reste monospace */
+.answer-block .monaco-editor,
 .answer-block .monaco-editor .view-lines {
   font-size: 16px !important;
   line-height: 1.6 !important;
@@ -245,31 +274,39 @@ table.docutils td {
   font-size: 16px !important;
 }
 
-.toctree-l3, .toctree-l4, .toctree-l5, .toctree-l6 { display: none; }
+
+/* ----------------------------------------------------------
+   7. Navigation avancée
+---------------------------------------------------------- */
+
+.toctree-l3, .toctree-l4, .toctree-l5, .toctree-l6 {
+    display: none;
+}
+
+
+/* ----------------------------------------------------------
+   8. Media queries
+---------------------------------------------------------- */
 
 @media screen and (min-width: 1100px){
     .wy-nav-content {
-        margin: 0;
-        background: #FCFAFF;
-    }   
+        max-width: 75ch;
+        margin: 0 auto;
+        background: #F7F3FF;
+    }
 }
 
 @media screen and (max-width: 1100px){
 
-    /* Nav mobile sur écran plus petit */
-
-    /* Makes the nav a block element */
     .wy-nav-top {
         display: block;
     }
 
-    /* Changes shift of the nav according to the screen size */
     .wy-nav-side.shift {
         width: 50%;
         left: 0;
     }
 
-    /* Position of the nav */
     .wy-nav-content-wrap.shift {
         position: fixed;
         min-width: 100%;
@@ -277,66 +314,62 @@ table.docutils td {
         top: 0;
         height: 100%;
         overflow: hidden;
-        margin-left: 0;
     }
 
-    /* Makes the nav disappear when the nav button is clicked */
     .wy-nav-side {
         left: -300px;
     }
 
-    /* Removing the margin in the nav */
     .wy-nav-content-wrap {
-        margin-left: 0px;
+        margin-left: 0;
     }
 
-    .wy-menu.wy-menu-vertical, .wy-side-nav-search, .wy-side-scroll {
+    .wy-menu.wy-menu-vertical,
+    .wy-side-nav-search,
+    .wy-side-scroll {
         width: auto;
     }
-    /*---------------------------------*/
-    .wy-nav-top a:visited{
+
+    .wy-nav-top a:visited {
         color: white;
     }
 
-    /* enable block modifications to the field list */
-    .field-list{
+    .field-list {
         display: block!important;
     }
 
-    /* Changes the display type of the table to fit on smaller screens */
-    .td{
+    .td {
         display: table-column-group;
     }
 
-    /* Fixing of the tables issue when on a small screen */
     html.writer-html5 .rst-content dl.field-list>dt{
         margin-bottom: 10px;
     }
 
-    /* Change the bg color of the main content page */
+    /* Confort conservé sur mobile */
     .wy-nav-content {
-        margin: 0;
-        background: #FCFAFF;
-    }   
+        max-width: 75ch;
+        margin: 0 auto;
+        background: #F7F3FF;
+    }
 
     @media screen and (max-width: 768px){
 
-    .wy-nav-side.shift {
-        width: 85%;
-        left: 0;
-    }
+        .wy-nav-side.shift {
+            width: 85%;
+            left: 0;
+        }
 
-    .wy-nav-content-wrap.shift {
-        position: fixed;
-        min-width: 100%;
-        left: 85%;
-        top: 0;
-        height: 100%;
-        overflow: hidden;
-    }
-
+        .wy-nav-content-wrap.shift {
+            left: 85%;
+        }
     }
 }
+
+
+/* ----------------------------------------------------------
+   9. Impression
+---------------------------------------------------------- */
 
 @media print {
   #export-answers { display: none; }

@@ -5,10 +5,10 @@
 */
 
 /* ----------------------------------------------------------
-   1. Import des polices
+   1. Polices
 ---------------------------------------------------------- */
 
-/* OpenDyslexic pour la lecture */
+/* OpenDyslexic */
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('OpenDyslexic-Regular.otf') format('opentype');
@@ -34,60 +34,99 @@
   font-style: italic;
 }
 
-/* ETML font pour le logo */
+/* ETML font (logo uniquement) */
 @font-face {
   font-family: ETMLFont;
   src: url(ETML-new.ttf);
 }
 
+
 /* ----------------------------------------------------------
-   2. Couleurs globales Dark
+   2. Base typographique confort en mode sombre
 ---------------------------------------------------------- */
 
-body{
+body {
     background-color: #1b1c1f;
     color: #e5e5e5;
     font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Paragraphe justifié */
-p{
-    text-align: justify;
+body,
+.rst-content {
+    font-size: 17px;
+    line-height: 1.6;
+    letter-spacing: 0.03em;
+    word-spacing: 0.12em;
 }
 
-/* Contenu principal */
+/* Titres lisibles */
+.rst-content h1,
+.rst-content h2,
+.rst-content h3,
+.rst-content h4 {
+    font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 700;
+    text-transform: none;
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
+}
+
+/* Texte aligné à gauche */
+p,
+.rst-content p {
+    text-align: left;
+    margin-bottom: 1em;
+}
+
+/* Neutralisation italique/souligné */
+em, i {
+    font-style: normal;
+    font-weight: 600;
+}
+u {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Zone de contenu */
 .rst-content {
     font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: #e5e5e5;
 }
 
+
 /* ----------------------------------------------------------
-   3. Zones de navigation
+   3. Confort visuel : largeur de ligne et fonds
 ---------------------------------------------------------- */
 
-.wy-nav-content{
+.wy-nav-content {
+    max-width: 75ch;                 /* ~60–75 caractères */
+    margin: 0 auto;
+    padding: 0 1.5rem;
     background-color: #1b1c1f;
-    max-width: none;
 }
 
-.wy-nav-content-wrap{
+.wy-nav-content-wrap {
     background-color: #1b1c1f;
 }
+
+
+/* ----------------------------------------------------------
+   4. Navigation / structure Sphinx
+---------------------------------------------------------- */
 
 .wy-side-nav-search {
-    background-color: #00306d !important;
+    background-color: #00306d;
 }
 
-.wy-nav-top{
-    background-color: #00306d !important;
+.wy-nav-top {
+    background-color: #00306d;
 }
 
-/* Sidebar nav */
 .wy-nav-side {
     background-color: #2a2c30;
 }
 
-/* Code highlight */
 .highlight {
     background-color: #2a2c30;
 }
@@ -97,8 +136,7 @@ p{
     background-color: #3f4757!important;
     color: #f0f0f0!important;
 }
-
-.btn{
+.btn {
     box-shadow: none;
 }
 
@@ -108,26 +146,24 @@ a:visited {
     color: #6ab8ff;
 }
 
-/* Liens menu */
 .wy-menu-vertical a:visited,
 .wy-menu-vertical a {
     color:#e5e5e5;
+    font-family: 'OpenDyslexic';
 }
 
-/* Active item */
+/* Élément actif */
 .current {
     color:#a8c4ff;
 }
 
-/* Logo ETML dans breadcrumb */
+/* Home icon avec logo ETML */
 .fa-home::before, .icon-home::before {
     content: "ETML";
     font-family: ETMLFont;
     color: #e5e5e5;
     letter-spacing: 1px;
 }
-
-/* Logo ETML dans la nav */
 .wy-side-nav-search .icon-home::before {
     content: "ETML";
     font-family: ETMLFont;
@@ -144,15 +180,11 @@ a:visited {
     color: #fafafa;
 }
 
-/* ----------------------------------------------------------
-   4. Tables
----------------------------------------------------------- */
-
-.row-even{
+/* Tables */
+.row-even {
     color: #e5e5e5;
 }
-
-.head{
+.head {
     color: #a8c4ff;
 }
 
@@ -161,36 +193,39 @@ table.docutils td {
   word-break: break-word;
 }
 
+
 /* ----------------------------------------------------------
-   5. Images
+   5. Images / références
 ---------------------------------------------------------- */
 
-.rst-content img{
+.rst-content img {
     max-width: 100%!important;
     height: auto!important;
 }
 
-/* Code PHP highlight */
-.fm{
+.fm {
     color: #05efc5;
 }
 
-/* Hover items */
-.reference.internal:hover{
+image-reference:hover {
+    background-color: none;
+}
+
+.reference.internal:hover {
     background: #003c79!important;
 }
 
-.toctree-expand{
+.toctree-expand {
     color: #ffffff!important;
 }
 
-/* Current in menu */
-.wy-menu-vertical li.current{
+.wy-menu-vertical li.current {
     background-color: #3a3d44;
 }
 
+
 /* ----------------------------------------------------------
-   6. Zones de réponse / exercices
+   6. Zones de réponse (OpenDyslexic)
 ---------------------------------------------------------- */
 
 .answer-block {
@@ -204,7 +239,7 @@ table.docutils td {
   padding: 0.75rem 1rem;
   border: 2px solid #fdba74;
   border-radius: 10px;
-  font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'OpenDyslexic';
   background: #2b2d31;
   color: #ffe5c3;
   font-size: 1rem;
@@ -236,34 +271,44 @@ table.docutils td {
   background: #005228;
 }
 
-/* Monaco editor → monospace normal dans Confort */
-.answer-block .monaco-editor, 
+/* Monaco Editor reste monospace */
+.answer-block .monaco-editor,
 .answer-block .monaco-editor .view-lines {
   font-size: 16px !important;
   line-height: 1.6 !important;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
-
 .answer-block .monaco-editor .margin .line-numbers {
   font-size: 16px !important;
 }
 
+
 /* ----------------------------------------------------------
-   7. Navigation mobile
+   7. Navigation avancée
 ---------------------------------------------------------- */
 
-.toctree-l3, .toctree-l4, .toctree-l5, .toctree-l6 { display: none; }
+.toctree-l3, .toctree-l4, .toctree-l5, .toctree-l6 {
+    display: none;
+}
+
+
+/* ----------------------------------------------------------
+   8. Media queries
+---------------------------------------------------------- */
 
 @media screen and (min-width: 1100px){
     .wy-nav-content {
-        margin: 0;
+        max-width: 75ch;
+        margin: 0 auto;
         background: #1b1c1f;
     }
 }
 
 @media screen and (max-width: 1100px){
 
-    .wy-nav-top { display: block; }
+    .wy-nav-top {
+        display: block;
+    }
 
     .wy-nav-side.shift {
         width: 50%;
@@ -283,45 +328,66 @@ table.docutils td {
         left: -300px;
     }
 
-    .wy-nav-content-wrap { margin-left: 0px; }
+    .wy-nav-content-wrap {
+        margin-left: 0;
+    }
 
-    .wy-menu.wy-menu-vertical, .wy-side-nav-search, .wy-side-scroll {
+    .wy-menu.wy-menu-vertical,
+    .wy-side-nav-search,
+    .wy-side-scroll {
         width: auto;
     }
 
-    .wy-nav-top a:visited { color: white; }
+    .wy-nav-top a:visited {
+        color: white;
+    }
 
-    .field-list { display: block!important; }
+    .field-list {
+        display: block!important;
+    }
 
-    .td { display: table-column-group; }
+    .td {
+        display: table-column-group;
+    }
 
     html.writer-html5 .rst-content dl.field-list>dt{
         margin-bottom: 10px;
     }
 
+    /* Confort conservé sur mobile */
     .wy-nav-content {
-        margin: 0;
+        max-width: 75ch;
+        margin: 0 auto;
         background: #1b1c1f;
     }
 
     @media screen and (max-width: 768px){
 
-    .wy-nav-side.shift {
-        width: 85%;
-        left: 0;
-    }
+        .wy-nav-side.shift {
+            width: 85%;
+            left: 0;
+        }
 
-    .wy-nav-content-wrap.shift {
-        left: 85%;
-    }
-
+        .wy-nav-content-wrap.shift {
+            left: 85%;
+        }
     }
 }
 
+
+/* ----------------------------------------------------------
+   9. Impression
+---------------------------------------------------------- */
+
 @media print {
   #export-answers { display: none; }
+  body,
+  .rst-content {
+    background: #ffffff;
+    color: #000000;
+  }
   .answer-area {
-    border-color: #bbb;
+    border-color: #999;
     background: #fff;
     min-height: 6rem;
     color: #000;
