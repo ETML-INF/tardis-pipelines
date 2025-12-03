@@ -43,7 +43,7 @@ exclude_patterns = []
 # -- Options HTML --------------------------------------------------------------
 html_theme = "sphinx_rtd_theme"
 html_static_path = [
-    os.path.join("themes", "sphinx", SPHINX_THEME, "assets"),
+    os.path.join("themes", "sphinx", SPHINX_THEME),
     os.path.join("themes", "sphinx", "js"),
 ]
 html_css_files = [
