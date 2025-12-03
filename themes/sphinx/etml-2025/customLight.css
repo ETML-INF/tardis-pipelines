@@ -221,17 +221,62 @@ textarea:focus-visible {
      6. Tables, images, code
   ---------------------------------------------------------- */
 
-table.docutils td {
+/* ----------------------------------------------------------
+   Tables – style ETML (bleu)
+---------------------------------------------------------- */
+
+/* Tables générales (docutils, Sphinx) */
+.rst-content table.docutils,
+.rst-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.2rem 0;
+    font-size: 0.95rem;
+    background: #ffffff;
+}
+
+/* Cellules */
+.rst-content table.docutils th,
+.rst-content table.docutils td,
+.rst-content table th,
+.rst-content table td {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d0d7e5;     /* gris bleuté doux */
+    vertical-align: top;
     white-space: normal !important;
     word-break: break-word;
 }
 
-.row-even {
-    color: black;
+/* En-têtes */
+.rst-content table.docutils th,
+.rst-content table th {
+    background: #004595;           /* bleu ETML */
+    color: #ffffff;
+    font-weight: 700;
+    text-align: left;
 }
 
-.head {
-    color: #D8DEE9;
+/* Légère zébrure des lignes */
+.rst-content table.docutils tr:nth-child(even),
+.rst-content table tr:nth-child(even) {
+    background: #f5f7fb;           /* bleu très clair */
+}
+
+/* Survol d’une ligne (desktop) */
+@media (hover: hover) {
+  .rst-content table.docutils tr:hover,
+  .rst-content table tr:hover {
+      background: #e4ecf9;
+  }
+}
+
+/* Optionnel : légende de table plus lisible */
+.rst-content table caption {
+    caption-side: top;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #004595;
 }
 
 .rst-content img {
