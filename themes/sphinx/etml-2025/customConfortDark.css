@@ -1,0 +1,329 @@
+/*
+*   Custom CSS for the ETML doc site
+*   Dark theme - Confort (OpenDyslexic)
+*   Variante centrée sur le confort de lecture en mode sombre
+*/
+
+/* ----------------------------------------------------------
+   1. Import des polices
+---------------------------------------------------------- */
+
+/* OpenDyslexic pour la lecture */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('OpenDyslexic-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('OpenDyslexic-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('OpenDyslexic-Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('OpenDyslexic-BoldItalic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* ETML font pour le logo */
+@font-face {
+  font-family: ETMLFont;
+  src: url(ETML-new.ttf);
+}
+
+/* ----------------------------------------------------------
+   2. Couleurs globales Dark
+---------------------------------------------------------- */
+
+body{
+    background-color: #1b1c1f;
+    color: #e5e5e5;
+    font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Paragraphe justifié */
+p{
+    text-align: justify;
+}
+
+/* Contenu principal */
+.rst-content {
+    font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #e5e5e5;
+}
+
+/* ----------------------------------------------------------
+   3. Zones de navigation
+---------------------------------------------------------- */
+
+.wy-nav-content{
+    background-color: #1b1c1f;
+    max-width: none;
+}
+
+.wy-nav-content-wrap{
+    background-color: #1b1c1f;
+}
+
+.wy-side-nav-search {
+    background-color: #00306d !important;
+}
+
+.wy-nav-top{
+    background-color: #00306d !important;
+}
+
+/* Sidebar nav */
+.wy-nav-side {
+    background-color: #2a2c30;
+}
+
+/* Code highlight */
+.highlight {
+    background-color: #2a2c30;
+}
+
+/* Boutons */
+.btn-neutral {
+    background-color: #3f4757!important;
+    color: #f0f0f0!important;
+}
+
+.btn{
+    box-shadow: none;
+}
+
+/* Liens */
+a:link,
+a:visited {
+    color: #6ab8ff;
+}
+
+/* Liens menu */
+.wy-menu-vertical a:visited,
+.wy-menu-vertical a {
+    color:#e5e5e5;
+}
+
+/* Active item */
+.current {
+    color:#a8c4ff;
+}
+
+/* Logo ETML dans breadcrumb */
+.fa-home::before, .icon-home::before {
+    content: "ETML";
+    font-family: ETMLFont;
+    color: #e5e5e5;
+    letter-spacing: 1px;
+}
+
+/* Logo ETML dans la nav */
+.wy-side-nav-search .icon-home::before {
+    content: "ETML";
+    font-family: ETMLFont;
+    color: white;
+    letter-spacing: 1px;
+    margin-right: 100px;
+}
+
+/* Inputs */
+.wy-side-nav-search input[type=text] {
+    border-radius: 8px;
+    border-color: #555;
+    background: #2f3136;
+    color: #fafafa;
+}
+
+/* ----------------------------------------------------------
+   4. Tables
+---------------------------------------------------------- */
+
+.row-even{
+    color: #e5e5e5;
+}
+
+.head{
+    color: #a8c4ff;
+}
+
+table.docutils td {
+  white-space: normal !important;
+  word-break: break-word;
+}
+
+/* ----------------------------------------------------------
+   5. Images
+---------------------------------------------------------- */
+
+.rst-content img{
+    max-width: 100%!important;
+    height: auto!important;
+}
+
+/* Code PHP highlight */
+.fm{
+    color: #05efc5;
+}
+
+/* Hover items */
+.reference.internal:hover{
+    background: #003c79!important;
+}
+
+.toctree-expand{
+    color: #ffffff!important;
+}
+
+/* Current in menu */
+.wy-menu-vertical li.current{
+    background-color: #3a3d44;
+}
+
+/* ----------------------------------------------------------
+   6. Zones de réponse / exercices
+---------------------------------------------------------- */
+
+.answer-block {
+  margin: 1rem 0 2rem;
+}
+
+.answer-area {
+  width: 100%;
+  min-height: 9rem;
+  resize: vertical;
+  padding: 0.75rem 1rem;
+  border: 2px solid #fdba74;
+  border-radius: 10px;
+  font-family: 'OpenDyslexic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #2b2d31;
+  color: #ffe5c3;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.answer-area:focus {
+  outline: none;
+  border-color: #f97316;
+  background: #383b40;
+  font-size: 1.05rem;
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.4);
+}
+
+.export-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  border: 2px solid #00c060;
+  border-radius: 8px;
+  background: #00391d;
+  cursor: pointer;
+  font-weight: 600;
+  color: #d9ffe8;
+}
+
+.export-btn:hover {
+  background: #005228;
+}
+
+/* Monaco editor → monospace normal dans Confort */
+.answer-block .monaco-editor, 
+.answer-block .monaco-editor .view-lines {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.answer-block .monaco-editor .margin .line-numbers {
+  font-size: 16px !important;
+}
+
+/* ----------------------------------------------------------
+   7. Navigation mobile
+---------------------------------------------------------- */
+
+.toctree-l3, .toctree-l4, .toctree-l5, .toctree-l6 { display: none; }
+
+@media screen and (min-width: 1100px){
+    .wy-nav-content {
+        margin: 0;
+        background: #1b1c1f;
+    }
+}
+
+@media screen and (max-width: 1100px){
+
+    .wy-nav-top { display: block; }
+
+    .wy-nav-side.shift {
+        width: 50%;
+        left: 0;
+    }
+
+    .wy-nav-content-wrap.shift {
+        position: fixed;
+        min-width: 100%;
+        left: 50%;
+        top: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .wy-nav-side {
+        left: -300px;
+    }
+
+    .wy-nav-content-wrap { margin-left: 0px; }
+
+    .wy-menu.wy-menu-vertical, .wy-side-nav-search, .wy-side-scroll {
+        width: auto;
+    }
+
+    .wy-nav-top a:visited { color: white; }
+
+    .field-list { display: block!important; }
+
+    .td { display: table-column-group; }
+
+    html.writer-html5 .rst-content dl.field-list>dt{
+        margin-bottom: 10px;
+    }
+
+    .wy-nav-content {
+        margin: 0;
+        background: #1b1c1f;
+    }
+
+    @media screen and (max-width: 768px){
+
+    .wy-nav-side.shift {
+        width: 85%;
+        left: 0;
+    }
+
+    .wy-nav-content-wrap.shift {
+        left: 85%;
+    }
+
+    }
+}
+
+@media print {
+  #export-answers { display: none; }
+  .answer-area {
+    border-color: #bbb;
+    background: #fff;
+    min-height: 6rem;
+    color: #000;
+  }
+}
