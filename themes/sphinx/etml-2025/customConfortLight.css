@@ -75,6 +75,7 @@ p,
 .rst-content p {
     text-align: left;
     margin-bottom: 1em;
+    line-height: 1.72;  
 }
 
 /* Neutralisation italique/souligné */

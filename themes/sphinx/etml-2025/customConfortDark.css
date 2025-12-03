@@ -54,7 +54,7 @@ body {
 body,
 .rst-content {
     font-size: 17px;
-    line-height: 1.6;
+    line-height: 1.8;
     letter-spacing: 0.03em;
     word-spacing: 0.12em;
 }
@@ -76,6 +76,7 @@ p,
 .rst-content p {
     text-align: left;
     margin-bottom: 1em;
+    line-height: 1.72;   
 }
 
 /* Neutralisation italique/souligné */
