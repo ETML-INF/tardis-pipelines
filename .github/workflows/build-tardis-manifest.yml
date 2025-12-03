@@ -48,6 +48,12 @@ jobs:
         with:
           repository: ${{ github.repository }}
 
+      - name: Checkout tardis-pipelines
+        uses: actions/checkout@v4
+        with:
+          repository: ETML-INF/tardis-pipelines
+          path: tardis-pipelines    
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -245,8 +251,8 @@ jobs:
 
           cp -f b-UnitesEnseignement/_build/manifests/tardis.* "${ROOT}/manifests/"
 
-          cp -f a-IdentificationModule/index.html  "${ROOT}/index.html"
-          cp -f a-IdentificationModule/styles.css  "${ROOT}/styles.css"
+          cp -f tardis-pipelines/themes/tardis/etml-2025/index.html  "${ROOT}/index.html"
+          cp -f tardis-pipelines/themes/tardis/etml-2025/styles.css  "${ROOT}/styles.css"
 
           echo "📁 Contenu du bundle TARDIS :"
           find "${ROOT}" -maxdepth 3 -type f | sed 's/^/  - /'

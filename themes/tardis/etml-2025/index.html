@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>TARDIS — Séquences</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+ 
+   <header class="site-header">
+    <div class="inner">
+      <h1 class="site-title">Teaching And Resources Development for Integrated Sequences (TARDIS) — Vue des séquences</h1>
+      <p class="site-subtitle">Synopsis du cours & onglets par séquence</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <div class="tabs" role="tablist" aria-label="Séquences du cours" id="tablist"></div>
+    <div id="panels"></div>
+  </div>
+
+
+<script type="module">
+  const MANIFEST_URL = "./manifests/tardis.json";
+  const BASE_HTTP_ROOT = "https://enseignement.section-inf.ch/moduleICT/182/"; 
+
+  async function loadManifest(){
+    const res = await fetch(MANIFEST_URL, { cache: "no-store" });
+    if(!res.ok) throw new Error("Impossible de charger tardis.json");
+    return res.json();
+  }
+
+  function tabId(key){ return `tab-${key}`; }
+  function panelId(key){ return `panel-${key}`; }
+
+  function activateTab(key){
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+      const on = btn.dataset.key===key;
+      btn.setAttribute('aria-selected', on?'true':'false');
+      btn.tabIndex = on?0:-1;
+    });
+    document.querySelectorAll('.panel').forEach(p=>{
+      p.classList.toggle('active', p.dataset.key===key);
+    });
+    const usp = new URLSearchParams(location.hash.replace(/^#/,''));
+    usp.set('tab', key);
+    location.hash = usp.toString();
+  }
+
+  function renderSynopsis(legal){
+    const el = document.createElement('div');
+    const b = Array.isArray(legal) ? (legal[0]||{}) : (legal||{});
+    el.innerHTML = `
+      <h2>Synopsis du cours</h2>
+      <dl class="kv">
+        <dt>Titre</dt><dd>${b.title ?? '<span class="muted">—</span>'}</dd>
+        <dt>Module</dt><dd>${b.module ?? '<span class="muted">—</span>'}</dd>
+        <dt>Auteurs</dt><dd>${(b.author||[]).join(', ') || '<span class="muted">—</span>'}</dd>
+        <dt>Licence</dt><dd>${b.license ?? '<span class="muted">—</span>'}</dd>
+        <dt>Maj</dt><dd>${b.lastUpdate ?? '<span class="muted">—</span>'}</dd>
+      </dl>
+      ${(b.requirements?.length?`<div class="muted">Prérequis</div><div class="chips">${b.requirements.map(x=>`<span class="chip">${x}</span>`).join(' ')}</div>`:'')}
+      ${(b.objectifs_ict?.length?`<div class="muted" style="margin-top:10px">Objectifs ICT</div><div class="chips">${b.objectifs_ict.map(o=>`<span class="chip">${o.id}${o.short?` — ${o.short}`:''}</span>`).join(' ')}</div>`:'')}
+      ${(b.sources?.ict_ref?`<div class="muted" style="margin-top:10px">Références</div><div><a href="${b.sources.ict_ref}" target="_blank" rel="noreferrer">Référentiel ICT</a></div>`:'')}
+      <hr class="divider">
+      <div class="muted">Les onglets suivants listent chaque séquence détectée dans le manifeste.</div>
+    `;
+    return el;
+  }
+
+  function fmtList(arr) {
+    if (!Array.isArray(arr) || arr.length === 0) return "<span class='muted'>—</span>";
+    return arr.join(" · ");
+  }
+
+  function bloomBadges(goals = []) {
+    const badges = [];
+    for (const g of goals) {
+      const m = /^C([1-6])\b/.exec(g || "");
+      if (m) badges.push(`C${m[1]}`);
+    }
+    const uniq = [...new Set(badges)];
+    return uniq.length
+      ? `<div class="chips chips--compact">${uniq.map(b => `<span class="chip chip--tone">${b}</span>`).join(" ")}</div>`
+      : "";
+  }
+
+  function renderSequenceTable(seqBlock) {
+    const el = document.createElement("div");
+    const rows = (seqBlock.items || []).map(it => `
+      <tr>
+        <td>
+		  <div class="title">${it.title ?? ""}</div>
+		  <div class="goal muted">${fmtList(it.goals || [])}</div>
+		  ${bloomBadges(it.goals)}
+		  ${actionLinks(it)}
+		</td>
+        <td>${fmtList(it.align_ict || [])}</td>
+        <td class="mono">${it.type ?? ""}</td>
+        <td>${it.method ?? "<span class='muted'>—</span>"}</td>
+        <td class="mono">${it.duree ?? "<span class='muted'>—</span>"}</td>
+        <td>${it.success_criteria ?? "<span class='muted'>—</span>"}</td>
+        <td>${fmtList(it.materiel || [])}</td>
+      </tr>
+    `).join("");
+
+    el.innerHTML = `
+      <h2>${seqBlock.seq} <span class="muted">(${seqBlock.count})</span></h2>
+      <div class="table-wrap">
+        <table class="grid-table">
+          <thead>
+            <tr>
+              <th>Titre / Objectifs pédagogiques</th>
+              <th>Objectifs ICT visés</th>
+              <th>Type</th>
+              <th>Méthode</th>
+              <th>Durée de l'activité</th>
+              <th>Critères de réussite</th>
+              <th>Matériel nécessaire</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+    return el;
+  }
+
+  function buildTabs(data){
+    const tablist = document.getElementById('tablist');
+    const panels = document.getElementById('panels');
+    tablist.innerHTML=''; panels.innerHTML='';
+
+    const tabs = [];
+    tabs.push({ key:'synopsis', label:'Synopsis du cours', render:()=>renderSynopsis(data.legal ?? data.legal_modules) });
+    for (const seq of (data.sequences||[])) {
+      tabs.push({ key: seq.seq, label: seq.seq, render:()=>renderSequenceTable(seq) });
+    }
+
+    for (const t of tabs) {
+      const btn = document.createElement('button');
+      btn.className='tab-btn'; btn.role='tab';
+      btn.id = tabId(t.key); btn.dataset.key=t.key;
+      btn.setAttribute('aria-controls', panelId(t.key));
+      btn.setAttribute('aria-selected','false');
+      btn.textContent = t.label;
+      btn.addEventListener('click', ()=>activateTab(t.key));
+      tablist.appendChild(btn);
+
+      const panel = document.createElement('div');
+      panel.className='panel'; panel.id=panelId(t.key); panel.dataset.key=t.key;
+      panel.role='tabpanel'; panel.setAttribute('aria-labelledby', btn.id);
+      panel.appendChild(t.render());
+      panels.appendChild(panel);
+    }
+
+    const usp = new URLSearchParams(location.hash.replace(/^#/,''));
+    const wanted = usp.get('tab');
+    const firstKey = tabs[0]?.key || 'synopsis';
+    activateTab(tabs.some(t=>t.key===wanted)?wanted:firstKey);
+
+    tablist.addEventListener('keydown', e=>{
+      const btns = [...tablist.querySelectorAll('.tab-btn')];
+      const idx = btns.findIndex(b=>b.getAttribute('aria-selected')==='true');
+      if(e.key==='ArrowRight'){ e.preventDefault(); btns[(idx+1)%btns.length].click(); }
+      if(e.key==='ArrowLeft'){ e.preventDefault(); btns[(idx-1+btns.length)%btns.length].click(); }
+    });
+  }
+  
+  function pathToWebUrl(sourcePath) {
+    if (!sourcePath) return null;
+    let p = String(sourcePath).replace(/^[.][/\\]/, ""); // nettoyer ./ ou .\
+  
+    if (p.startsWith("b-UnitesEnseignement/Support/")) {
+      p = p.replace(/^b-UnitesEnseignement\/Support\//, "cours/");
+    } else if (p.startsWith("b-UnitesEnseignement/Presentations/slidedeck/")) {
+      p = p.replace(
+        /^b-UnitesEnseignement\/Presentations\/slidedeck\//,
+        "presentations/"
+      );
+    }
+  
+    // extension .md -> .html
+    p = p.replace(/\.md$/i, ".html");
+  
+    // renommage slides.html -> index.html
+    p = p.replace(/slides\.html$/i, "index.html");
+  
+    return BASE_HTTP_ROOT ? BASE_HTTP_ROOT + p : null;
+  }
+
+  function actionLinks(item){
+    const links = [];
+    const pageUrl = pathToWebUrl(item.source_path);
+    if (pageUrl) links.push(`<a class="btn-link" href="${pageUrl}" target="_blank" rel="noreferrer">Ouvrir</a>`);
+    return links.length ? `<div class="actions">${links.join("")}</div>` : "";
+  }
+
+
+  (async function init(){
+    try {
+      const data = await loadManifest();
+      buildTabs(data);
+    } catch(e) {
+      document.querySelector('.wrap').innerHTML = `<p>Erreur: ${e.message}</p>`;
+      console.error(e);
+    }
+  })();
+</script>
+</body>
+</html>
