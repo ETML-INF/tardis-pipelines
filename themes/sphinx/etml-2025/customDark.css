@@ -13,7 +13,31 @@ body{
 /* Import of the etml font */
 @font-face {
   font-family: ETMLFont;
-  src: url(ETML-new.ttf);
+  src: url('fonts/ETML-new.ttf');
+}
+
+@font-face {
+  font-family: 'Lexend';
+  src: url('fonts/Lexend-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lexend';
+  src: url('fonts/Lexend-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lexend';
+  src: url('fonts/Lexend-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* Justify of all the  */

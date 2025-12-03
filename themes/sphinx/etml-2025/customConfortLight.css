@@ -11,25 +11,25 @@
 /* OpenDyslexic */
 @font-face {
   font-family: 'OpenDyslexic';
-  src: url('OpenDyslexic-Regular.otf') format('opentype');
+  src: url('fonts/OpenDyslexic-Regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'OpenDyslexic';
-  src: url('OpenDyslexic-Bold.otf') format('opentype');
+  src: url('fonts/OpenDyslexic-Bold.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
   font-family: 'OpenDyslexic';
-  src: url('OpenDyslexic-Italic.otf') format('opentype');
+  src: url('fonts/OpenDyslexic-Italic.otf') format('opentype');
   font-weight: normal;
   font-style: italic;
 }
 @font-face {
   font-family: 'OpenDyslexic';
-  src: url('OpenDyslexic-BoldItalic.otf') format('opentype');
+  src: url('fonts/OpenDyslexic-BoldItalic.otf') format('opentype');
   font-weight: bold;
   font-style: italic;
 }
@@ -37,7 +37,7 @@
 /* ETML font (logo uniquement) */
 @font-face {
   font-family: ETMLFont;
-  src: url(ETML-new.ttf);
+  src: url('fonts/ETML-new.ttf');
 }
 
 
