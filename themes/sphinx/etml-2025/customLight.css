@@ -222,62 +222,69 @@ textarea:focus-visible {
   ---------------------------------------------------------- */
 
 /* ----------------------------------------------------------
-   Tables – style ETML (bleu)
+   Tables – style ETML (bleu) + wrapper wy-table-responsive
 ---------------------------------------------------------- */
 
-/* Tables générales (docutils, Sphinx) */
-.rst-content table.docutils,
-.rst-content table {
-    border-collapse: collapse;
-    width: 100%;
+/* Wrapper responsive : on laisse l'overflow RTD, on nettoie juste un peu */
+.wy-table-responsive {
     margin: 1.2rem 0;
+    border: 0;
+    background: transparent;
+}
+
+/* Table principale (docutils align-default) */
+.wy-table-responsive table.docutils.align-default,
+.rst-content table.docutils.align-default {
+    width: 100%;
+    border-collapse: collapse;
     font-size: 0.95rem;
     background: #ffffff;
 }
 
-/* Cellules */
-.rst-content table.docutils th,
-.rst-content table.docutils td,
-.rst-content table th,
-.rst-content table td {
+/* Cellules générales */
+.wy-table-responsive table.docutils.align-default th,
+.wy-table-responsive table.docutils.align-default td,
+.rst-content table.docutils.align-default th,
+.rst-content table.docutils.align-default td {
     padding: 0.5rem 0.75rem;
-    border: 1px solid #d0d7e5;     /* gris bleuté doux */
+    border: 1px solid #d0d7e5;   /* gris bleuté doux */
     vertical-align: top;
     white-space: normal !important;
     word-break: break-word;
 }
 
-/* En-têtes */
-.rst-content table.docutils th,
-.rst-content table th {
-    background: #004595;           /* bleu ETML */
+/* En-têtes : bleu ETML */
+.wy-table-responsive table.docutils.align-default th,
+.rst-content table.docutils.align-default th {
+    background: #004595;
     color: #ffffff;
     font-weight: 700;
     text-align: left;
 }
 
-/* Légère zébrure des lignes */
-.rst-content table.docutils tr:nth-child(even),
-.rst-content table tr:nth-child(even) {
-    background: #f5f7fb;           /* bleu très clair */
+/* Lignes zébrées */
+.wy-table-responsive table.docutils.align-default tr:nth-child(even),
+.rst-content table.docutils.align-default tr:nth-child(even) {
+    background: #f5f7fb;         /* bleu très clair */
 }
 
-/* Survol d’une ligne (desktop) */
+/* Survol (desktop uniquement) */
 @media (hover: hover) {
-  .rst-content table.docutils tr:hover,
-  .rst-content table tr:hover {
+  .wy-table-responsive table.docutils.align-default tr:hover,
+  .rst-content table.docutils.align-default tr:hover {
       background: #e4ecf9;
   }
 }
 
-/* Optionnel : légende de table plus lisible */
-.rst-content table caption {
+/* Légende de table (si utilisée) */
+.rst-content table.docutils.align-default caption {
     caption-side: top;
     text-align: left;
     font-weight: 600;
     margin-bottom: 0.3rem;
     color: #004595;
 }
+
 
 .rst-content img {
     max-width: 100% !important;
