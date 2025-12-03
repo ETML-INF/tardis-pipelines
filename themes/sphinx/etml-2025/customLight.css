@@ -383,7 +383,7 @@ textarea:focus-visible {
 /* Reset léger des <li> pour éviter les styles hérités trop lourds */
 .wy-menu-vertical li {
     margin: 0.2rem 0;
-    border-radius: 999px;          /* pastilles */
+    border-radius: 8px;          /* pastilles */
     overflow: hidden;
 }
 
