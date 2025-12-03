@@ -1,428 +1,376 @@
 /*
 *   Custom CSS for the ETML doc site
-*   Light theme - Standard (Lexend)
-*   Version modernisée : lisibilité & structure
+*   Light theme - Standard (Lexend, Option A)
+*   Layout moderne aligné avec la barre latérale
 */
 
 /* ----------------------------------------------------------
    1. Polices
 ---------------------------------------------------------- */
 
-/* Police principale : Lexend (WOFF2 + fallback TTF) */
 @font-face {
-  font-family: 'Lexend';
-  src:
-    url('fonts/Lexend-Regular.woff2') format('woff2'),
-    url('fonts/Lexend-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Lexend';
-  src:
-    url('fonts/Lexend-Medium.woff2') format('woff2'),
-    url('fonts/Lexend-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Lexend';
-  src:
-    url('fonts/Lexend-Bold.woff2') format('woff2'),
-    url('fonts/Lexend-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Police ETML pour le logo uniquement */
-@font-face {
-  font-family: ETMLFont;
-  src: url(ETML-new.ttf);
-}
-
-
-/* ----------------------------------------------------------
-   2. Base typographique & structure de la page
----------------------------------------------------------- */
-
-body {
-    color: #303030;
-    font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-}
-
-/* Appliquer Lexend sur les zones principales */
-.rst-content,
-.wy-nav-content,
-.wy-menu-vertical a,
-.wy-side-nav-search input,
-table,
-button,
-input,
-textarea {
-    font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-/* Paragraphes : alignement à gauche + espacement cohérent */
-p,
-.rst-content p {
-    text-align: left;
-    margin-bottom: 1em;
-}
-
-/* Contenu central : largeur de ligne raisonnable et centrée */
-.wy-nav-content {
-    max-width: 75ch;          /* ~60–75 caractères par ligne */
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    background-color: #FCFAFF;
-}
-
-/* Fond général autour du contenu */
-.wy-nav-content-wrap {
-    background-color: #FCFAFF;
-}
-
-
-/* ----------------------------------------------------------
-   3. Navigation & header
----------------------------------------------------------- */
-
-/* Bandeau de recherche et top-nav aux couleurs ETML */
-.wy-side-nav-search {
-    background-color: #004595;
-}
-
-.wy-nav-top {
-    background-color: #004595;
-}
-
-/* Sidebar gauche */
-.wy-nav-side {
-    background-color: #efedf1;
-}
-
-/* Zones de code en surbrillance */
-.highlight {
-    background-color: #efedf1;
-}
-
-/* Boutons "Next/Previous" */
-.btn-neutral {
-    background-color: #D8DEE9;
-    color: #262b35;
-}
-
-.btn {
-    box-shadow: none;
-}
-
-/* Logo ETML dans le fil d'Ariane */
-.fa-home::before,
-.icon-home::before {
-    content: "ETML";
-    font-family: ETMLFont;
-    color: #303030;
-    letter-spacing: 1px;
-}
-
-/* Logo ETML dans la zone de recherche */
-.wy-side-nav-search .icon-home::before {
-    content: "ETML";
-    font-family: ETMLFont;
-    color: white;
-    letter-spacing: 1px;
-    margin-right: 100px;
-}
-
-/* Champ de recherche */
-.wy-side-nav-search input[type=text] {
-    border-radius: 8px;
-    border-color: #D8DEE9;
-}
-
-
-/* ----------------------------------------------------------
-   4. Liens, focus & états de navigation
----------------------------------------------------------- */
-
-/* Liens dans le contenu */
-a {
-    color: #1b76c4;
-    text-decoration: none;
-}
-
-a:visited {
-    color: #2980b9;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Focus visible pour accessibilité clavier */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible {
-    outline: 2px solid #004595;
-    outline-offset: 2px;
-}
-
-/* Liens dans le menu vertical */
-.wy-menu-vertical a {
-    color: #303030;
-}
-
-.wy-menu-vertical a:visited {
-    color: #303030;
-}
-
-/* Élément de menu courant */
-.wy-menu-vertical li.current {
-    background-color: #dbdbdb;
-}
-
-/* Texte de l'élément courant (par ex. titre de section) */
-.current {
-    color: #D8DEE9;
-}
-
-/* Lien dans la zone de recherche (titre) */
-.wy-side-nav-search > a:visited {
-    color: white;
-}
-
-
-/* ----------------------------------------------------------
-   5. Tables, images, code & divers
----------------------------------------------------------- */
-
-/* Taille de police dans la table d'accueil */
-.field-name {
-    font-weight: bold !important;
-    font-size: 18px !important;
-}
-
-/* Lignes de tableau : comportement plus souple */
-table.docutils td {
-  white-space: normal !important;
-  word-break: break-word;
-}
-
-/* Couleur du texte en ligne paire */
-.row-even {
-    color: black;
-}
-
-/* En-têtes de tableau */
-.head {
-    color: #D8DEE9;
-}
-
-/* Images : éviter les déformations */
-.rst-content img {
-    max-width: 100% !important;
-    height: auto !important;
-}
-
-/* Coloration d'un élément PHP dans les blocs de code */
-.fm {
-    color: #05efc5;
-}
-
-/* Suppression du fond noir derrière les images au survol */
-.image-reference:hover {
-    background-color: transparent;
-}
-
-/* Survol d'un lien interne dans le contenu */
-.reference.internal:hover {
-    background: #d8eaff !important;
-}
-
-/* Icône d'expansion de la table des matières */
-.toctree-expand {
-    color: black !important;
-}
-
-/* Masquer les titres trop profonds dans le menu (conservé) */
-.toctree-l3,
-.toctree-l4,
-.toctree-l5,
-.toctree-l6 {
-    display: none;
-}
-
-
-/* ----------------------------------------------------------
-   6. Zones de réponse & export des réponses
----------------------------------------------------------- */
-
-.answer-block {
-  margin: 1rem 0 2rem;
-}
-
-.answer-area {
-  width: 100%;
-  min-height: 9rem;
-  resize: vertical;
-  padding: 0.75rem 1rem;
-  border: 2px solid #fdba74;
-  border-radius: 10px;
-  font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #fff7ed;
-  color: #431407;
-  font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-}
-
-.answer-area:focus {
-  outline: none;
-  border-color: #f97316;
-  background: #ffffff;
-  font-size: 1.05rem;
-  box-shadow: 0 0 0 3px rgba(249,115,22,0.4);
-}
-
-.export-btn {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.6rem 1rem;
-  border: 2px solid #00aa44;
-  border-radius: 8px;
-  background: #eafff0;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.export-btn:hover {
-  background: #d6ffe6;
-}
-
-/* Monaco : garder la police monospace pour le code */
-.answer-block .monaco-editor,
-.answer-block .monaco-editor .view-lines {
-  font-size: 16px !important;
-  line-height: 1.6 !important;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-}
-
-.answer-block .monaco-editor .margin .line-numbers {
-  font-size: 16px !important;
-}
-
-
-/* ----------------------------------------------------------
-   7. Layout responsive
----------------------------------------------------------- */
-
-@media screen and (min-width: 1100px) {
-    .wy-nav-content {
-        max-width: 75ch;
-        margin: 0 auto;
-        background: #FCFAFF;
-    }
-}
-
-@media screen and (max-width: 1100px) {
-
-    /* Nav mobile sur écran plus petit */
-
-    .wy-nav-top {
-        display: block;
-    }
-
-    .wy-nav-side.shift {
-        width: 50%;
-        left: 0;
-    }
-
-    .wy-nav-content-wrap.shift {
-        position: fixed;
-        min-width: 100%;
-        left: 50%;
-        top: 0;
-        height: 100%;
-        overflow: hidden;
-        margin-left: 0;
-    }
-
-    .wy-nav-side {
-        left: -300px;
-    }
-
-    .wy-nav-content-wrap {
-        margin-left: 0;
-    }
-
-    .wy-menu.wy-menu-vertical,
-    .wy-side-nav-search,
-    .wy-side-scroll {
-        width: auto;
-    }
-
-    .wy-nav-top a:visited {
-        color: white;
-    }
-
-    /* Field-list plus lisible sur petit écran */
-    .field-list {
-        display: block !important;
-    }
-
-    /* Tables adaptatives */
-    .td {
-        display: table-column-group;
-    }
-
-    html.writer-html5 .rst-content dl.field-list > dt {
-        margin-bottom: 10px;
-    }
-
-    .wy-nav-content {
-        max-width: 100%;
-        margin: 0;
-        padding: 0 1rem;
-        background: #FCFAFF;
-    }
-
-    @media screen and (max-width: 768px) {
-
-        .wy-nav-side.shift {
-            width: 85%;
-            left: 0;
-        }
-
-        .wy-nav-content-wrap.shift {
-            position: fixed;
-            min-width: 100%;
-            left: 85%;
-            top: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------
-   8. Impression
----------------------------------------------------------- */
-
-@media print {
-  #export-answers { display: none; }
-
-  .answer-area {
-    border-color: #999;
-    background: #fff;
-    min-height: 6rem;
+    font-family: 'Lexend';
+    src:
+      url('fonts/Lexend-Regular.woff2') format('woff2'),
+      url('fonts/Lexend-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
   }
-}
+  
+  @font-face {
+    font-family: 'Lexend';
+    src:
+      url('fonts/Lexend-Medium.woff2') format('woff2'),
+      url('fonts/Lexend-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Lexend';
+    src:
+      url('fonts/Lexend-Bold.woff2') format('woff2'),
+      url('fonts/Lexend-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: ETMLFont;
+    src: url('fonts/ETML-new.ttf');
+  }
+  
+  
+  /* ----------------------------------------------------------
+     2. Base typographique & structure
+  ---------------------------------------------------------- */
+  
+  body {
+      color: #303030;
+      font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+  }
+  
+  /* Appliquer Lexend uniformément */
+  .rst-content,
+  .wy-nav-content,
+  .wy-menu-vertical a,
+  .wy-side-nav-search input,
+  table,
+  button,
+  input,
+  textarea {
+      font-family: 'Lexend', system-ui, sans-serif;
+  }
+  
+  /* Paragraphes lisibles */
+  p,
+  .rst-content p {
+      text-align: left;
+      margin-bottom: 1em;
+  }
+  
+  
+  /* ----------------------------------------------------------
+     3. OPTION A – Layout moderne aligné sur la sidebar
+  ---------------------------------------------------------- */
+  
+  /* Contenu aligné à gauche, pas centré dans le viewport */
+  .wy-nav-content {
+      max-width: 75ch;
+      margin-left: 2.5rem;   /* Ancrage visuel */
+      margin-right: auto;
+      padding: 1.5rem;
+      background: #FCFAFF;
+  }
+  
+  /* Fond autour du contenu */
+  .wy-nav-content-wrap {
+      background: #FCFAFF;
+  }
+  
+  /* Rail discret de séparation */
+  .wy-side-scroll {
+      border-right: 1px solid #e4e4e4;
+  }
+  
+  
+  /* ----------------------------------------------------------
+     4. Navigation & header
+  ---------------------------------------------------------- */
+  
+  .wy-side-nav-search,
+  .wy-nav-top {
+      background-color: #004595;
+  }
+  
+  .wy-nav-side {
+      background-color: #efedf1;
+  }
+  
+  .highlight {
+      background-color: #efedf1;
+  }
+  
+  /* Champ de recherche */
+  .wy-side-nav-search input[type=text] {
+      border-radius: 8px;
+      border-color: #D8DEE9;
+  }
+  
+  /* Logo ETML dans le breadcrumb */
+  .fa-home::before,
+  .icon-home::before {
+      content: "ETML";
+      font-family: ETMLFont;
+      color: #303030;
+      letter-spacing: 1px;
+  }
+  
+  /* Logo ETML dans la zone recherche */
+  .wy-side-nav-search .icon-home::before {
+      content: "ETML";
+      font-family: ETMLFont;
+      color: white;
+      letter-spacing: 1px;
+      margin-right: 100px;
+  }
+  
+  
+  /* ----------------------------------------------------------
+     5. Liens, focus & états interactifs
+  ---------------------------------------------------------- */
+  
+  a {
+      color: #1b76c4;
+      text-decoration: none;
+  }
+  
+  a:hover {
+      text-decoration: underline;
+  }
+  
+  a:visited {
+      color: #2980b9;
+  }
+  
+  /* Focus visible (accessibilité) */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+      outline: 2px solid #004595;
+      outline-offset: 2px;
+  }
+  
+  /* Menu vertical */
+  .wy-menu-vertical a,
+  .wy-menu-vertical a:visited {
+      color: #303030;
+  }
+  
+  /* Élément actif */
+  .wy-menu-vertical li.current {
+      background-color: #dbdbdb;
+  }
+  
+  .current {
+      color:#D8DEE9;
+  }
+  
+  
+  /* ----------------------------------------------------------
+     6. Tables, images, code
+  ---------------------------------------------------------- */
+  
+  table.docutils td {
+    white-space: normal !important;
+    word-break: break-word;
+  }
+  
+  .row-even {
+      color: black;
+  }
+  
+  .head {
+      color: #D8DEE9;
+  }
+  
+  .rst-content img {
+      max-width: 100% !important;
+      height: auto !important;
+  }
+  
+  .fm {
+      color: #05efc5;
+  }
+  
+  .image-reference:hover {
+      background-color: transparent;
+  }
+  
+  .reference.internal:hover {
+      background: #d8eaff !important;
+  }
+  
+  .toctree-expand {
+      color: black !important;
+  }
+  
+  /* Masquage des titres profonds (conservé) */
+  .toctree-l3,
+  .toctree-l4,
+  .toctree-l5,
+  .toctree-l6 {
+      display: none;
+  }
+  
+  
+  /* ----------------------------------------------------------
+     7. Zones de réponse
+  ---------------------------------------------------------- */
+  
+  .answer-block {
+    margin: 1rem 0 2rem;
+  }
+  
+  .answer-area {
+    width: 100%;
+    min-height: 9rem;
+    resize: vertical;
+    padding: 0.75rem 1rem;
+    border: 2px solid #fdba74;
+    border-radius: 10px;
+    font-family: 'Lexend';
+    background: #fff7ed;
+    color: #431407;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  }
+  
+  .answer-area:focus {
+    outline: none;
+    border-color: #f97316;
+    background: #fff;
+    font-size: 1.05rem;
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.4);
+  }
+  
+  .export-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1rem;
+    border: 2px solid #00aa44;
+    border-radius: 8px;
+    background: #eafff0;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .export-btn:hover {
+    background: #d6ffe6;
+  }
+  
+  /* Monaco : reste en monospace */
+  .answer-block .monaco-editor,
+  .answer-block .monaco-editor .view-lines {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  
+  .answer-block .monaco-editor .margin .line-numbers {
+    font-size: 16px !important;
+  }
+  
+  
+  /* ----------------------------------------------------------
+     8. Responsive
+  ---------------------------------------------------------- */
+  
+  @media screen and (max-width: 1100px) {
+  
+      .wy-nav-top {
+          display: block;
+      }
+  
+      .wy-nav-side.shift {
+          width: 50%;
+          left: 0;
+      }
+  
+      .wy-nav-content-wrap.shift {
+          position: fixed;
+          min-width: 100%;
+          left: 50%;
+          height: 100%;
+          overflow: hidden;
+      }
+  
+      .wy-nav-side {
+          left: -300px;
+      }
+  
+      .wy-nav-content-wrap {
+          margin-left: 0;
+      }
+  
+      .wy-menu.wy-menu-vertical,
+      .wy-side-nav-search,
+      .wy-side-scroll {
+          width: auto;
+      }
+  
+      .field-list {
+          display: block !important;
+      }
+  
+      .td {
+          display: table-column-group;
+      }
+  
+      html.writer-html5 .rst-content dl.field-list > dt {
+          margin-bottom: 10px;
+      }
+  
+      /* Option A : le contenu reste aligné à gauche */
+      .wy-nav-content {
+          max-width: 75ch;
+          margin-left: 1.5rem;
+          margin-right: auto;
+          padding: 1rem;
+          background: #FCFAFF;
+      }
+  
+      @media screen and (max-width: 768px) {
+  
+          .wy-nav-side.shift {
+              width: 85%;
+          }
+  
+          .wy-nav-content-wrap.shift {
+              left: 85%;
+          }
+      }
+  }
+  
+  
+  /* ----------------------------------------------------------
+     9. Impression
+  ---------------------------------------------------------- */
+  
+  @media print {
+    #export-answers { display: none; }
+  
+    .answer-area {
+      border-color: #999;
+      background: #fff;
+      min-height: 6rem;
+    }
+  }
+  
