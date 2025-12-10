@@ -46,6 +46,15 @@ inputs:
     description: "Mot de passe FTP"
     required: true
 
+  mode:
+    description: '"module" (par défaut) pour les modules ICT, "raw" pour pousser vers un dossier ou le root du vhost.'
+    required: false
+    default: "module"
+
+  raw-server-dir:
+    description: "Chemin distant complet si mode=raw (ex: /)"
+    required: false
+
 runs:
   using: "composite"
   steps:
@@ -82,7 +91,8 @@ runs:
 
         echo "✅ Secrets FTP détectés."
 
-    - name: 📝 Créer placeholder state.json si nécessaire (et arborescence)
+    - name: 📝 Créer placeholder state.json si nécessaire (et arborescence) [mode=module]
+      if: ${{ inputs.mode == 'module' }}
       shell: bash
       env:
         FTP_SERVER:   ${{ inputs.ftp-server }}
@@ -117,8 +127,8 @@ runs:
           echo "✅ Fichier de state déjà présent."
         fi
 
-
-    - name: 📂 Sync via FTP-Deploy-Action
+    - name: 📂 Sync via FTP-Deploy-Action (mode module)
+      if: ${{ inputs.mode == 'module' }}
       uses: SamKirkland/FTP-Deploy-Action@v4.3.6
       with:
         server:     ${{ inputs.ftp-server }}
@@ -127,7 +137,22 @@ runs:
         protocol:   ftps
         port:       21
         local-dir:  ${{ inputs.local-dir }}
-        server-dir: ${{ inputs.ictroot-dir }}/${{ inputs.ictmodule-dir}}/${{ inputs.custom-dir }}/
+        server-dir: ${{ inputs.ictroot-dir }}/${{ inputs.ictmodule-dir }}/${{ inputs.custom-dir }}/
+        state-name: ${{ inputs.state-name }}
+        log-level:  ${{ inputs.log-level }}
+        timeout:    ${{ inputs.timeout }}
+
+    - name: 📂 Sync via FTP-Deploy-Action (mode raw)
+      if: ${{ inputs.mode == 'raw' }}
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+      with:
+        server:     ${{ inputs.ftp-server }}
+        username:   ${{ inputs.ftp-username }}
+        password:   ${{ inputs.ftp-password }}
+        protocol:   ftps
+        port:       21
+        local-dir:  ${{ inputs.local-dir }}
+        server-dir: ${{ inputs.raw-server-dir }}
         state-name: ${{ inputs.state-name }}
         log-level:  ${{ inputs.log-level }}
         timeout:    ${{ inputs.timeout }}
