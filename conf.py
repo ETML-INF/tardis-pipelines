@@ -41,6 +41,9 @@ templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- Options HTML --------------------------------------------------------------
+html_copy_source = False
+html_show_sourcelink = False
+
 html_theme = "sphinx_rtd_theme"
 html_static_path = [
     os.path.join("themes", "sphinx", SPHINX_THEME),
