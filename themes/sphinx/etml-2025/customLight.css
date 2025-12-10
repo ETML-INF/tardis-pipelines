@@ -441,45 +441,6 @@ textarea:focus-visible {
 }
 
 /* ----------------------------------------------------------
-   Effet stabilo sur le gras dans le texte (paragraphes + listes)
-   - Appliqué au thème normal ET au thème confort
-   - Pas d'effet dans les titres ni dans le code
----------------------------------------------------------- */
-
-/* Gras dans paragraphes et listes => stabilo vert */
-.rst-content p strong,
-.rst-content p b,
-.rst-content li strong,
-.rst-content li b {
-    background-color: #C2EDE0;
-    padding: 0.08em 0.18em;
-    border-radius: 3px;
-}
-
-/* Pas de stabilo dans les titres, même si quelqu'un met du <strong> dedans */
-.rst-content h1 strong,
-.rst-content h2 strong,
-.rst-content h3 strong,
-.rst-content h4 strong,
-.rst-content h1 b,
-.rst-content h2 b,
-.rst-content h3 b,
-.rst-content h4 b {
-    background: none;
-    padding: 0;
-    border-radius: 0;
-}
-
-/* Pas de stabilo dans le code / blocs techniques */
-.rst-content code strong,
-.rst-content code b,
-.rst-content pre strong,
-.rst-content pre b {
-    background: none;
-    padding: 0;
-    border-radius: 0;
-}
-/* ----------------------------------------------------------
      8. Responsive
   ---------------------------------------------------------- */
 
