@@ -24,7 +24,7 @@
 
 <script type="module">
   const MANIFEST_URL = "./manifests/tardis.json";
-  const BASE_HTTP_ROOT = "https://enseignement.section-inf.ch/moduleICT/182/"; 
+  const BASE_HTTP_ROOT = "https://enseignement.section-inf.ch/moduleICT/%%ICT_MODULE%%/"; 
 
   async function loadManifest(){
     const res = await fetch(MANIFEST_URL, { cache: "no-store" });
