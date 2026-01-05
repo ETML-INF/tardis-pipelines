@@ -252,6 +252,7 @@ jobs:
           cp -f b-UnitesEnseignement/_build/manifests/tardis.* "${ROOT}/manifests/"
 
           cp -f tardis-pipelines/themes/tardis/etml-2025/index.html  "${ROOT}/index.html"
+          sed -i "s/%%ICT_MODULE%%/${ICT_MODULE}/g" "${ROOT}/index.html"
           cp -f tardis-pipelines/themes/tardis/etml-2025/styles.css  "${ROOT}/styles.css"
 
           echo "📁 Contenu du bundle TARDIS :"
