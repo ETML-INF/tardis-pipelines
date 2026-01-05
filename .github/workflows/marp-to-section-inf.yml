@@ -7,6 +7,11 @@ on:
         description: "Code du module ICT (ex: I346)"
         required: true
         type: string
+      theme_name:
+        description: "Nom du thème Marp présent dans tardis-pipelines/themes/marp (ex: etml-2025)"
+        required: false
+        type: string
+        default: "etml-2025"
     secrets:
       ftp_server:
         description: "Host FTP (ex: enseignement.section-inf.ch)"
@@ -23,18 +28,34 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      ICT_MODULE: ${{ inputs.ICT_MODULE }}
+      ICT_MODULE: ${{ inputs.ict_module }}
+      THEME_NAME: ${{ inputs.theme_name }}
+      PIPELINES_REPO: ETML-INF/tardis-pipelines
+      PIPELINES_REF: main
     steps:
       - name: Check ICT_MODULE
         run: |
+          set -euo pipefail
           if [ -z "${ICT_MODULE}" ]; then
-            echo "::error::❌ ICT_MODULE non défini. Configurez-le dans Settings → Actions → Variables."
+            echo "::error::❌ ICT_MODULE non défini. (input workflow_call: ict_module)"
             exit 1
-          else
-            echo "✅ ICT_MODULE=${ICT_MODULE}"
           fi
+          echo "✅ ICT_MODULE=${ICT_MODULE}"
+          echo "✅ THEME_NAME=${THEME_NAME}"
 
-      - uses: actions/checkout@v4
+      # 1) Checkout du dépôt APPELANT (cours)
+      - name: Checkout caller repo
+        uses: actions/checkout@v4
+        with:
+          path: caller
+
+      # 2) Checkout de tardis-pipelines (thèmes + index.php)
+      - name: Checkout tardis-pipelines (themes)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.PIPELINES_REPO }}
+          ref: ${{ env.PIPELINES_REF }}
+          path: pipelines
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -47,11 +68,25 @@ jobs:
       - name: Build slides (HTML)
         run: |
           set -euo pipefail
-          SRC_DIR="b-UnitesEnseignement/Presentations"
+
+          # Dépôt appelant
+          SRC_DIR="caller/b-UnitesEnseignement/Presentations"
           OUT_HTML="${SRC_DIR}/dist/html"
-          STYLE_DIR="${SRC_DIR}/style"
-          ASSETS_DIR="${SRC_DIR}/assets"
           mkdir -p "${OUT_HTML}"
+
+          # Thèmes dans tardis-pipelines
+          PIPELINES_THEME_ROOT="pipelines/themes/marp"
+          PIPELINES_THEME_DIR="${PIPELINES_THEME_ROOT}/${THEME_NAME}"
+          PIPELINES_INDEX="${PIPELINES_THEME_ROOT}/index.php"
+
+          if [ ! -d "${PIPELINES_THEME_DIR}" ]; then
+            echo "::error::❌ Thème introuvable: ${PIPELINES_THEME_DIR}"
+            ls -la "${PIPELINES_THEME_ROOT}" || true
+            exit 1
+          fi
+
+          # Marp: theme-set doit viser le dossier qui contient les thèmes
+          THEME_SET_DIR="${PIPELINES_THEME_ROOT}"
 
           shopt -s nullglob
           FILES=(${SRC_DIR}/*.md)
@@ -62,44 +97,42 @@ jobs:
           for f in "${FILES[@]}"; do
             base="$(basename "${f%.md}")"
             marp "${f}" --html --allow-local-files \
-              --theme-set "${STYLE_DIR}" \
+              --theme-set "${THEME_SET_DIR}" \
               --output "${OUT_HTML}/${base}.html"
           done
 
-          ROOT_INDEX="${SRC_DIR}/index.php"
-          if [ -f "${ROOT_INDEX}" ]; then
-            echo "ℹ️  index.php détecté → copie dans ${OUT_HTML}/"
-            cp "${ROOT_INDEX}" "${OUT_HTML}/index.php"
+          # Index.php: vient de tardis-pipelines
+          if [ -f "${PIPELINES_INDEX}" ]; then
+            echo "ℹ️ index.php (tardis-pipelines) → copie dans ${OUT_HTML}/"
+            cp "${PIPELINES_INDEX}" "${OUT_HTML}/index.php"
           else
-            echo "ℹ️  Aucun index.php à la racine de Presentations/"
+            echo "::warning::Aucun index.php trouvé dans ${PIPELINES_THEME_ROOT}/"
           fi
 
-          if [ -d "${STYLE_DIR}" ]; then
-            echo "ℹ️  Dossier style détecté → copie dans ${OUT_HTML}/"
-            cp -r "${STYLE_DIR}" "${OUT_HTML}/"
-          else
-            echo "ℹ️  Aucun dossier style à la racine de Presentations/"
-          fi
+          # Copier le thème + assets (fonts/img) pour que le HTML puisse les charger localement
+          echo "ℹ️ Thème ${THEME_NAME} → copie dans ${OUT_HTML}/style/${THEME_NAME}/"
+          mkdir -p "${OUT_HTML}/style"
+          cp -r "${PIPELINES_THEME_DIR}" "${OUT_HTML}/style/"
 
-          ASSETS_FOLDER="${SRC_DIR}/assets"
-          if [ -d "${ASSETS_DIR}" ]; then
-            echo "ℹ️  Dossier assets détecté → copie dans ${OUT_HTML}/"
-            cp -r "${ASSETS_DIR}" "${OUT_HTML}/"
-          else
-            echo "ℹ️  Aucun dossier assets à la racine de Presentations/"
+          # Copier aussi un éventuel assets/ du dépôt appelant (si tu en as)
+          if [ -d "${SRC_DIR}/assets" ]; then
+            echo "ℹ️ assets (caller) → copie dans ${OUT_HTML}/assets/"
+            cp -r "${SRC_DIR}/assets" "${OUT_HTML}/assets"
           fi
 
       - name: Upload slides artifact
         uses: actions/upload-artifact@v4
         with:
           name: slides-site
-          path: b-UnitesEnseignement/Presentations/dist/html/**
+          path: caller/b-UnitesEnseignement/Presentations/dist/html/**
           if-no-files-found: error
           retention-days: 7
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      ICT_MODULE: ${{ inputs.ict_module }}
     steps:
       - name: ⬇️ Download build artifacts
         uses: actions/download-artifact@v4
@@ -110,13 +143,13 @@ jobs:
       - name: 📂 Sync présentations (HTML)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
-          local-dir:    site/dist/html/
-          ictroot-dir: ${{ vars.ICT_ROOT_FOLDER }}
-          ictmodule-dir: ${{ vars.ICT_MODULE }}
-          custom-dir:   ${{ vars.FTP_PRESENTATIONS_DIR }}
-          state-name:   ".ftp-sync-deck.json"
-          log-level:    "minimal"
-          timeout:      "300000"
-          ftp-server:   ${{ vars.FTP_SERVER }}
-          ftp-username: ${{ secrets.FTP_USERNAME }}
-          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          local-dir:     site/dist/html/
+          ictroot-dir:   ${{ vars.ICT_ROOT_FOLDER }}
+          ictmodule-dir: ${{ env.ICT_MODULE }}
+          custom-dir:    ${{ vars.FTP_PRESENTATIONS_DIR }}
+          state-name:    ".ftp-sync-deck.json"
+          log-level:     "minimal"
+          timeout:       "300000"
+          ftp-server:    ${{ secrets.ftp_server }}
+          ftp-username:  ${{ secrets.ftp_username }}
+          ftp-password:  ${{ secrets.ftp_password }}
