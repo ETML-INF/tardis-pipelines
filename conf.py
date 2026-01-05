@@ -18,6 +18,7 @@ extensions = [
     "myst_parser",
     "tardis_textarea",
     "tardis_qcm",
+    "tardis_cards",
 ]
 
 myst_enable_extensions = [
@@ -52,6 +53,7 @@ html_static_path = [
 html_css_files = [
     "customLight.css",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/editor/editor.main.css",
+    "print-cards.css",
 ]
 html_js_files = [
     "customToggle.js",
