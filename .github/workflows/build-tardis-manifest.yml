@@ -131,7 +131,7 @@ jobs:
               let fm = extractFM(raw);
               if (!fm) { console.log(`⚠️  FM vide: ${f}`); continue; }
               fm = sanitize(fm);
-
+              console.log(fm);
               const TYPE_RE = /^\s*type\s*:\s*["']?([A-Za-z0-9_-]+)["']?\s*(?:#.*)?$/;
 
               let type = null;
