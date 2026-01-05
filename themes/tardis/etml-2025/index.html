@@ -175,9 +175,9 @@
   
     if (p.startsWith("b-UnitesEnseignement/Support/")) {
       p = p.replace(/^b-UnitesEnseignement\/Support\//, "cours/");
-    } else if (p.startsWith("b-UnitesEnseignement/Presentations/slidedeck/")) {
+    } else if (p.startsWith("b-UnitesEnseignement/Presentations/")) {
       p = p.replace(
-        /^b-UnitesEnseignement\/Presentations\/slidedeck\//,
+        /^b-UnitesEnseignement\/Presentations\//,
         "presentations/"
       );
     }
