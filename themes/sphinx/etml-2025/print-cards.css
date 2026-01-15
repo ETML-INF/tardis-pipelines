@@ -1,116 +1,154 @@
 /* ============================================================================
-   TARDIS – Cards (HTML -> PDF)
-   Objectif : impression fiable, mm/cm respectés
+   TARDIS – Cards printing system
+   Objectif :
+   - cartes uniquement dans le Markdown
+   - pagination contrôlée
+   - dimensions physiques fiables (mm)
    ========================================================================== */
 
 
-/* -----------------------------
-   Carte individuelle
-   ----------------------------- */
-.tardis-cardgrid > .docutils.container {
-  display: contents;
-}
+/* ---------------------------------------------------------------------------
+   1. Page (PDF / impression)
+   --------------------------------------------------------------------------- */
 
-.tardis-card{
+   @media print {
 
-  background: var(--card-bg, #ff00ff) !important;
-
-  box-sizing: border-box;
-
-  /* dimensions héritées ou inline */
-  width: var(--card-w, auto);
-  height: var(--card-h, auto);
-
-  border: 0.35mm solid #111;
-  border-radius: 2mm;
-  padding: 3mm;
-
-  /* background: var(--card-bg, #ffffff); */
-
-  /* stabilité impression */
-  break-inside: avoid;
-  page-break-inside: avoid;
-
-  /* forcer les fonds en PDF */
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-
-/* -----------------------------
-   Titre de carte
-   ----------------------------- */
-
-.tardis-card__title{
-  margin: 0 0 2mm 0;
-  line-height: 1.1;
-  font-weight: 700;
-}
-
-/* -----------------------------
-   Contenu de carte
-   ----------------------------- */
-
-.tardis-card__content > :first-child{
-  margin-top: 0;
-}
-
-.tardis-card__content > :last-child{
-  margin-bottom: 0;
-}
-
-/* -----------------------------
-   Grille de cartes (planche)
-   ----------------------------- */
-
-.tardis-cardgrid{
-  --card-w: 63.5mm;
-  --card-h: 88.9mm;
-
-  display: grid;
-  gap: 4mm;
-  align-items: start;
-
-  break-inside: avoid;
-}
-
-/* variantes colonnes */
-.tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, var(--card-w)); }
-.tardis-cardgrid.cols-3{ grid-template-columns: repeat(3, var(--card-w)); }
-.tardis-cardgrid.cols-4{ grid-template-columns: repeat(4, var(--card-w)); }
-
-/* -----------------------------
-   Mode impression
-   ----------------------------- */
-
-@media print {
-
-  @page{
-    size: A4 portrait;
-    margin: 10mm;
+    @page{
+      size: A4 portrait;
+      margin: 10mm; /* safe pour imprimantes non bord perdu */
+    }
+  
+    /* neutraliser l’UI ReadTheDocs */
+    .wy-nav-side,
+    .wy-nav-content-wrap > nav,
+    .rst-versions{
+      display: none !important;
+    }
+  
+    .wy-nav-content-wrap{
+      margin-left: 0 !important;
+    }
+  
+    .wy-nav-content{
+      max-width: none !important;
+    }
   }
-
-  /* neutraliser l’UI RTD à l’impression */
-  .wy-nav-side,
-  .wy-nav-content-wrap > nav,
-  .rst-versions{
-    display: none !important;
+  
+  
+  /* ---------------------------------------------------------------------------
+     2. Cardsheet – une planche = une page
+     --------------------------------------------------------------------------- */
+  
+  .tardis-cardsheet{
+    break-after: page;
+    page-break-after: always;
   }
-
-  .wy-nav-content-wrap{
-    margin-left: 0 !important;
+  
+  
+  /* ---------------------------------------------------------------------------
+     3. Card grid (grille)
+     --------------------------------------------------------------------------- */
+  
+  .tardis-cardgrid{
+    display: grid;
+    gap: var(--card-gap, 4mm);
+    align-items: start;
   }
-
-  .wy-nav-content{
+  
+  /* Docutils ajoute souvent un container intermédiaire :
+     on le neutralise pour que le grid voie directement les cartes */
+  .tardis-cardgrid > .docutils.container{
+    display: contents;
+  }
+  
+  
+  /* Colonnes selon configuration */
+  .tardis-cardgrid.cols-2{
+    grid-template-columns: repeat(2, var(--card-w, 63.5mm));
+  }
+  
+  .tardis-cardgrid.cols-3{
+    grid-template-columns: repeat(3, var(--card-w, 63.5mm));
+  }
+  
+  .tardis-cardgrid.cols-4{
+    grid-template-columns: repeat(4, var(--card-w, 63.5mm));
+  }
+  
+  
+  /* ---------------------------------------------------------------------------
+     4. Carte individuelle
+     --------------------------------------------------------------------------- */
+  
+  .tardis-card{
+    box-sizing: border-box;
+  
+    width: var(--card-w, 63.5mm);
+    height: var(--card-h, 88.9mm);
+  
+    padding: 3mm;
+    border: 0.35mm solid #111;
+    border-radius: 2mm;
+  
+    background: var(--card-bg, #ffffff);
+  
+    /* stabilité à l’impression */
+    break-inside: avoid;
+    page-break-inside: avoid;
+  
+    /* forcer l’impression des couleurs */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  
+  /* ---------------------------------------------------------------------------
+     5. Titre de carte
+     --------------------------------------------------------------------------- */
+  
+  .tardis-card__title{
+    margin: 0 0 2mm 0;
+    line-height: 1.15;
+    font-weight: 700;
+  }
+  
+  
+  /* ---------------------------------------------------------------------------
+     6. Contenu de carte
+     --------------------------------------------------------------------------- */
+  
+  .tardis-card__content > :first-child{
+    margin-top: 0;
+  }
+  
+  .tardis-card__content > :last-child{
+    margin-bottom: 0;
+  }
+  
+  
+  /* ---------------------------------------------------------------------------
+     7. Sécurité : éviter toute interaction avec le layout global
+     --------------------------------------------------------------------------- */
+  
+  /* empêcher les flottants ou largeurs héritées */
+  .tardis-card,
+  .tardis-cardgrid,
+  .tardis-cardsheet{
+    float: none !important;
     max-width: none !important;
   }
-}
-
-/* -----------------------------
-   Optionnel : debug visuel
-   (à activer temporairement)
-   ----------------------------- */
-/*
-.tardis-card{
-  outline: 0.2mm dashed rgba(255,0,0,0.4);
-}
-*/
+  
+  
+  /* ---------------------------------------------------------------------------
+     8. Debug visuel (désactivé par défaut)
+     --------------------------------------------------------------------------- */
+  /*
+  .tardis-card{
+    outline: 0.2mm dashed rgba(255, 0, 0, 0.4);
+  }
+  
+  .tardis-cardgrid{
+    outline: 0.2mm solid rgba(0, 0, 255, 0.4);
+  }
+  */
+  
