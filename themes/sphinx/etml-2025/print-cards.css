@@ -3,6 +3,7 @@
    Objectif : impression fiable, mm/cm respectés
    ========================================================================== */
 
+
 /* -----------------------------
    Carte individuelle
    ----------------------------- */
@@ -56,9 +57,8 @@
    ----------------------------- */
 
 .tardis-cardgrid{
-  /* taille standard des cartes */
-  --card-w: 63mm;
-  --card-h: 88mm;
+  --card-w: 63.5mm;
+  --card-h: 88.9mm;
 
   display: grid;
   gap: 4mm;
@@ -68,9 +68,9 @@
 }
 
 /* variantes colonnes */
-.tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, auto); }
-.tardis-cardgrid.cols-3{ grid-template-columns: repeat(3, auto); }
-.tardis-cardgrid.cols-4{ grid-template-columns: repeat(4, auto); }
+.tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, var(--card-w)); }
+.tardis-cardgrid.cols-3{ grid-template-columns: repeat(3, var(--card-w)); }
+.tardis-cardgrid.cols-4{ grid-template-columns: repeat(4, var(--card-w)); }
 
 /* -----------------------------
    Mode impression
