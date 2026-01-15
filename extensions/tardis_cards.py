@@ -90,7 +90,7 @@ def visit_card_html(self, node: tardis_card):
         styles.append(f"--card-bg:{node['bg']}")
 
     style_attr = ";".join(styles)
-
+    self.body.append("<!-- TARDIS_CARD_RENDERED -->")
     self.body.append(
         self.starttag(
             node,
