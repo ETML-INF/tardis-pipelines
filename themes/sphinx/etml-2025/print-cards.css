@@ -10,7 +10,7 @@
 
 .tardis-card{
 
-  background: #00ff00 !important;
+  background: var(--card-bg, #ff00ff) !important;
 
   box-sizing: border-box;
 
