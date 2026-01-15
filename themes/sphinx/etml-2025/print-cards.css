@@ -77,29 +77,13 @@
     /* profondeur papier */
     outline: 0.6mm solid rgba(0,0,0,0.15);
     outline-offset: -1.2mm;
+
+    box-shadow:
+      inset 4mm 0 0 0 var(--card-accent),
+      inset 0 0 0 0 transparent;
   
     /* couleur d’accent par défaut */
     --card-accent: var(--card-accent-default);
-  }
-  
-  
-  /* ============================================================================
-     ACCENT VISUEL TARDIS
-     ========================================================================== */
-  
-  .tardis-card::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-  
-    width: 4mm;
-    height: 100%;
-  
-    background: var(--card-accent);
-  
-    border-top-left-radius: 4mm;
-    border-bottom-left-radius: 2mm;
   }
   
   
