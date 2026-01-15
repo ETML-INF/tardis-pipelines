@@ -74,13 +74,10 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   
-    /* profondeur papier */
-    outline: 0.6mm solid rgba(0,0,0,0.15);
-    outline-offset: -1.2mm;
 
     box-shadow:
-      inset 4mm 0 0 0 var(--card-accent),
-      inset 0 0 0 0 transparent;
+      inset 4mm 0 0 0 var(--card-accent),       /* accent */
+      inset 0 0 0 0.6mm rgba(0,0,0,0.15);       /* profondeur papier interne */
   
     /* couleur d’accent par défaut */
     --card-accent: var(--card-accent-default);
