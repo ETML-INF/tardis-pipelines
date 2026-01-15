@@ -20,6 +20,7 @@
     --card-border-color: #111;
   }
   
+
   
   /* ============================================================================
      GRILLE AUTOMATIQUE DE CARTES
@@ -28,16 +29,19 @@
   
   .tardis-cardgrid{
     display: grid;
-    grid-template-columns: repeat(3, var(--card-w));
-    gap: var(--card-gap);
-  
-    justify-content: start;
+    gap: var(--card-gap, 4mm);
     align-items: start;
-  
-    break-inside: avoid;
-    page-break-inside: avoid;
+    justify-content: start;
   }
-  
+
+  .tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, var(--card-w, 63.5mm)); }
+  .tardis-cardgrid.cols-3{ grid-template-columns: repeat(3, var(--card-w, 63.5mm)); }
+  .tardis-cardgrid.cols-4{ grid-template-columns: repeat(4, var(--card-w, 63.5mm)); }
+
+  /* wrapper docutils */
+  .tardis-cardgrid > .docutils.container{
+    display: contents;
+  }
   
   /* ============================================================================
      CARTE INDIVIDUELLE
