@@ -7,6 +7,9 @@
 /* -----------------------------
    Carte individuelle
    ----------------------------- */
+.tardis-cardgrid > .docutils.container {
+  display: contents;
+}
 
 .tardis-card{
 
