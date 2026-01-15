@@ -155,8 +155,9 @@ class CardGridDirective(Directive):
         node["card_h"] = card_h
         node["classes"] = classes
 
-        # Parse nested content (cards inside)
-        self.state.nested_parse(self.content, self.content_offset, node)
+        inner = nodes.container()
+        self.state.nested_parse(self.content, self.content_offset, inner)
+        node += inner
         return [node]
 
 
