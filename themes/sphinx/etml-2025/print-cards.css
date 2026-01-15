@@ -3,7 +3,16 @@
    Objectif : impression fiable, mm/cm respectés
    ========================================================================== */
 
-
+body::before{
+  content:"PRINT-CARDS CSS LOADED";
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 2mm 4mm;
+  background: #ff00ff;
+  color: #000;
+  z-index: 999999;
+}
 /* -----------------------------
    Carte individuelle
    ----------------------------- */
