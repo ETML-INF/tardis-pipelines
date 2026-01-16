@@ -67,6 +67,7 @@ class CardDirective(Directive):
         "title": directives.unchanged,
         "class": directives.class_option,
         "bg": directives.unchanged,
+        "accent": directives.unchanged,
         "clip": directives.flag,
     }
 
@@ -79,6 +80,7 @@ class CardDirective(Directive):
         classes = ["tardis-card"] + self.options.get("class", [])
         bg = _normalize_bg(self.options.get("bg"))
         clip = "clip" in self.options
+        accent = _normalize_bg(self.options.get("accent"))
 
         node = tardis_card()
         node["width"] = width
@@ -87,6 +89,7 @@ class CardDirective(Directive):
         node["classes"] = classes
         node["bg"] = bg
         node["clip"] = clip
+        node["accent"] = accent
 
         if title:
             title_node = nodes.paragraph()
@@ -213,6 +216,8 @@ def visit_card_html(self, node: tardis_card):
         styles.append("overflow:hidden")
     if node.get("bg") is not None:
         styles.append(f"--card-bg:{node['bg']}")
+    if node.get("accent") is not None:
+        styles.append(f"--card-accent:{node['accent']}")
 
     style_attr = ";".join(styles)
     self.body.append(self.starttag(node, "div", CLASS=classes, style=style_attr))
