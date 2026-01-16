@@ -11,7 +11,6 @@
   --card-h: 88.9mm;
   --card-gap: 4mm;
 
-  --card-border: #111;
   --card-bg: #fff;
 
   --card-accent: #1f2a44; /* bleu TARDIS par défaut */
@@ -45,9 +44,9 @@
 
   /* style TARDIS */
   border-left: 4mm solid var(--card-accent);
-  border-top: 0.35mm solid var(--card-border);
-  border-right: 0.35mm solid var(--card-border);
-  border-bottom: 0.35mm solid var(--card-border);
+  border-top: 0.35mm solid var(--card-accent);
+  border-right: 0.35mm solid var(--card-accent);
+  border-bottom: 0.35mm solid var(--card-accent);
 
   /* asymetrie signature */
   border-radius: 4mm 2mm 4mm 2mm;
