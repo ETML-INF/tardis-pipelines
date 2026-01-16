@@ -1,11 +1,11 @@
 /* ============================================================================
-   TARDIS – Cards (HTML -> PDF)
-   Objectif : impression fiable, mm/cm respectés
+   TARDIS – Cards (HTML → PDF)
+   Objectif :
+   - Impression fiable (mm respectés)
+   - Lisibilité maximale
+   - Style TARDIS assumé mais sobre
    ========================================================================== */
 
-/* -----------------------------
-   Carte individuelle
-   ----------------------------- */
 
   .tardis-card{
     position: relative;
@@ -100,28 +100,138 @@
     margin: 10mm;
   }
 
-  /* neutraliser l’UI RTD à l’impression */
-  .wy-nav-side,
-  .wy-nav-content-wrap > nav,
-  .rst-versions{
-    display: none !important;
-  }
+  .tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, var(--card-w, 63.5mm)); }
+  .tardis-cardgrid.cols-3{ grid-template-columns: repeat(3, var(--card-w, 63.5mm)); }
+  .tardis-cardgrid.cols-4{ grid-template-columns: repeat(4, var(--card-w, 63.5mm)); }
 
-  .wy-nav-content-wrap{
-    margin-left: 0 !important;
+  /* wrapper docutils */
+  .tardis-cardgrid > .docutils.container{
+    display: contents;
   }
-
-  .wy-nav-content{
-    max-width: none !important;
+  
+  /* ============================================================================
+     CARTE INDIVIDUELLE
+     ========================================================================== */
+  
+     .tardis-card{
+      position: relative;
+    
+      box-sizing: border-box;
+      width: var(--card-w);
+      height: var(--card-h);
+    
+      /* espace gauche réservé à l’accent */
+      padding: 3mm 3mm 3mm calc(3mm + 4mm);
+    
+      border: 0.35mm solid var(--card-border-color);
+    
+      /* asymétrie TARDIS */
+      border-radius: 4mm 2mm 4mm 2mm;
+    
+      background: var(--card-bg, #ffffff);
+    
+      display: flex;
+      flex-direction: column;
+    
+      /* stabilité impression */
+      break-inside: avoid;
+      page-break-inside: avoid;
+    
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    
+      /* couleur d’accent par défaut */
+      --card-accent: var(--card-accent-default);
+    
+      /* accent + profondeur papier (stable, respecte les coins) */
+      box-shadow:
+        inset 4mm 0 0 0 var(--card-accent),
+        inset 0 0 0 0.6mm rgba(0,0,0,0.15);
+    }
+  
+  
+  /* ============================================================================
+     TITRE DE CARTE
+     ========================================================================== */
+  
+  .tardis-card__title{
+    margin: 0 0 2mm 0;
+  
+    font-weight: 700;
+    font-size: 1.05em;
+    line-height: 1.2;
   }
-}
-
-/* -----------------------------
-   Optionnel : debug visuel
-   (à activer temporairement)
-   ----------------------------- */
-/*
-.tardis-card{
-  outline: 0.2mm dashed rgba(255,0,0,0.4);
-}
-*/
+  
+  
+  /* ============================================================================
+     CONTENU DE CARTE
+     ========================================================================== */
+  
+  .tardis-card__content{
+    flex: 1;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* centre le contenu si court */
+    align-items: stretch;
+  
+    font-size: 0.95em;
+    line-height: 1.35;
+  
+    overflow: hidden;
+  }
+  
+  /* nettoyer les marges parasites */
+  .tardis-card__content > :first-child{ margin-top: 0; }
+  .tardis-card__content > :last-child{ margin-bottom: 0; }
+  
+  
+  /* ============================================================================
+     VARIANTES OPTIONNELLES D’ACCENT
+     (prêtes pour usage futur)
+     ========================================================================== */
+  
+  .tardis-card.critical{ --card-accent: #b02a37; }
+  .tardis-card.warning { --card-accent: #d39e00; }
+  .tardis-card.info    { --card-accent: #0d6efd; }
+  .tardis-card.success { --card-accent: #198754; }
+  
+  
+  /* ============================================================================
+     IMPRESSION
+     ========================================================================== */
+  
+  @media print{
+  
+    @page{
+      size: A4 portrait;
+      margin: 10mm;
+    }
+  
+    /* neutraliser l’UI RTD */
+    .wy-nav-side,
+    .wy-nav-content-wrap > nav,
+    .rst-versions{
+      display: none !important;
+    }
+  
+    .wy-nav-content-wrap{
+      margin-left: 0 !important;
+    }
+  
+    .wy-nav-content{
+      max-width: none !important;
+    }
+  }
+  
+  
+  /* ============================================================================
+     DEBUG (désactivé par défaut)
+     ========================================================================== */
+  
+  /*
+  .tardis-card{
+    outline: 0.2mm dashed rgba(255,0,0,0.4);
+  }
+  */
+  
