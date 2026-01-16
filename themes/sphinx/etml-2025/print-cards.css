@@ -7,27 +7,44 @@
    Carte individuelle
    ----------------------------- */
 
-.tardis-card{
-  box-sizing: border-box;
+  .tardis-card{
+    position: relative;
 
-  /* dimensions héritées ou inline */
-  width: var(--card-w, auto);
-  height: var(--card-h, auto);
+    box-sizing: border-box;
+    width: var(--card-w);
+    height: var(--card-h);
 
-  border: 0.35mm solid #111;
-  border-radius: 2mm;
-  padding: 3mm;
+    /* couleur d’accent par défaut */
+    --card-accent: var(--card-accent-default);
 
-  background: var(--card-bg, #ffffff);
+    /* Accent ultra fiable (PDF) */
+    border-left: 4mm solid var(--card-accent);
 
-  /* stabilité impression */
-  break-inside: avoid;
-  page-break-inside: avoid;
+    border-top: 0.35mm solid var(--card-border-color);
+    border-right: 0.35mm solid var(--card-border-color);
+    border-bottom: 0.35mm solid var(--card-border-color);
 
-  /* forcer les fonds en PDF */
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
+    /* asymétrie TARDIS */
+    border-radius: 4mm 2mm 4mm 2mm;
+
+    background: var(--card-bg, #ffffff);
+
+    /* padding: plus besoin de réserver l’accent */
+    padding: 3mm;
+
+    display: flex;
+    flex-direction: column;
+
+    /* stabilité impression */
+    break-inside: avoid;
+    page-break-inside: avoid;
+
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+
+    /* profondeur papier (sans outline) */
+    box-shadow: inset 0 0 0 0.6mm rgba(0,0,0,0.15);
+  }
 
 /* -----------------------------
    Titre de carte
