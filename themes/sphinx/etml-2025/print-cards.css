@@ -79,18 +79,18 @@
   content: "";
   position: absolute;
 
-  left: 0;
-  bottom: 0;
+  right: 3mm;
+  bottom: 3mm;
 
-  width: 100%;
-  height: 22mm;              /* hauteur visuelle du filigrane */
+  width: 32px;        /* largeur libre */
+  height: 16px;       /* contrainte demandée */
 
-  background-image: url("images/keyboard.svg");
+  background-image: url("images/keyboard-logo.png");
   background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: 85% auto; /* largeur dominante, hauteur auto */
+  background-position: right bottom;
+  background-size: contain;
 
-  opacity: 0.06;             /* très discret */
+  opacity: 0.65;      /* visible mais secondaire */
   pointer-events: none;
 }
 .tardis-card > *{
