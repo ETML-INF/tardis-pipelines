@@ -75,25 +75,27 @@
   position: relative;
   overflow: hidden; 
 }
-
 .tardis-card::after{
   content: "";
   position: absolute;
 
-  /* bas-droite, légèrement "hors carte" */
-  right: -6mm;
-  bottom: -6mm;
+  left: 0;
+  bottom: 0;
 
-  width: 42mm;
-  height: 42mm;
+  width: 100%;
+  height: 22mm;              /* hauteur visuelle du filigrane */
 
   background-image: url("images/keyboard.svg");
   background-repeat: no-repeat;
-  background-size: contain;
-  background-position: right bottom;
+  background-position: center bottom;
+  background-size: 85% auto; /* largeur dominante, hauteur auto */
 
-  opacity: 0.06;          /* ajuste entre 0.04 et 0.08 */
-  pointer-events: none;   /* ne jamais capter de clic */
+  opacity: 0.06;             /* très discret */
+  pointer-events: none;
+}
+.tardis-card > *{
+  position: relative;
+  z-index: 1;
 }
 
 /* --- 4) Title ------------------------------------------------------------- */
