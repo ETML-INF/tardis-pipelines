@@ -102,18 +102,16 @@
 
 
 .tardis-cardsheet{
-  margin: 0 0 8mm 0;   
+  margin: 0 0 8mm 0;
 }
 
-/* Impression: une planche = une page */
+/* Impression */
 @media print{
+
   .tardis-cardsheet{
     margin: 0;
-    break-after: page;
-    page-break-after: always; 
+    break-before: page;
+    page-break-before: always; /* compat legacy */
   }
-  .tardis-cardsheet:last-child{
-    break-after: auto;
-    page-break-after: auto;
-  }
+
 }
