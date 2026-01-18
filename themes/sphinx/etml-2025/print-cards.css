@@ -54,24 +54,7 @@
   position: relative;
   overflow: hidden; 
 }
-.tardis-card::after{
-  content: "";
-  position: absolute;
 
-  right: 3mm;
-  bottom: 3mm;
-
-  width: 32px;        
-  height: 16px;      
-
-  background-image: url("images/keyboard-logo.png");
-  background-repeat: no-repeat;
-  background-position: right bottom;
-  background-size: contain;
-
-  opacity: 0.65;      
-  pointer-events: none;
-}
 .tardis-card > *{
   position: relative;
   z-index: 1;
