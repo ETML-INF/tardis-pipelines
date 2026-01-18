@@ -94,8 +94,7 @@
 .tardis-card__content > :first-child{ margin-top: 0; }
 .tardis-card__content > :last-child{ margin-bottom: 0; }
 
-
-
+/* Variantes accent */
 .tardis-card.critical{ --card-accent: #b02a37; }
 .tardis-card.warning { --card-accent: #d39e00; }
 .tardis-card.info    { --card-accent: #0d6efd; }
@@ -103,17 +102,16 @@
 
 
 .tardis-cardsheet{
-  margin-top: var(--card-gap, 4mm);
+  margin: 0 0 8mm 0;   
 }
 
-
+/* Impression: une planche = une page */
 @media print{
   .tardis-cardsheet{
+    margin: 0;
     break-after: page;
-    page-break-after: always;
-    margin-top: 0; 
+    page-break-after: always; 
   }
-
   .tardis-cardsheet:last-child{
     break-after: auto;
     page-break-after: auto;
