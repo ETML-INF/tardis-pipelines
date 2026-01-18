@@ -105,6 +105,19 @@
   margin: 0 0 8mm 0;
 }
 
+.tardis-card__counter{
+  position: absolute;
+  bottom: 2mm;
+  right: 2.5mm;
+
+  font-size: 0.75em;
+  font-weight: 600;
+  opacity: 0.6;
+
+  color: #000;
+  pointer-events: none;
+}
+
 /* Impression */
 @media print{
 
