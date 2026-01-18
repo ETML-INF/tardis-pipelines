@@ -4,7 +4,6 @@
    - classes : .tardis-cardgrid, .tardis-card, .tardis-card__title, __content
    ========================================================================== */
 
-/* --- 1) Tokens ------------------------------------------------------------ */
 
 :root{
   --card-w: 63.5mm;
@@ -13,11 +12,9 @@
 
   --card-bg: #fff;
 
-  --card-accent: #1f2a44; /* bleu TARDIS par défaut */
+  --card-accent: #1f2a44; 
   --card-inner-frame: rgba(0,0,0,0.15);
 }
-
-/* --- 2) Grid -------------------------------------------------------------- */
 
 .tardis-cardgrid{
   display: grid;
@@ -25,52 +22,34 @@
   align-items: start;
 }
 
-/* variantes colonnes */
 .tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, var(--card-w)); }
 .tardis-cardgrid.cols-3{ grid-template-columns: repeat(3, var(--card-w)); }
 .tardis-cardgrid.cols-4{ grid-template-columns: repeat(4, var(--card-w)); }
 
-/* Docutils ajoute parfois un wrapper: si present, on l'aplatit */
 .tardis-cardgrid > .docutils.container{
   display: contents;
 }
-
-/* --- 3) Card -------------------------------------------------------------- */
 
 .tardis-card{
   box-sizing: border-box;
   width: var(--card-w);
   height: var(--card-h);
-
-  /* style TARDIS */
   border-left: 4mm solid var(--card-accent);
   border-top: 0.25mm solid var(--card-accent);
   border-right: 0.25mm solid var(--card-accent);
   border-bottom: 0.25mm solid var(--card-accent);
-
-  /* asymetrie signature */
   border-radius: 4mm 2mm 4mm 2mm;
-
-  /* fond: variable surchargeable par carte */
   background: var(--card-bg, #fff);
-
-  /* cadre interne subtil (profondeur papier) */
   box-shadow: inset 0 0 0 0.6mm var(--card-inner-frame);
-
-  /* contenu */
   padding: 3mm;
   display: flex;
   flex-direction: column;
-
-  /* stabilité pagination (standard) */
   break-inside: avoid;
   page-break-inside: avoid;
-
-  /* couleurs en impression (standard, sans cibler chrome) */
   print-color-adjust: exact;
 }
 
-/* si tu veux que l'accent respecte parfaitement les coins */
+
 .tardis-card{
   position: relative;
   overflow: hidden; 
@@ -82,15 +61,15 @@
   right: 3mm;
   bottom: 3mm;
 
-  width: 32px;        /* largeur libre */
-  height: 16px;       /* contrainte demandée */
+  width: 32px;        
+  height: 16px;      
 
   background-image: url("images/keyboard-logo.png");
   background-repeat: no-repeat;
   background-position: right bottom;
   background-size: contain;
 
-  opacity: 0.65;      /* visible mais secondaire */
+  opacity: 0.65;      
   pointer-events: none;
 }
 .tardis-card > *{
@@ -98,33 +77,45 @@
   z-index: 1;
 }
 
-/* --- 4) Title ------------------------------------------------------------- */
-
 .tardis-card__title{
   margin: 0 0 2mm 0;
   font-weight: 700;
   line-height: 1.15;
 }
 
-/* --- 5) Content ----------------------------------------------------------- */
-
 .tardis-card__content{
   flex: 1;
   overflow: hidden;
-
-  /* layout simple */
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-/* nettoyage marges */
 .tardis-card__content > :first-child{ margin-top: 0; }
 .tardis-card__content > :last-child{ margin-bottom: 0; }
 
-/* --- 6) Accent variants (optionnel) -------------------------------------- */
+
 
 .tardis-card.critical{ --card-accent: #b02a37; }
 .tardis-card.warning { --card-accent: #d39e00; }
 .tardis-card.info    { --card-accent: #0d6efd; }
 .tardis-card.success { --card-accent: #198754; }
+
+
+.tardis-cardsheet{
+  margin-top: var(--card-gap, 4mm);
+}
+
+
+@media print{
+  .tardis-cardsheet{
+    break-after: page;
+    page-break-after: always;
+    margin-top: 0; 
+  }
+
+  .tardis-cardsheet:last-child{
+    break-after: auto;
+    page-break-after: auto;
+  }
+}
