@@ -1,0 +1,32 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0" version="29.3.2">
+  <diagram name="Page-1" id="TFXa2Eoanc08H3BI9DUF">
+    <mxGraphModel dx="1828" dy="977" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_AKIoURkXWTnUs90HmMZ-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;autosize=1;resizable=0;fontColor=#333333;" value="&lt;div&gt;&lt;font style=&quot;color: rgb(51, 51, 51); font-size: 160px;&quot; face=&quot;Upheaval TT BRK&quot;&gt;Section&amp;nbsp;&lt;/font&gt;&lt;font style=&quot;color: rgb(51, 51, 51); font-size: 120px;&quot; face=&quot;Upheaval TT BRK&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="220" width="740" x="450" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="_AKIoURkXWTnUs90HmMZ-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="290" width="310" x="140" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="_AKIoURkXWTnUs90HmMZ-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#9cd7f3, #198cc4);fontColor=#ffffff;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="260" width="260" x="170" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="_AKIoURkXWTnUs90HmMZ-8" edge="1" parent="1" style="edgeStyle=segmentEdgeStyle;endArrow=block;html=1;curved=0;rounded=0;endSize=8;startSize=8;strokeWidth=18;endFill=1;strokeColor=#333333;startArrow=none;startFill=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="150" />
+              <mxPoint x="380" y="270" />
+            </Array>
+            <mxPoint x="380" y="140" as="sourcePoint" />
+            <mxPoint x="210" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dgycwK9aq5GvKX2Lit9t-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;autosize=1;resizable=0;" value="&lt;font style=&quot;color: rgb(51, 51, 51); font-size: 120px;&quot; face=&quot;Upheaval TT BRK&quot;&gt;Informatique&lt;/font&gt;" vertex="1">
+          <mxGeometry height="160" width="880" x="450" y="180" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,103 +1,113 @@
 /* ============================================================================
-   TARDIS – Cards (HTML → PDF)
-   Objectif :
-   - Impression fiable (mm respectés)
-   - Lisibilité maximale
-   - Style TARDIS assumé mais sobre
+   TARDIS Cards - Core (standard CSS)
+   - taille poker (63.5mm x 88.9mm)
+   - classes : .tardis-cardgrid, .tardis-card, .tardis-card__title, __content
    ========================================================================== */
 
 
-  .tardis-card{
-    position: relative;
+:root{
+  --card-w: 63.5mm;
+  --card-h: 88.9mm;
+  --card-gap: 4mm;
 
-    box-sizing: border-box;
-    width: var(--card-w);
-    height: var(--card-h);
+  --card-bg: #fff;
 
-    /* couleur d’accent par défaut */
-    --card-accent: var(--card-accent-default);
+  --card-accent: #1f2a44; 
+  --card-inner-frame: rgba(0,0,0,0.15);
+}
 
-    /* Accent ultra fiable (PDF) */
-    border-left: 4mm solid var(--card-accent);
+.tardis-cardgrid{
+  display: grid;
+  gap: var(--card-gap);
+  align-items: start;
+}
 
-    border-top: 0.35mm solid var(--card-border-color);
-    border-right: 0.35mm solid var(--card-border-color);
-    border-bottom: 0.35mm solid var(--card-border-color);
+.tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, var(--card-w)); }
+.tardis-cardgrid.cols-3{ grid-template-columns: repeat(3, var(--card-w)); }
+.tardis-cardgrid.cols-4{ grid-template-columns: repeat(4, var(--card-w)); }
 
-    /* asymétrie TARDIS */
-    border-radius: 4mm 2mm 4mm 2mm;
+.tardis-cardgrid > .docutils.container{
+  display: contents;
+}
 
-    background: var(--card-bg, #ffffff);
+.tardis-card{
+  box-sizing: border-box;
+  width: var(--card-w);
+  height: var(--card-h);
+  border-left: 4mm solid var(--card-accent);
+  border-top: 0.25mm solid var(--card-accent);
+  border-right: 0.25mm solid var(--card-accent);
+  border-bottom: 0.25mm solid var(--card-accent);
+  border-radius: 4mm 2mm 4mm 2mm;
+  background: var(--card-bg, #fff);
+  box-shadow: inset 0 0 0 0.6mm var(--card-inner-frame);
+  padding: 3mm;
+  display: flex;
+  flex-direction: column;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  print-color-adjust: exact;
+}
 
-    /* padding: plus besoin de réserver l’accent */
-    padding: 3mm;
 
-    display: flex;
-    flex-direction: column;
+.tardis-card{
+  position: relative;
+  overflow: hidden; 
+}
 
-    /* stabilité impression */
-    break-inside: avoid;
-    page-break-inside: avoid;
-
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-
-    /* profondeur papier (sans outline) */
-    box-shadow: inset 0 0 0 0.6mm rgba(0,0,0,0.15);
-  }
-
-/* -----------------------------
-   Titre de carte
-   ----------------------------- */
+.tardis-card > *{
+  position: relative;
+  z-index: 1;
+}
 
 .tardis-card__title{
   margin: 0 0 2mm 0;
-  line-height: 1.1;
   font-weight: 700;
+  line-height: 1.15;
 }
 
-/* -----------------------------
-   Contenu de carte
-   ----------------------------- */
-
-.tardis-card__content > :first-child{
-  margin-top: 0;
+.tardis-card__content{
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.tardis-card__content > :last-child{
-  margin-bottom: 0;
+.tardis-card__content > :first-child{ margin-top: 0; }
+.tardis-card__content > :last-child{ margin-bottom: 0; }
+
+/* Variantes accent */
+.tardis-card.critical{ --card-accent: #b02a37; }
+.tardis-card.warning { --card-accent: #d39e00; }
+.tardis-card.info    { --card-accent: #0d6efd; }
+.tardis-card.success { --card-accent: #198754; }
+
+
+.tardis-cardsheet{
+  margin: 0 0 8mm 0;
 }
 
-/* -----------------------------
-   Grille de cartes (planche)
-   ----------------------------- */
+.tardis-card__counter{
+  position: absolute;
+  bottom: 2mm;
+  right: 2.5mm;
 
-.tardis-cardgrid{
-  /* taille standard des cartes */
-  --card-w: 63mm;
-  --card-h: 88mm;
+  font-size: 0.75em;
+  font-weight: 600;
+  opacity: 0.6;
 
-  display: grid;
-  gap: 4mm;
-  align-items: start;
-
-  break-inside: avoid;
+  color: #000;
+  pointer-events: none;
 }
 
-/* variantes colonnes */
-.tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, auto); }
-.tardis-cardgrid.cols-3{ grid-template-columns: repeat(3, auto); }
-.tardis-cardgrid.cols-4{ grid-template-columns: repeat(4, auto); }
+/* Impression */
+@media print{
 
-/* -----------------------------
-   Mode impression
-   ----------------------------- */
-
-@media print {
-
-  @page{
-    size: A4 portrait;
-    margin: 10mm;
+  .tardis-cardsheet{
+    margin: 0;
+    break-before: page;
+    page-break-before: always; /* compat legacy */
   }
 
   .tardis-cardgrid.cols-2{ grid-template-columns: repeat(2, var(--card-w, 63.5mm)); }
