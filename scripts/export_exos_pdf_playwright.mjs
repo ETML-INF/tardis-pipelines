@@ -201,7 +201,7 @@ async function main() {
   await fs.mkdir(PDF_OUT, { recursive: true });
   const bucketExo = path.join(PDF_OUT, "exercices");
   const bucketSol = path.join(PDF_OUT, "solutions");
-  const bucketPrint = path.join(PDF_OUT, "to_print");
+  const bucketPrint = path.join(PDF_OUT, "exercices");
 
   await fs.mkdir(bucketExo, { recursive: true });
   await fs.mkdir(bucketSol, { recursive: true });
