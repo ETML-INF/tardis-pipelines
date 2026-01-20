@@ -275,7 +275,7 @@ async function main() {
 
   const bucketExo = path.join(PDF_OUT, "exercices");
   const bucketSol = path.join(PDF_OUT, "solutions");
-  const bucketCards = path.join(PDF_OUT, "cards");
+  const bucketCards = path.join(PDF_OUT, "exercices");
 
   await fs.mkdir(bucketExo, { recursive: true });
   await fs.mkdir(bucketSol, { recursive: true });
