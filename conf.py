@@ -53,7 +53,7 @@ html_static_path = [
 html_css_files = [
     "customLight.css",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/editor/editor.main.css",
-    "print-cards.css",
+    "cards.css",
 ]
 html_js_files = [
     "customToggle.js",
