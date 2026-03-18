@@ -135,6 +135,7 @@ class CardDirective(Directive):
             title_node += nodes.strong(text=title)
             node += title_node
 
+
         if image:
             media_node = nodes.container()
             media_node["classes"].append("tardis-card__media")
