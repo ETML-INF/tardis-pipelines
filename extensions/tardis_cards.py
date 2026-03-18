@@ -98,10 +98,11 @@ class CardDirective(Directive):
         "accent": directives.unchanged,      # hex
         "clip": directives.flag,
         "counter": directives.flag,          # when present => DISABLE counter on this card
+        "image": directives.uri, 
     }
 
     def run(self):
-        self.assert_has_content()
+   
 
         width = _parse_len(self.options.get("width"))
         height = _parse_len(self.options.get("height"))
@@ -110,6 +111,7 @@ class CardDirective(Directive):
         bg = _normalize_hex_color(self.options.get("bg"))
         accent = _normalize_hex_color(self.options.get("accent"))
         clip = "clip" in self.options
+        image = self.options.get("image")
 
         # Counter handling:
         # - default is enabled
@@ -124,7 +126,8 @@ class CardDirective(Directive):
         node["bg"] = bg
         node["accent"] = accent
         node["clip"] = clip
-        node["counter_enabled"] = counter_enabled  # NEW
+        node["counter_enabled"] = counter_enabled 
+        node["image"] = image
 
         if title:
             title_node = nodes.paragraph()
@@ -132,10 +135,23 @@ class CardDirective(Directive):
             title_node += nodes.strong(text=title)
             node += title_node
 
-        content_node = nodes.container()
-        content_node["classes"].append("tardis-card__content")
-        self.state.nested_parse(self.content, self.content_offset, content_node)
-        node += content_node
+        if image:
+            media_node = nodes.container()
+            media_node["classes"].append("tardis-card__media")
+
+            img = nodes.image(uri=image)
+            img["classes"].append("tardis-card__image")
+            media_node += img
+
+            node += media_node
+
+        if self.content:
+            content_node = nodes.container()
+            content_node["classes"].append("tardis-card__content")
+            self.state.nested_parse(self.content, self.content_offset, content_node)
+            node += content_node
+
+
 
         return [node]
 
