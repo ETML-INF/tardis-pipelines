@@ -97,19 +97,15 @@
 .tardis-card__content > :first-child{ margin-top: 0; }
 .tardis-card__content > :last-child{ margin-bottom: 0; }
 
-.tardis-card--has-image .tardis-card__media{
-  flex: 1;
+.tardis-card--has-image{
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  min-height: 0;
+  flex-direction: column;
 }
 
-.tardis-card--has-image .tardis-card__media > *{
-  margin: 0;
-  width: 100%;
-  height: 100%;
+.tardis-card--has-image .tardis-card__media{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 
   display: flex;
   align-items: center;
@@ -122,8 +118,12 @@
   max-width: 90%;
   height: auto;
   margin: 0 auto;
-  flex: 0 0 auto;
 }
+
+.tardis-card--image-only .tardis-card__title{
+  margin-bottom: 1mm;
+}
+
 /* ---------------------------------------------------------------------------
    Accent variants (optionnels)
 --------------------------------------------------------------------------- */
