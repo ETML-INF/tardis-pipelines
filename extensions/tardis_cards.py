@@ -101,58 +101,58 @@ class CardDirective(Directive):
         "image": directives.uri, 
     }
 
-def run(self):
-    width = _parse_len(self.options.get("width"))
-    height = _parse_len(self.options.get("height"))
-    title = self.options.get("title", "")
-    classes = ["tardis-card"] + self.options.get("class", [])
-    bg = _normalize_hex_color(self.options.get("bg"))
-    accent = _normalize_hex_color(self.options.get("accent"))
-    clip = "clip" in self.options
-    image = self.options.get("image")
+    def run(self):
+        width = _parse_len(self.options.get("width"))
+        height = _parse_len(self.options.get("height"))
+        title = self.options.get("title", "")
+        classes = ["tardis-card"] + self.options.get("class", [])
+        bg = _normalize_hex_color(self.options.get("bg"))
+        accent = _normalize_hex_color(self.options.get("accent"))
+        clip = "clip" in self.options
+        image = self.options.get("image")
 
-    # Counter handling:
-    # - default is enabled
-    # - when :counter: flag is present -> disabled
-    counter_enabled = "counter" not in self.options
+        # Counter handling:
+        # - default is enabled
+        # - when :counter: flag is present -> disabled
+        counter_enabled = "counter" not in self.options
 
-    if image:
-        classes.append("tardis-card--has-image")
-    if image and not self.content:
-        classes.append("tardis-card--image-only")
+        if image:
+            classes.append("tardis-card--has-image")
+        if image and not self.content:
+            classes.append("tardis-card--image-only")
 
-    node = tardis_card()
-    node["width"] = width
-    node["height"] = height
-    node["title"] = title
-    node["classes"] = classes
-    node["bg"] = bg
-    node["accent"] = accent
-    node["clip"] = clip
-    node["counter_enabled"] = counter_enabled
-    node["image"] = image
+        node = tardis_card()
+        node["width"] = width
+        node["height"] = height
+        node["title"] = title
+        node["classes"] = classes
+        node["bg"] = bg
+        node["accent"] = accent
+        node["clip"] = clip
+        node["counter_enabled"] = counter_enabled
+        node["image"] = image
 
-    if title:
-        title_node = nodes.paragraph()
-        title_node["classes"].append("tardis-card__title")
-        title_node += nodes.strong(text=title)
-        node += title_node
+        if title:
+            title_node = nodes.paragraph()
+            title_node["classes"].append("tardis-card__title")
+            title_node += nodes.strong(text=title)
+            node += title_node
 
-    if image:
-        media_node = nodes.container()
-        media_node["classes"].append("tardis-card__media")
+        if image:
+            media_node = nodes.container()
+            media_node["classes"].append("tardis-card__media")
 
-        img = nodes.image(uri=image)
-        img["classes"].append("tardis-card__image")
-        media_node += img
+            img = nodes.image(uri=image)
+            img["classes"].append("tardis-card__image")
+            media_node += img
 
-        node += media_node
+            node += media_node
 
-    if self.content:
-        content_node = nodes.container()
-        content_node["classes"].append("tardis-card__content")
-        self.state.nested_parse(self.content, self.content_offset, content_node)
-        node += content_node
+        if self.content:
+            content_node = nodes.container()
+            content_node["classes"].append("tardis-card__content")
+            self.state.nested_parse(self.content, self.content_offset, content_node)
+            node += content_node
 
     return [node]
 
