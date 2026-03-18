@@ -154,7 +154,7 @@ class CardDirective(Directive):
             self.state.nested_parse(self.content, self.content_offset, content_node)
             node += content_node
 
-    return [node]
+        return [node]
 
 
 # --- Transform: group cards per section --------------------------------------
