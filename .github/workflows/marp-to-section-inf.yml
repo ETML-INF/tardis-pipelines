@@ -164,6 +164,16 @@ jobs:
     env:
       ICT_MODULE: ${{ inputs.ict_module }}
     steps:
+      - name: Calculer le sous-dossier de branche
+        id: branch
+        run: |
+          REF="${{ github.ref_name }}"
+          if [[ "${REF}" == "main" || "${REF}" == "master" ]]; then
+            echo "subdir=" >> "$GITHUB_OUTPUT"
+          else
+            echo "subdir=/${REF}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: ⬇️ Download build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -176,7 +186,7 @@ jobs:
           local-dir:     site/dist/html/
           ictroot-dir:   ${{ vars.ICT_ROOT_FOLDER }}
           ictmodule-dir: ${{ env.ICT_MODULE }}
-          custom-dir:    ${{ vars.FTP_PRESENTATIONS_DIR }}
+          custom-dir:    ${{ vars.FTP_PRESENTATIONS_DIR }}${{ steps.branch.outputs.subdir }}
           state-name:    ".ftp-sync-deck.json"
           log-level:     "minimal"
           timeout:       "300000"

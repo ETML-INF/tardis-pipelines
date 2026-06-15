@@ -161,6 +161,16 @@ jobs:
     env:
       ICT_MODULE: ${{ inputs.ict_module }}
     steps:
+      - name: Calculer le sous-dossier de branche
+        id: branch
+        run: |
+          REF="${{ github.ref_name }}"
+          if [[ "${REF}" == "main" || "${REF}" == "master" ]]; then
+            echo "subdir=" >> "$GITHUB_OUTPUT"
+          else
+            echo "subdir=/${REF}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: ⬇️ Download site HTML
         uses: actions/download-artifact@v4
         with:
@@ -202,7 +212,7 @@ jobs:
           description: 
           ictroot-dir: ${{ vars.ICT_ROOT_FOLDER }}
           ictmodule-dir: ${{ vars.ICT_MODULE }}
-          custom-dir:   ${{ vars.FTP_DOCS_DIR }}
+          custom-dir:   ${{ vars.FTP_DOCS_DIR }}${{ steps.branch.outputs.subdir }}
           state-name:   ".ftp-sync-support.json"
           log-level:    "minimal"
           timeout:      "300000"
@@ -217,7 +227,7 @@ jobs:
           local-dir:    site-exo/exercices/
           ictroot-dir: ${{ vars.ICT_ROOT_FOLDER }}
           ictmodule-dir: ${{ vars.ICT_MODULE }}
-          custom-dir:   ${{ vars.FTP_EXO_DIR }}
+          custom-dir:   ${{ vars.FTP_EXO_DIR }}${{ steps.branch.outputs.subdir }}
           state-name:   ".ftp-sync-exercices.json"
           log-level:    "minimal"
           timeout:      "300000"
