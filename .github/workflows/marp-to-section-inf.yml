@@ -89,17 +89,47 @@ jobs:
           THEME_SET_DIR="${PIPELINES_THEME_ROOT}"
 
           shopt -s nullglob
-          FILES=(${SRC_DIR}/*.md)
-          if [ ${#FILES[@]} -eq 0 ]; then
-            echo "::warning::Aucun fichier .md trouvé dans ${SRC_DIR}/"
-          fi
+          FOUND_COUNT=0
 
-          for f in "${FILES[@]}"; do
+          # ── 1. Fichiers .md à la racine ───────────────────────────────────
+          ROOT_FILES=("${SRC_DIR}"/*.md)
+          for f in "${ROOT_FILES[@]}"; do
             base="$(basename "${f%.md}")"
             marp "${f}" --html --allow-local-files \
               --theme-set "${THEME_SET_DIR}" \
               --output "${OUT_HTML}/${base}.html"
+            FOUND_COUNT=$((FOUND_COUNT + 1))
           done
+
+          # ── 2. Fichiers .md dans des sous-dossiers (un niveau) ────────────
+          for subdir in "${SRC_DIR}"/*/; do
+            [[ "${subdir}" == "${SRC_DIR}/dist/" ]] && continue
+            SUB_NAME="$(basename "${subdir%/}")"
+            SUB_FILES=("${subdir}"*.md)
+            [ ${#SUB_FILES[@]} -eq 0 ] && continue
+
+            mkdir -p "${OUT_HTML}/${SUB_NAME}"
+
+            for f in "${SUB_FILES[@]}"; do
+              base="$(basename "${f%.md}")"
+              marp "${f}" --html --allow-local-files \
+                --theme-set "${THEME_SET_DIR}" \
+                --output "${OUT_HTML}/${SUB_NAME}/${base}.html"
+              FOUND_COUNT=$((FOUND_COUNT + 1))
+            done
+
+            # Copier les assets (non-.md) du sous-dossier pour les références relatives
+            find "${subdir}" -mindepth 1 ! -name "*.md" -type f | while IFS= read -r asset; do
+              rel="${asset#${subdir}}"
+              dest="${OUT_HTML}/${SUB_NAME}/${rel}"
+              mkdir -p "$(dirname "${dest}")"
+              cp "${asset}" "${dest}"
+            done
+          done
+
+          if [ ${FOUND_COUNT} -eq 0 ]; then
+            echo "::warning::Aucun fichier .md trouvé dans ${SRC_DIR}/"
+          fi
 
           # Index.php: vient de tardis-pipelines
           if [ -f "${PIPELINES_INDEX}" ]; then

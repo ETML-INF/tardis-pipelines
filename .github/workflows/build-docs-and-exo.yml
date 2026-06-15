@@ -90,6 +90,8 @@ jobs:
   build-exo-pdf:
     runs-on: ubuntu-latest
     needs: build-docs
+    outputs:
+      has_pdfs: ${{ steps.check-pdfs.outputs.has_pdfs }}
     env:
       ICT_MODULE: ${{ inputs.ict_module }}
       SPHINX_SRC_DIR: ${{ inputs.sphinx_src }}
@@ -133,7 +135,19 @@ jobs:
         run: |
           node tardis-pipelines/scripts/export_exos_pdf_playwright.mjs
 
+      - name: Vérifier la présence de PDFs générés
+        id: check-pdfs
+        run: |
+          if find "${PDF_OUT_DIR}" -name '*.pdf' -print -quit 2>/dev/null | grep -q .; then
+            echo "has_pdfs=true" >> "$GITHUB_OUTPUT"
+            echo "✅ PDFs trouvés"
+          else
+            echo "has_pdfs=false" >> "$GITHUB_OUTPUT"
+            echo "ℹ️ Aucun PDF — déploiement des exercices ignoré"
+          fi
+
       - name: Upload PDFs (raw)
+        if: steps.check-pdfs.outputs.has_pdfs == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: exercices-pdf
@@ -154,6 +168,7 @@ jobs:
           path: site
 
       - name: ⬇️ Download exercices PDF
+        if: needs.build-exo-pdf.outputs.has_pdfs == 'true'
         uses: actions/download-artifact@v4
         with:
           name: exercices-pdf
@@ -172,12 +187,13 @@ jobs:
           node-version: "20"
 
       - name: Générer index.html + CSS pour /exercices
+        if: needs.build-exo-pdf.outputs.has_pdfs == 'true'
         working-directory: ${{ github.workspace }}
         env:
           EXO_ROOT: site-exo/exercices
           TARDIS_THEME_ROOT: ${{ github.workspace }}/tardis-pipelines/themes/${{ inputs.theme }}
         run: |
-          node tardis-pipelines/scripts/build_exo_index.mjs    
+          node tardis-pipelines/scripts/build_exo_index.mjs
 
       - name: 📂 Sync cours (HTML)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
@@ -195,6 +211,7 @@ jobs:
           ftp-password: ${{ secrets.FTP_PASSWORD }}
 
       - name: 📂 Sync /exercices (PDF)
+        if: needs.build-exo-pdf.outputs.has_pdfs == 'true'
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
           local-dir:    site-exo/exercices/
