@@ -282,7 +282,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event_name == 'workflow_call'
     env:
       ICT_MODULE: ${{ inputs.ict_module }}
     steps:
@@ -301,6 +301,12 @@ jobs:
         with:
           name: tardis-site
           path: site-tardis
+
+      - name: 🔍 Debug: afficher le chemin FTP calculé
+        run: |
+          echo "prefix: '${{ steps.branch.outputs.prefix }}'"
+          echo "FTP_TARDIS_DIR: '${{ vars.FTP_TARDIS_DIR }}'"
+          echo "custom-dir final: '${{ steps.branch.outputs.prefix }}${{ vars.FTP_TARDIS_DIR }}'"
 
       - name: 📂 Sync TARDIS (manifests + UI)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
