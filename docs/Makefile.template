@@ -125,14 +125,14 @@ build-docs: setup venv-create
 		-c tardis-pipelines \
 		-b html \
 		"$(DOCS_DIR)" \
-		"$(BUILD_DIR)/docs" \
+		"$(BUILD_DIR)/cours" \
 		2>&1 | grep -v "WARNING.*toctree" || true
-	@if [ -f "$(BUILD_DIR)/docs/index.html" ]; then \
+	@if [ -f "$(BUILD_DIR)/cours/index.html" ]; then \
 		echo "$(GREEN)✓ Documentation compilée$(NC)"; \
 	else \
 		echo "$(YELLOW)⚠ Documentation non trouvée$(NC)"; \
 	fi
-	@echo "  📂 Sortie: $(BUILD_DIR)/docs/"
+	@echo "  📂 Sortie: $(BUILD_DIR)/cours/"
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -229,7 +229,7 @@ build: check-deps build-docs build-manifest build-slides
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
 	@echo ""
 	@echo "$(YELLOW)Fichiers générés:$(NC)"
-	@echo "  📚 Documentation: $(BUILD_DIR)/docs/index.html"
+	@echo "  📚 Documentation: $(BUILD_DIR)/cours/index.html"
 	@echo "  📋 Manifest:      $(BUILD_DIR)/tardis/index.html"
 	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/index.php"
 	@echo ""
@@ -251,7 +251,7 @@ serve:
 	@echo ""
 	@echo "$(GREEN)✓ Serveur démarré sur http://localhost:8000$(NC)"
 	@echo ""
-	@echo "  📚 Documentation: http://localhost:8000/docs/"
+	@echo "  📚 Documentation: http://localhost:8000/cours/"
 	@echo "  📋 Manifest:      http://localhost:8000/tardis/"
 	@echo "  🎬 Présentations: http://localhost:8000/presentations/"
 	@echo ""
