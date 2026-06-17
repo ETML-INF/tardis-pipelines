@@ -109,13 +109,17 @@ setup:
 build-docs: setup
 	@echo "$(BLUE)📚 Compilation de la documentation Sphinx...$(NC)"
 	@mkdir -p "$(BUILD_DIR)"
-	sphinx-build \
+	$(PYTHON) -m sphinx \
 		-c tardis-pipelines \
 		-b html \
 		"$(DOCS_DIR)" \
 		"$(BUILD_DIR)/docs" \
 		2>&1 | grep -v "WARNING.*toctree" || true
-	@echo "$(GREEN)✓ Documentation compilée$(NC)"
+	@if [ -f "$(BUILD_DIR)/docs/index.html" ]; then \
+		echo "$(GREEN)✓ Documentation compilée$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ Documentation non trouvée$(NC)"; \
+	fi
 	@echo "  📂 Sortie: $(BUILD_DIR)/docs/"
 	@echo ""
 
@@ -126,17 +130,14 @@ build-docs: setup
 build-manifest: setup
 	@echo "$(BLUE)📋 Génération du manifest TARDIS...$(NC)"
 	@mkdir -p "$(BUILD_DIR)/tardis/manifests"
-	@cd tardis-pipelines && $(NPM) --silent init -y >/dev/null 2>&1; true
-	@cd tardis-pipelines && $(NPM) --silent install yaml@2 glob@10 >/dev/null 2>&1; true
-	@$(NODE) tardis-pipelines/scripts/build_manifest.mjs || \
-		{ echo "$(YELLOW)⚠ Script manifest non trouvé ou erreur$(NC)"; }
-	@if [ -f "$(MANIFEST_DIR)/tardis.json" ]; then \
-		cp "$(MANIFEST_DIR)/tardis."* "$(BUILD_DIR)/tardis/manifests/" 2>/dev/null || true; \
+	@cd tardis-pipelines && $(NPM) --silent install yaml@2 glob@10 >/dev/null 2>&1
+	@$(NODE) tardis-pipelines/docs/build-manifest.mjs 2>/dev/null || \
+		echo "$(YELLOW)⚠ Manifest non généré (normal si pas de fichier frontmatter)$(NC)"
+	@if [ -f "$(BUILD_DIR)/tardis/manifests/tardis.json" ]; then \
 		echo "$(GREEN)✓ Manifest généré$(NC)"; \
 	else \
-		echo "$(YELLOW)⚠ Manifest non trouvé (probablement normal si pas de fichier frontmatter)$(NC)"; \
+		echo "$(YELLOW)⚠ Manifest non trouvé (normal si pas de fichier frontmatter)$(NC)"; \
 	fi
-	@mkdir -p "$(BUILD_DIR)/tardis"
 	@cp tardis-pipelines/themes/tardis/etml-2025/index.html "$(BUILD_DIR)/tardis/" 2>/dev/null || true
 	@cp tardis-pipelines/themes/tardis/etml-2025/styles.css "$(BUILD_DIR)/tardis/" 2>/dev/null || true
 	@echo "  📂 Sortie: $(BUILD_DIR)/tardis/"
