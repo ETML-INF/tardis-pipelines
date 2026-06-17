@@ -131,6 +131,17 @@ venv-create:
 	fi
 	@echo ""
 
+_npm-deps:
+	@if ! command -v npm >/dev/null 2>&1; then \
+		echo "$(RED)❌ npm manquant (lancez 'make install-deps' d'abord)$(NC)"; exit 1; \
+	fi
+	@if [ ! -d "tardis-pipelines/node_modules" ]; then \
+		echo "$(BLUE)📦 Installation des dépendances Node.js tardis-pipelines...$(NC)"; \
+		cd tardis-pipelines && $(NPM) ci || { echo "$(RED)❌ Erreur npm ci$(NC)"; exit 1; }; \
+		echo "$(GREEN)✓ Dépendances Node.js installées$(NC)"; \
+	fi
+	@echo ""
+
 install-deps: _system-deps venv-create
 	@echo "$(BLUE)📦 Installation des dépendances Python...$(NC)"
 	$(PIP) install -q -r tardis-pipelines/requirements.txt || \
@@ -188,7 +199,7 @@ build-docs: setup venv-create
 # Build: Manifest TARDIS
 # ─────────────────────────────────────────────────────────────────────────
 
-build-manifest: setup venv-create
+build-manifest: setup _npm-deps
 	@echo "$(BLUE)📋 Génération du manifest TARDIS...$(NC)"
 	@mkdir -p "$(BUILD_DIR)/tardis/manifests"
 	@cd tardis-pipelines && $(NPM) run build-manifest || \
@@ -276,7 +287,7 @@ build-slides: setup
 # Build: Tout compiler
 # ─────────────────────────────────────────────────────────────────────────
 
-build-exercices-pdf: setup venv-create build-docs
+build-exercices-pdf: setup venv-create build-docs _npm-deps
 	@echo "$(BLUE)📄 Génération des PDFs d'exercices...$(NC)"
 	@echo "  (première fois: installation de Playwright, peut prendre ~2 min)"
 	@mkdir -p "$(BUILD_DIR)/exercices"
