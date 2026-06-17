@@ -67,9 +67,44 @@ check-deps:
 	fi
 	@echo ""
 
+_system-deps:
+	@echo "$(BLUE)📦 Préparation des dépendances système...$(NC)"
+	@if ! command -v python3 >/dev/null 2>&1; then \
+		echo "  Installation de Python 3..."; \
+		if command -v apt >/dev/null 2>&1; then \
+			sudo apt update && sudo apt install -y python3 python3-pip >/dev/null 2>&1; \
+		elif command -v brew >/dev/null 2>&1; then \
+			brew install python3 >/dev/null 2>&1; \
+		else \
+			echo "$(RED)❌ Impossible d'installer Python 3 automatiquement$(NC)"; exit 1; \
+		fi; \
+	fi
+	@echo "$(GREEN)✓ Python 3 disponible$(NC)"
+	@if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then \
+		echo "  Installation de Node.js + NPM..."; \
+		if command -v apt >/dev/null 2>&1; then \
+			sudo apt update && sudo apt install -y nodejs npm >/dev/null 2>&1; \
+		elif command -v brew >/dev/null 2>&1; then \
+			brew install node >/dev/null 2>&1; \
+		fi; \
+	fi
+	@echo "$(GREEN)✓ Node.js + NPM disponibles$(NC)"
+	@if ! command -v php >/dev/null 2>&1; then \
+		echo "  Installation de PHP..."; \
+		if command -v apt >/dev/null 2>&1; then \
+			sudo apt install -y php-cli >/dev/null 2>&1; \
+		elif command -v brew >/dev/null 2>&1; then \
+			brew install php >/dev/null 2>&1; \
+		fi; \
+	fi
+	@if command -v php >/dev/null 2>&1; then \
+		echo "$(GREEN)✓ PHP disponible$(NC)"; \
+	fi
+	@echo ""
+
 venv-create:
 	@if ! command -v python3 >/dev/null 2>&1; then \
-		echo "$(RED)❌ Python 3 manquant$(NC)"; exit 1; \
+		echo "$(RED)❌ Python 3 manquant (lancez 'make _system-deps' d'abord)$(NC)"; exit 1; \
 	fi
 	@if ! python3 -c "import venv" 2>/dev/null; then \
 		echo "$(BLUE)📦 Installation de python3-venv...$(NC)"; \
@@ -89,35 +124,11 @@ venv-create:
 	fi
 	@echo ""
 
-install-deps: venv-create
-	@echo "$(BLUE)📦 Installation des dépendances Python système...$(NC)"
-	@if ! command -v python3 >/dev/null 2>&1 || ! command -v pip3 >/dev/null 2>&1; then \
-		echo "  Installation de Python 3 + pip3..."; \
-		if command -v apt >/dev/null 2>&1; then \
-			sudo apt update && sudo apt install -y python3 python3-pip python3-venv >/dev/null 2>&1; \
-		elif command -v brew >/dev/null 2>&1; then \
-			brew install python3 >/dev/null 2>&1; \
-		else \
-			echo "$(RED)❌ Impossible d'installer Python automatiquement$(NC)"; exit 1; \
-		fi; \
-	fi
-	@echo "$(GREEN)✓ Python 3 + pip3$(NC)"
-	@echo ""
+install-deps: _system-deps venv-create
 	@echo "$(BLUE)📦 Installation des dépendances Python...$(NC)"
 	$(PIP) install -q -r tardis-pipelines/requirements.txt || \
 		{ echo "$(RED)❌ Erreur lors de l'installation$(NC)"; $(PIP) install -r tardis-pipelines/requirements.txt; exit 1; }
 	@echo "$(GREEN)✓ Dépendances Python$(NC)"
-	@echo ""
-	@echo "$(BLUE)📦 Vérification de Node.js + NPM...$(NC)"
-	@if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then \
-		echo "  Installation de Node.js + NPM..."; \
-		if command -v apt >/dev/null 2>&1; then \
-			sudo apt update && sudo apt install -y nodejs npm >/dev/null 2>&1; \
-		elif command -v brew >/dev/null 2>&1; then \
-			brew install node >/dev/null 2>&1; \
-		fi; \
-	fi
-	@echo "$(GREEN)✓ Node.js + NPM$(NC)"
 	@echo ""
 	@echo "$(BLUE)📦 Installation de Marp CLI...$(NC)"
 	$(NPM) list -g @marp-team/marp-cli >/dev/null 2>&1 || \
@@ -127,23 +138,6 @@ install-deps: venv-create
 	@echo "$(BLUE)📦 Installation des dépendances tardis-pipelines (Node.js)...$(NC)"
 	@cd tardis-pipelines && $(NPM) ci >/dev/null 2>&1
 	@echo "$(GREEN)✓ Dépendances tardis-pipelines$(NC)"
-	@echo ""
-	@echo "$(BLUE)📦 Installation de PHP (si nécessaire)...$(NC)"
-	@if ! command -v php >/dev/null 2>&1; then \
-		echo "  Installation de PHP..."; \
-		if command -v apt >/dev/null 2>&1; then \
-			sudo apt update && sudo apt install -y php-cli >/dev/null 2>&1; \
-		elif command -v brew >/dev/null 2>&1; then \
-			brew install php >/dev/null 2>&1; \
-		else \
-			echo "$(YELLOW)⚠ Impossible d'installer PHP automatiquement. Installez manuellement.$(NC)"; \
-		fi; \
-	fi
-	@if command -v php >/dev/null 2>&1; then \
-		echo "$(GREEN)✓ PHP$(NC)"; \
-	else \
-		echo "$(YELLOW)⚠ PHP non trouvé (optionnel)$(NC)"; \
-	fi
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────────────────
