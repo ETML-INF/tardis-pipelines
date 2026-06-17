@@ -171,8 +171,8 @@
   
   function pathToWebUrl(sourcePath) {
     if (!sourcePath) return null;
-    let p = String(sourcePath).replace(/^[.][/\\]/, ""); // nettoyer ./ ou .\
-  
+    let p = String(sourcePath).replace(/^[.][/\\]/, "");
+
     if (p.startsWith("b-UnitesEnseignement/Support/")) {
       p = p.replace(/^b-UnitesEnseignement\/Support\//, "cours/");
     } else if (p.startsWith("b-UnitesEnseignement/Presentations/")) {
@@ -181,14 +181,14 @@
         "presentations/"
       );
     }
-  
-    // extension .md -> .html
+
     p = p.replace(/\.md$/i, ".html");
-  
-    // renommage slides.html -> index.html
     p = p.replace(/slides\.html$/i, "index.html");
-  
-    return BASE_HTTP_ROOT ? BASE_HTTP_ROOT + p : null;
+
+    // Use server-root-relative paths: /cours/..., /presentations/...
+    // Works both locally (http://localhost:8000/presentations/...)
+    // and in production (https://example.com/courseID/presentations/...)
+    return "/" + p;
   }
 
   function actionLinks(item){
