@@ -161,11 +161,11 @@ build-manifest: setup venv-create
 
 build-slides: setup
 	@echo "$(BLUE)🎬 Compilation des slides Marp...$(NC)"
-	@mkdir -p "$(BUILD_DIR)/presentations/dist/html"
+	@mkdir -p "$(BUILD_DIR)/presentations"
 	@PRESENTATIONS_COUNT=0; \
 	THEME_SET_DIR="tardis-pipelines/themes/marp"; \
 	THEME_DIR="tardis-pipelines/themes/marp/etml-2025"; \
-	OUT_HTML="$(BUILD_DIR)/presentations/dist/html"; \
+	OUT_HTML="$(BUILD_DIR)/presentations"; \
 	\
 	if [ ! -d "$(PRESENTATIONS_DIR)" ]; then \
 		echo "$(YELLOW)⚠ Dossier Presentations non trouvé$(NC)"; \
@@ -216,7 +216,7 @@ build-slides: setup
 	else \
 		echo "$(YELLOW)⚠ Aucune slide trouvée$(NC)"; \
 	fi
-	@echo "  📂 Sortie: $(BUILD_DIR)/presentations/dist/html/"
+	@echo "  📂 Sortie: $(BUILD_DIR)/presentations/"
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -231,7 +231,7 @@ build: check-deps build-docs build-manifest build-slides
 	@echo "$(YELLOW)Fichiers générés:$(NC)"
 	@echo "  📚 Documentation: $(BUILD_DIR)/docs/index.html"
 	@echo "  📋 Manifest:      $(BUILD_DIR)/tardis/index.html"
-	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/dist/html/index.php"
+	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/index.php"
 	@echo ""
 	@echo "$(YELLOW)Prochaine étape:$(NC)"
 	@echo "  $(GREEN)make serve$(NC)  pour lancer un serveur local"
@@ -253,7 +253,7 @@ serve:
 	@echo ""
 	@echo "  📚 Documentation: http://localhost:8000/docs/"
 	@echo "  📋 Manifest:      http://localhost:8000/tardis/"
-	@echo "  🎬 Présentations: http://localhost:8000/presentations/dist/html/"
+	@echo "  🎬 Présentations: http://localhost:8000/presentations/"
 	@echo ""
 	@echo "$(YELLOW)Appuyez sur Ctrl+C pour arrêter$(NC)"
 	@echo ""
