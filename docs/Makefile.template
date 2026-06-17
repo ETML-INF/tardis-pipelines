@@ -131,7 +131,7 @@ build-manifest: setup
 	@echo "$(BLUE)📋 Génération du manifest TARDIS...$(NC)"
 	@mkdir -p "$(BUILD_DIR)/tardis/manifests"
 	@cd tardis-pipelines && $(NPM) --silent install yaml@2 glob@10 >/dev/null 2>&1
-	@$(NODE) tardis-pipelines/docs/build-manifest.mjs 2>/dev/null || \
+	@$(NODE) tardis-pipelines/scripts/build-manifest.mjs 2>/dev/null || \
 		echo "$(YELLOW)⚠ Manifest non généré (normal si pas de fichier frontmatter)$(NC)"
 	@if [ -f "$(BUILD_DIR)/tardis/manifests/tardis.json" ]; then \
 		echo "$(GREEN)✓ Manifest généré$(NC)"; \
