@@ -46,6 +46,7 @@ html_copy_source = False
 html_show_sourcelink = False
 
 html_theme = "sphinx_rtd_theme"
+html_baseurl = os.getenv("HTML_BASEURL", "/cours/")  # Base path for static files (local: /cours/, prod: /moduleICT/346/cours/)
 html_static_path = [
     os.path.join("themes", "sphinx", SPHINX_THEME),
     os.path.join("themes", "sphinx", "js"),
