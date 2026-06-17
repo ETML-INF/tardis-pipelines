@@ -48,7 +48,7 @@ help:
 
 check-deps:
 	@echo "$(BLUE)🔍 Vérification des dépendances...$(NC)"
-	@command -v $(PYTHON) >/dev/null 2>&1 || { echo "$(RED)✗ Python 3 manquant$(NC)"; exit 1; }
+	@command -v python3 >/dev/null 2>&1 || { echo "$(RED)✗ Python 3 manquant$(NC)"; exit 1; }
 	@echo "$(GREEN)✓ Python 3$(NC)"
 	@command -v $(NPM) >/dev/null 2>&1 || { echo "$(RED)✗ Node/NPM manquant$(NC)"; exit 1; }
 	@echo "$(GREEN)✓ Node/NPM$(NC)"
