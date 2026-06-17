@@ -35,6 +35,25 @@ Mon-Cours-I346/
         └── index.md                  (manifest TARDIS)
 ```
 
+## Configuration
+
+### Créer le fichier `.env`
+
+Dans votre **dépôt de cours** (où se trouve le Makefile), créez un fichier `.env`:
+
+```bash
+echo "ICT_MODULE=117" > .env
+```
+
+Ou manuellement, créez `.env` avec:
+```
+ICT_MODULE=117
+```
+
+Remplacez `117` par le code de votre module ICT (ex: 346, etc.).
+
+**Remarque**: Ajoutez `.env` à votre `.gitignore` local pour ne pas commiter vos configuration personnelles.
+
 ## Utilisation
 
 ### Vérifier les dépendances
