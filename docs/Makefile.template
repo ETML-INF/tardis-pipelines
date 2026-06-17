@@ -68,8 +68,8 @@ $(VENV_DIR):
 
 install-deps: check-deps $(VENV_DIR)
 	@echo "$(BLUE)📦 Installation des dépendances Python...$(NC)"
-	$(PIP) install -q -r tardis-pipelines/requirements.txt 2>/dev/null || \
-		{ echo "$(YELLOW)⚠ Erreur lors de l'installation$(NC)"; exit 1; }
+	$(PIP) install -q -r tardis-pipelines/requirements.txt || \
+		{ echo "$(RED)❌ Erreur lors de l'installation$(NC)"; $(PIP) install -r tardis-pipelines/requirements.txt; exit 1; }
 	@echo "$(GREEN)✓ Dépendances Python$(NC)"
 	@echo ""
 	@echo "$(BLUE)📦 Installation de Marp CLI...$(NC)"
