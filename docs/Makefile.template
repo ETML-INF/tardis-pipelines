@@ -111,6 +111,10 @@ install-deps: check-deps venv-create
 		{ echo "$(YELLOW)  Installation de @marp-team/marp-cli...$(NC)"; $(NPM) install -g @marp-team/marp-cli >/dev/null 2>&1; }
 	@echo "$(GREEN)✓ Marp CLI$(NC)"
 	@echo ""
+	@echo "$(BLUE)📦 Installation des dépendances tardis-pipelines (Node.js)...$(NC)"
+	@cd tardis-pipelines && $(NPM) ci >/dev/null 2>&1
+	@echo "$(GREEN)✓ Dépendances tardis-pipelines$(NC)"
+	@echo ""
 	@echo "$(BLUE)📦 Installation de PHP (si nécessaire)...$(NC)"
 	@if ! command -v php >/dev/null 2>&1; then \
 		echo "  Installation de PHP..."; \
@@ -173,8 +177,7 @@ build-docs: setup venv-create
 build-manifest: setup venv-create
 	@echo "$(BLUE)📋 Génération du manifest TARDIS...$(NC)"
 	@mkdir -p "$(BUILD_DIR)/tardis/manifests"
-	@cd tardis-pipelines && $(NPM) --silent install yaml@2 glob@10 >/dev/null 2>&1
-	@$(NODE) tardis-pipelines/scripts/build-manifest.mjs 2>/dev/null || \
+	@cd tardis-pipelines && $(NPM) run build-manifest 2>/dev/null || \
 		echo "$(YELLOW)⚠ Manifest non généré (normal si pas de fichier frontmatter)$(NC)"
 	@if [ -f "$(BUILD_DIR)/tardis/manifests/tardis.json" ]; then \
 		echo "$(GREEN)✓ Manifest généré$(NC)"; \
@@ -263,11 +266,10 @@ build-exercices-pdf: setup venv-create build-docs
 	@echo "$(BLUE)📄 Génération des PDFs d'exercices...$(NC)"
 	@echo "  (première fois: installation de Playwright, peut prendre ~2 min)"
 	@mkdir -p "$(BUILD_DIR)/exercices"
-	@cd tardis-pipelines && $(NPM) --silent install >/dev/null 2>&1
 	@echo "  ⏳ Installation de Chromium..."
-	@cd tardis-pipelines && npx playwright install --with-deps chromium 2>&1 | grep -E "downloaded|Chromium" || true
+	@cd tardis-pipelines && $(NPM) run playwright:install 2>&1 | grep -E "downloaded|Chromium" || true
 	@echo "  ⏳ Génération des PDFs (cela peut prendre un moment)..."
-	@$(NODE) tardis-pipelines/scripts/export_exos_pdf_playwright.mjs || \
+	@cd tardis-pipelines && $(NPM) run build-exos-pdf 2>&1 || \
 		echo "$(YELLOW)⚠ Aucun PDF généré (normal si pas d'exercices)$(NC)"
 	@if [ -d "$(DOCS_DIR)/_build/exo-pdf" ]; then \
 		cp -r "$(DOCS_DIR)/_build/exo-pdf"/* "$(BUILD_DIR)/exercices/" 2>/dev/null || true; \
