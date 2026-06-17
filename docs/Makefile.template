@@ -125,8 +125,9 @@ setup:
 
 build-docs: setup venv-create
 	@echo "$(BLUE)📚 Compilation de la documentation Sphinx...$(NC)"
+	@echo "  Module ICT: $(ICT_MODULE)"
 	@mkdir -p "$(BUILD_DIR)"
-	$(PYTHON) -m sphinx \
+	ICT_MODULE=$(ICT_MODULE) $(PYTHON) -m sphinx \
 		-c tardis-pipelines \
 		-b html \
 		"$(DOCS_DIR)" \
