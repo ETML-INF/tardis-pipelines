@@ -3,8 +3,9 @@
 # Configuration
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
-PYTHON := python3
-PIP := pip3
+VENV_DIR := .venv
+PYTHON := $(VENV_DIR)/bin/python3
+PIP := $(VENV_DIR)/bin/pip3
 NODE := node
 NPM := npm
 MARP := npx @marp-team/marp-cli
@@ -58,10 +59,17 @@ check-deps:
 	fi
 	@echo ""
 
-install-deps: check-deps
+$(VENV_DIR):
+	@echo "$(BLUE)📦 Création du venv Python...$(NC)"
+	python3 -m venv $(VENV_DIR)
+	$(PIP) install --upgrade pip >/dev/null 2>&1
+	@echo "$(GREEN)✓ venv créé$(NC)"
+	@echo ""
+
+install-deps: check-deps $(VENV_DIR)
 	@echo "$(BLUE)📦 Installation des dépendances Python...$(NC)"
-	$(PYTHON) -m pip install --user -q -r tardis-pipelines/requirements.txt 2>/dev/null || \
-		{ echo "$(YELLOW)⚠ Sphinx/deps déjà installés ou problème de permission$(NC)"; }
+	$(PIP) install -q -r tardis-pipelines/requirements.txt 2>/dev/null || \
+		{ echo "$(YELLOW)⚠ Erreur lors de l'installation$(NC)"; exit 1; }
 	@echo "$(GREEN)✓ Dépendances Python$(NC)"
 	@echo ""
 	@echo "$(BLUE)📦 Installation de Marp CLI...$(NC)"
