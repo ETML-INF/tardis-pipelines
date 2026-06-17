@@ -357,4 +357,36 @@ clean:
 	@echo "$(GREEN)✓ Nettoyé$(NC)"
 	@echo ""
 
-.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides serve clean help
+# ─────────────────────────────────────────────────────────────────────────
+# Déploiement
+# ─────────────────────────────────────────────────────────────────────────
+
+publish:
+	@if [ ! -d "$(BUILD_DIR)" ]; then \
+		echo "$(RED)✗ $(BUILD_DIR) n'existe pas$(NC)"; \
+		echo "  Lancez d'abord: $(GREEN)make build$(NC)"; \
+		exit 1; \
+	fi
+	@SFTP_HOST=$$(grep '^SFTP_HOST=' .env 2>/dev/null | cut -d= -f2); \
+	SFTP_USER=$$(grep '^SFTP_USER=' .env 2>/dev/null | cut -d= -f2); \
+	SFTP_KEY=$$(grep '^SFTP_KEY=' .env 2>/dev/null | cut -d= -f2); \
+	SFTP_BASE_PATH=$$(grep '^SFTP_BASE_PATH=' .env 2>/dev/null | cut -d= -f2); \
+	if [ -z "$$SFTP_HOST" ] || [ -z "$$SFTP_USER" ] || [ -z "$$SFTP_KEY" ] || [ -z "$$SFTP_BASE_PATH" ]; then \
+		echo "$(RED)❌ Configuration SFTP incomplète dans .env$(NC)"; \
+		echo "  Requiert: SFTP_HOST, SFTP_USER, SFTP_KEY, SFTP_BASE_PATH"; \
+		exit 1; \
+	fi; \
+	SFTP_KEY=$$(eval echo $$SFTP_KEY); \
+	if [ ! -f "$$SFTP_KEY" ]; then \
+		echo "$(RED)❌ Clé SSH non trouvée: $$SFTP_KEY$(NC)"; \
+		exit 1; \
+	fi; \
+	echo "$(BLUE)📤 Déploiement vers $$SFTP_USER@$$SFTP_HOST:$$SFTP_BASE_PATH$(NC)"; \
+	rsync -avz --delete -e "ssh -i $$SFTP_KEY" "$(BUILD_DIR)/" "$$SFTP_USER@$$SFTP_HOST:$$SFTP_BASE_PATH/" || { \
+		echo "$(RED)❌ Erreur lors du déploiement$(NC)"; \
+		exit 1; \
+	}; \
+	echo "$(GREEN)✓ Déploiement terminé$(NC)"
+	@echo ""
+
+.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-exercices-pdf serve publish clean help
