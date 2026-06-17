@@ -301,13 +301,7 @@ jobs:
         with:
           name: tardis-site
           path: site-tardis
-
-      - name: 🔍 Debug: afficher le chemin FTP calculé
-        run: |
-          echo "prefix: '${{ steps.branch.outputs.prefix }}'"
-          echo "FTP_TARDIS_DIR: '${{ vars.FTP_TARDIS_DIR }}'"
-          echo "custom-dir final: '${{ steps.branch.outputs.prefix }}${{ vars.FTP_TARDIS_DIR }}'"
-
+          
       - name: 📂 Sync TARDIS (manifests + UI)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
