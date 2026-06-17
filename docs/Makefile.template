@@ -60,7 +60,7 @@ check-deps:
 
 install-deps: check-deps
 	@echo "$(BLUE)📦 Installation des dépendances Python...$(NC)"
-	$(PIP) install --user -q -r tardis-pipelines/requirements.txt 2>/dev/null || \
+	$(PYTHON) -m pip install --user -q -r tardis-pipelines/requirements.txt 2>/dev/null || \
 		{ echo "$(YELLOW)⚠ Sphinx/deps déjà installés ou problème de permission$(NC)"; }
 	@echo "$(GREEN)✓ Dépendances Python$(NC)"
 	@echo ""
