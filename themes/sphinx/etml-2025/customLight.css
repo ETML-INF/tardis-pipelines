@@ -557,8 +557,8 @@ textarea:focus-visible {
         left: 0;
     }
 
-    /* Backdrop semi-transparent */
-    .wy-nav-side::before {
+    /* Backdrop semi-transparent (uniquement quand sidebar ouvert) */
+    .wy-nav-side.shift::before {
         content: '';
         position: fixed;
         top: 0;
@@ -566,8 +566,8 @@ textarea:focus-visible {
         right: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.3);
-        z-index: -1;
-        backdrop-filter: blur(4px);
+        z-index: 0;
+        pointer-events: none;
     }
 
     /* Nav top visible */
