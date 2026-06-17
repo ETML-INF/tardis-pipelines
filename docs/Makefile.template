@@ -191,12 +191,12 @@ build-docs: setup venv-create
 build-manifest: setup venv-create
 	@echo "$(BLUE)📋 Génération du manifest TARDIS...$(NC)"
 	@mkdir -p "$(BUILD_DIR)/tardis/manifests"
-	@cd tardis-pipelines && $(NPM) run build-manifest 2>/dev/null || \
-		echo "$(YELLOW)⚠ Manifest non généré (normal si pas de fichier frontmatter)$(NC)"
+	@cd tardis-pipelines && $(NPM) run build-manifest || \
+		echo "$(YELLOW)⚠ Manifest non généré$(NC)"
 	@if [ -f "$(BUILD_DIR)/tardis/manifests/tardis.json" ]; then \
 		echo "$(GREEN)✓ Manifest généré$(NC)"; \
 	else \
-		echo "$(YELLOW)⚠ Manifest non trouvé (normal si pas de fichier frontmatter)$(NC)"; \
+		echo "$(YELLOW)⚠ Manifest non trouvé (vérifiez que vous avez des fichiers .md avec frontmatter)$(NC)"; \
 	fi
 	@cp tardis-pipelines/themes/tardis/etml-2025/index.html "$(BUILD_DIR)/tardis/" 2>/dev/null || true
 	@cp tardis-pipelines/themes/tardis/etml-2025/styles.css "$(BUILD_DIR)/tardis/" 2>/dev/null || true
