@@ -83,22 +83,29 @@ _system-deps:
 	@if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then \
 		echo "  Installation de Node.js + NPM..."; \
 		if command -v apt >/dev/null 2>&1; then \
-			sudo apt update && sudo apt install -y nodejs npm >/dev/null 2>&1; \
+			sudo apt update && sudo apt install -y nodejs npm || { echo "$(RED)❌ Erreur installation Node.js$(NC)"; exit 1; }; \
 		elif command -v brew >/dev/null 2>&1; then \
-			brew install node >/dev/null 2>&1; \
+			brew install node || { echo "$(RED)❌ Erreur installation Node.js$(NC)"; exit 1; }; \
+		else \
+			echo "$(RED)❌ Impossible d'installer Node.js automatiquement$(NC)"; exit 1; \
 		fi; \
+	fi
+	@if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then \
+		echo "$(RED)❌ Node.js/NPM toujours indisponibles après installation$(NC)"; exit 1; \
 	fi
 	@echo "$(GREEN)✓ Node.js + NPM disponibles$(NC)"
 	@if ! command -v php >/dev/null 2>&1; then \
 		echo "  Installation de PHP..."; \
 		if command -v apt >/dev/null 2>&1; then \
-			sudo apt install -y php-cli >/dev/null 2>&1; \
+			sudo apt install -y php-cli || echo "$(YELLOW)⚠ Erreur installation PHP (optionnel)$(NC)"; \
 		elif command -v brew >/dev/null 2>&1; then \
-			brew install php >/dev/null 2>&1; \
+			brew install php || echo "$(YELLOW)⚠ Erreur installation PHP (optionnel)$(NC)"; \
 		fi; \
 	fi
 	@if command -v php >/dev/null 2>&1; then \
 		echo "$(GREEN)✓ PHP disponible$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ PHP non disponible (optionnel)$(NC)"; \
 	fi
 	@echo ""
 
