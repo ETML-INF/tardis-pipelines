@@ -236,10 +236,13 @@ build-slides: setup
 
 build-exercices-pdf: setup venv-create build-docs
 	@echo "$(BLUE)📄 Génération des PDFs d'exercices...$(NC)"
+	@echo "  (première fois: installation de Playwright, peut prendre ~2 min)"
 	@mkdir -p "$(BUILD_DIR)/exercices"
 	@cd tardis-pipelines && $(NPM) --silent install >/dev/null 2>&1
-	@cd tardis-pipelines && npx playwright install --with-deps chromium >/dev/null 2>&1
-	@$(NODE) tardis-pipelines/scripts/export_exos_pdf_playwright.mjs 2>/dev/null || \
+	@echo "  ⏳ Installation de Chromium..."
+	@cd tardis-pipelines && npx playwright install --with-deps chromium 2>&1 | grep -E "downloaded|Chromium" || true
+	@echo "  ⏳ Génération des PDFs (cela peut prendre un moment)..."
+	@$(NODE) tardis-pipelines/scripts/export_exos_pdf_playwright.mjs || \
 		echo "$(YELLOW)⚠ Aucun PDF généré (normal si pas d'exercices)$(NC)"
 	@if [ -d "$(DOCS_DIR)/_build/exo-pdf" ]; then \
 		cp -r "$(DOCS_DIR)/_build/exo-pdf"/* "$(BUILD_DIR)/exercices/" 2>/dev/null || true; \
