@@ -46,7 +46,18 @@ html_copy_source = False
 html_show_sourcelink = False
 
 html_theme = "sphinx_rtd_theme"
-html_baseurl = os.getenv("HTML_BASEURL", "/cours/")  # Base path for static files (local: /cours/, prod: /moduleICT/346/cours/)
+
+# Determine html_baseurl based on context
+# - Local dev: /cours/
+# - Production with ICT_MODULE: /moduleICT/{ICT_MODULE}/cours/
+# - Override with HTML_BASEURL env var
+ict_module = os.getenv("ICT_MODULE", "")
+if os.getenv("HTML_BASEURL"):
+    html_baseurl = os.getenv("HTML_BASEURL")
+elif ict_module:
+    html_baseurl = f"/moduleICT/{ict_module}/cours/"
+else:
+    html_baseurl = "/cours/"
 html_static_path = [
     os.path.join("themes", "sphinx", SPHINX_THEME),
     os.path.join("themes", "sphinx", "js"),
