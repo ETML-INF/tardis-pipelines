@@ -25,8 +25,10 @@ async function scanSlidesHierarchy(dir, baseUrl = './') {
       if (Object.keys(subStructure.slides).length > 0 || Object.keys(subStructure.folders).length > 0) {
         structure.folders[item] = subStructure;
       }
-    } else if (item.endsWith('.html') && item !== 'index.html' && item !== 'index.php') {
-      const name = item.replace(/\.html$/, '');
+    } else if (item.endsWith('.html') && item !== 'index.php') {
+      // Include all HTML files except index.php
+      // index.html at root is skipped by the folder check, but index.html in subdirs is included
+      const name = item === 'index.html' ? '📄 Présentation' : item.replace(/\.html$/, '');
       structure.slides[item] = {
         name,
         path: baseUrl + encodeURIComponent(item),
