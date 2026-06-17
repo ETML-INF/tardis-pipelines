@@ -286,6 +286,16 @@ jobs:
     env:
       ICT_MODULE: ${{ inputs.ict_module }}
     steps:
+      - name: Calculer le sous-dossier de branche
+        id: branch
+        run: |
+          REF="${{ github.ref_name }}"
+          if [[ "${REF}" == "main" || "${REF}" == "master" ]]; then
+            echo "prefix=" >> "$GITHUB_OUTPUT"
+          else
+            echo "prefix=${REF}/" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: ⬇️ Download TARDIS site
         uses: actions/download-artifact@v4
         with:
@@ -298,7 +308,7 @@ jobs:
           local-dir:      site-tardis/
           ictroot-dir:    ${{ vars.ICT_ROOT_FOLDER }}
           ictmodule-dir:  ${{ env.ICT_MODULE }}
-          custom-dir:     ${{ vars.FTP_TARDIS_DIR }}
+          custom-dir:     ${{ steps.branch.outputs.prefix }}${{ vars.FTP_TARDIS_DIR }}
           state-name:     ".ftp-sync-tardis.json"
           log-level:      "minimal"
           timeout:        "300000"
