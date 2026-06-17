@@ -55,8 +55,11 @@ check-deps:
 	@echo "$(BLUE)🔍 Vérification des dépendances...$(NC)"
 	@command -v python3 >/dev/null 2>&1 || { echo "$(RED)✗ Python 3 manquant$(NC)"; exit 1; }
 	@echo "$(GREEN)✓ Python 3$(NC)"
-	@command -v $(NPM) >/dev/null 2>&1 || { echo "$(RED)✗ Node/NPM manquant$(NC)"; exit 1; }
-	@echo "$(GREEN)✓ Node/NPM$(NC)"
+	@if ! command -v $(NPM) >/dev/null 2>&1; then \
+		echo "$(YELLOW)⚠ Node/NPM manquant - sera installé par install-deps$(NC)"; \
+	else \
+		echo "$(GREEN)✓ Node/NPM$(NC)"; \
+	fi
 	@if command -v php >/dev/null 2>&1; then \
 		echo "$(GREEN)✓ PHP$(NC)"; \
 	else \
@@ -91,6 +94,17 @@ install-deps: check-deps venv-create
 	$(PIP) install -q -r tardis-pipelines/requirements.txt || \
 		{ echo "$(RED)❌ Erreur lors de l'installation$(NC)"; $(PIP) install -r tardis-pipelines/requirements.txt; exit 1; }
 	@echo "$(GREEN)✓ Dépendances Python$(NC)"
+	@echo ""
+	@echo "$(BLUE)📦 Vérification de Node.js + NPM...$(NC)"
+	@if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then \
+		echo "  Installation de Node.js + NPM..."; \
+		if command -v apt >/dev/null 2>&1; then \
+			sudo apt update && sudo apt install -y nodejs npm >/dev/null 2>&1; \
+		elif command -v brew >/dev/null 2>&1; then \
+			brew install node >/dev/null 2>&1; \
+		fi; \
+	fi
+	@echo "$(GREEN)✓ Node.js + NPM$(NC)"
 	@echo ""
 	@echo "$(BLUE)📦 Installation de Marp CLI...$(NC)"
 	$(NPM) list -g @marp-team/marp-cli >/dev/null 2>&1 || \
