@@ -18,7 +18,7 @@ MANIFEST_DIR := b-UnitesEnseignement/_build/manifests
 # Configuration depuis .env
 ICT_MODULE := $(shell [ -f .env ] && grep '^ICT_MODULE=' .env | cut -d= -f2 || echo "346")
 BRANCH_NAME := $(shell git branch --show-current 2>/dev/null || echo "main")
-BRANCH_PREFIX := $(shell if [ "$(BRANCH_NAME)" = "main" ] || [ "$(BRANCH_NAME)" = "master" ]; then echo ""; else echo "$(BRANCH_NAME)/"; fi)
+BRANCH_PREFIX := $(shell if [ "$(BRANCH_NAME)" = "main" ] || [ "$(BRANCH_NAME)" = "master" ]; then echo ""; else echo "/$(BRANCH_NAME)"; fi)
 
 # Couleurs pour output
 RED := \033[0;31m
