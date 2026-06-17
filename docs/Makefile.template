@@ -1,0 +1,242 @@
+.PHONY: help install-deps check-deps setup build build-docs build-manifest build-slides serve clean
+
+# Configuration
+SHELL := /bin/bash
+.DEFAULT_GOAL := help
+PYTHON := python3
+PIP := pip3
+NODE := node
+NPM := npm
+MARP := npx @marp-team/marp-cli
+
+BUILD_DIR := _build_local
+DOCS_DIR := b-UnitesEnseignement/Support
+PRESENTATIONS_DIR := b-UnitesEnseignement/Presentations
+MANIFEST_DIR := b-UnitesEnseignement/_build/manifests
+
+# Couleurs pour output
+RED := \033[0;31m
+GREEN := \033[0;32m
+YELLOW := \033[0;33m
+BLUE := \033[0;34m
+NC := \033[0m # No Color
+
+help:
+	@echo "$(BLUE)=== TARDIS Pipeline - Local Build ===$(NC)"
+	@echo ""
+	@echo "$(GREEN)Commandes disponibles:$(NC)"
+	@echo "  $(YELLOW)make help$(NC)             - Affiche cette aide"
+	@echo "  $(YELLOW)make install-deps$(NC)    - Installe les dépendances système"
+	@echo "  $(YELLOW)make check-deps$(NC)      - Vérifie les dépendances"
+	@echo "  $(YELLOW)make setup$(NC)            - Clone/update tardis-pipelines"
+	@echo "  $(YELLOW)make build$(NC)            - Compile tout (docs + manifest + slides)"
+	@echo "  $(YELLOW)make build-docs$(NC)      - Compile la documentation Sphinx"
+	@echo "  $(YELLOW)make build-manifest$(NC)  - Génère le manifest TARDIS"
+	@echo "  $(YELLOW)make build-slides$(NC)    - Compile les slides Marp"
+	@echo "  $(YELLOW)make serve$(NC)            - Lance un serveur local (port 8000)"
+	@echo "  $(YELLOW)make clean$(NC)            - Nettoie les fichiers générés"
+	@echo ""
+	@echo "$(BLUE)Exemples:$(NC)"
+	@echo "  make setup build        # Setup + compile tout"
+	@echo "  make build serve        # Compile et lance le serveur"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
+# Vérification et installation des dépendances
+# ─────────────────────────────────────────────────────────────────────────
+
+check-deps:
+	@echo "$(BLUE)🔍 Vérification des dépendances...$(NC)"
+	@command -v $(PYTHON) >/dev/null 2>&1 || { echo "$(RED)✗ Python 3 manquant$(NC)"; exit 1; }
+	@echo "$(GREEN)✓ Python 3$(NC)"
+	@command -v $(NPM) >/dev/null 2>&1 || { echo "$(RED)✗ Node/NPM manquant$(NC)"; exit 1; }
+	@echo "$(GREEN)✓ Node/NPM$(NC)"
+	@command -v php >/dev/null 2>&1 || { echo "$(RED)✗ PHP manquant$(NC)"; exit 1; }
+	@echo "$(GREEN)✓ PHP$(NC)"
+	@echo ""
+
+install-deps: check-deps
+	@echo "$(BLUE)📦 Installation des dépendances Python...$(NC)"
+	$(PIP) install --user -q -r tardis-pipelines/requirements.txt 2>/dev/null || \
+		{ echo "$(YELLOW)⚠ Sphinx/deps déjà installés ou problème de permission$(NC)"; }
+	@echo "$(GREEN)✓ Dépendances Python$(NC)"
+	@echo ""
+	@echo "$(BLUE)📦 Installation de Marp CLI...$(NC)"
+	$(NPM) list -g @marp-team/marp-cli >/dev/null 2>&1 || \
+		{ echo "$(YELLOW)  Installation de @marp-team/marp-cli...$(NC)"; $(NPM) install -g @marp-team/marp-cli >/dev/null 2>&1; }
+	@echo "$(GREEN)✓ Marp CLI$(NC)"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
+# Setup (clone/update tardis-pipelines)
+# ─────────────────────────────────────────────────────────────────────────
+
+setup:
+	@if [ ! -d "tardis-pipelines" ]; then \
+		echo "$(BLUE)📥 Clonage de tardis-pipelines...$(NC)"; \
+		git clone https://github.com/ETML-INF/tardis-pipelines.git; \
+	else \
+		echo "$(BLUE)🔄 Mise à jour de tardis-pipelines...$(NC)"; \
+		cd tardis-pipelines && git pull origin main -q && cd ..; \
+	fi
+	@echo "$(GREEN)✓ tardis-pipelines prêt$(NC)"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
+# Build: Documentation Sphinx
+# ─────────────────────────────────────────────────────────────────────────
+
+build-docs: setup
+	@echo "$(BLUE)📚 Compilation de la documentation Sphinx...$(NC)"
+	@mkdir -p "$(BUILD_DIR)"
+	sphinx-build \
+		-c tardis-pipelines \
+		-b html \
+		"$(DOCS_DIR)" \
+		"$(BUILD_DIR)/docs" \
+		2>&1 | grep -v "WARNING.*toctree" || true
+	@echo "$(GREEN)✓ Documentation compilée$(NC)"
+	@echo "  📂 Sortie: $(BUILD_DIR)/docs/"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
+# Build: Manifest TARDIS
+# ─────────────────────────────────────────────────────────────────────────
+
+build-manifest: setup
+	@echo "$(BLUE)📋 Génération du manifest TARDIS...$(NC)"
+	@mkdir -p "$(BUILD_DIR)/tardis/manifests"
+	@cd tardis-pipelines && $(NPM) --silent init -y >/dev/null 2>&1; true
+	@cd tardis-pipelines && $(NPM) --silent install yaml@2 glob@10 >/dev/null 2>&1; true
+	@$(NODE) tardis-pipelines/scripts/build_manifest.mjs || \
+		{ echo "$(YELLOW)⚠ Script manifest non trouvé ou erreur$(NC)"; }
+	@if [ -f "$(MANIFEST_DIR)/tardis.json" ]; then \
+		cp "$(MANIFEST_DIR)/tardis."* "$(BUILD_DIR)/tardis/manifests/" 2>/dev/null || true; \
+		echo "$(GREEN)✓ Manifest généré$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ Manifest non trouvé (probablement normal si pas de fichier frontmatter)$(NC)"; \
+	fi
+	@mkdir -p "$(BUILD_DIR)/tardis"
+	@cp tardis-pipelines/themes/tardis/etml-2025/index.html "$(BUILD_DIR)/tardis/" 2>/dev/null || true
+	@cp tardis-pipelines/themes/tardis/etml-2025/styles.css "$(BUILD_DIR)/tardis/" 2>/dev/null || true
+	@echo "  📂 Sortie: $(BUILD_DIR)/tardis/"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
+# Build: Slides Marp
+# ─────────────────────────────────────────────────────────────────────────
+
+build-slides: setup
+	@echo "$(BLUE)🎬 Compilation des slides Marp...$(NC)"
+	@mkdir -p "$(BUILD_DIR)/presentations/dist/html"
+	@PRESENTATIONS_COUNT=0; \
+	THEME_SET_DIR="tardis-pipelines/themes/marp"; \
+	THEME_DIR="tardis-pipelines/themes/marp/etml-2025"; \
+	OUT_HTML="$(BUILD_DIR)/presentations/dist/html"; \
+	\
+	if [ ! -d "$(PRESENTATIONS_DIR)" ]; then \
+		echo "$(YELLOW)⚠ Dossier Presentations non trouvé$(NC)"; \
+		exit 0; \
+	fi; \
+	\
+	echo "  Slides à la racine:"; \
+	for f in "$(PRESENTATIONS_DIR)"/*.md; do \
+		if [ -f "$$f" ]; then \
+			base="$$(basename "$${f%.md}")"; \
+			if [ "$$base" != "index" ]; then \
+				echo "    ➜ $$base"; \
+				$(MARP) "$$f" --html --allow-local-files \
+					--theme-set "$$THEME_SET_DIR" \
+					--output "$$OUT_HTML/$${base}.html" 2>/dev/null; \
+				PRESENTATIONS_COUNT=$$((PRESENTATIONS_COUNT + 1)); \
+			fi; \
+		fi; \
+	done; \
+	\
+	echo "  Slides dans les sous-dossiers:"; \
+	for subdir in "$(PRESENTATIONS_DIR)"/*; do \
+		if [ -d "$$subdir" ] && [ "$$(basename "$$subdir")" != "dist" ]; then \
+			SUB_NAME="$$(basename "$$subdir")"; \
+			mkdir -p "$$OUT_HTML/$$SUB_NAME"; \
+			for f in "$$subdir"/*.md; do \
+				if [ -f "$$f" ]; then \
+					base="$$(basename "$${f%.md}")"; \
+					echo "    ➜ $$SUB_NAME/$$base"; \
+					$(MARP) "$$f" --html --allow-local-files \
+						--theme-set "$$THEME_SET_DIR" \
+						--output "$$OUT_HTML/$$SUB_NAME/$${base}.html" 2>/dev/null; \
+					PRESENTATIONS_COUNT=$$((PRESENTATIONS_COUNT + 1)); \
+				fi; \
+			done; \
+			find "$$subdir" -mindepth 1 ! -name "*.md" -type f | while IFS= read -r asset; do \
+				rel="$${asset#$$subdir/}"; \
+				dest="$$OUT_HTML/$$SUB_NAME/$$rel"; \
+				mkdir -p "$$(dirname "$$dest")"; \
+				cp "$$asset" "$$dest"; \
+			done; \
+		fi; \
+	done; \
+	\
+	cp tardis-pipelines/themes/marp/index.php "$$OUT_HTML/index.php"; \
+	if [ "$$PRESENTATIONS_COUNT" -gt 0 ]; then \
+		echo "$(GREEN)✓ $$PRESENTATIONS_COUNT slides compilées$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ Aucune slide trouvée$(NC)"; \
+	fi
+	@echo "  📂 Sortie: $(BUILD_DIR)/presentations/dist/html/"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
+# Build: Tout compiler
+# ─────────────────────────────────────────────────────────────────────────
+
+build: check-deps build-docs build-manifest build-slides
+	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
+	@echo "$(GREEN)✓ Build complet terminé !$(NC)"
+	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
+	@echo ""
+	@echo "$(YELLOW)Fichiers générés:$(NC)"
+	@echo "  📚 Documentation: $(BUILD_DIR)/docs/index.html"
+	@echo "  📋 Manifest:      $(BUILD_DIR)/tardis/index.html"
+	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/dist/html/index.php"
+	@echo ""
+	@echo "$(YELLOW)Prochaine étape:$(NC)"
+	@echo "  $(GREEN)make serve$(NC)  pour lancer un serveur local"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
+# Serveur local
+# ─────────────────────────────────────────────────────────────────────────
+
+serve:
+	@if [ ! -d "$(BUILD_DIR)" ]; then \
+		echo "$(RED)✗ $(BUILD_DIR) n'existe pas$(NC)"; \
+		echo "  Lancez d'abord: $(GREEN)make build$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)🌐 Lancement du serveur local...$(NC)"
+	@echo ""
+	@echo "$(GREEN)✓ Serveur démarré sur http://localhost:8000$(NC)"
+	@echo ""
+	@echo "  📚 Documentation: http://localhost:8000/docs/"
+	@echo "  📋 Manifest:      http://localhost:8000/tardis/"
+	@echo "  🎬 Présentations: http://localhost:8000/presentations/dist/html/"
+	@echo ""
+	@echo "$(YELLOW)Appuyez sur Ctrl+C pour arrêter$(NC)"
+	@echo ""
+	cd "$(BUILD_DIR)" && $(PYTHON) -m http.server 8000
+
+# ─────────────────────────────────────────────────────────────────────────
+# Nettoyage
+# ─────────────────────────────────────────────────────────────────────────
+
+clean:
+	@echo "$(BLUE)🧹 Nettoyage...$(NC)"
+	@rm -rf "$(BUILD_DIR)"
+	@rm -rf "$(MANIFEST_DIR)" 2>/dev/null || true
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name "node_modules" -path "*/tardis-pipelines/*" -prune -o -type d -name ".egg-info" -exec rm -rf {} + 2>/dev/null || true
+	@echo "$(GREEN)✓ Nettoyé$(NC)"
+	@echo ""
+
+.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides serve clean help
