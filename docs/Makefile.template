@@ -223,7 +223,23 @@ build-slides: setup
 # Build: Tout compiler
 # ─────────────────────────────────────────────────────────────────────────
 
-build: check-deps build-docs build-manifest build-slides
+build-exercices-pdf: setup venv-create build-docs
+	@echo "$(BLUE)📄 Génération des PDFs d'exercices...$(NC)"
+	@mkdir -p "$(BUILD_DIR)/exercices"
+	@cd tardis-pipelines && $(NPM) --silent install >/dev/null 2>&1
+	@cd tardis-pipelines && npx playwright install --with-deps chromium >/dev/null 2>&1
+	@$(NODE) tardis-pipelines/scripts/export_exos_pdf_playwright.mjs 2>/dev/null || \
+		echo "$(YELLOW)⚠ Aucun PDF généré (normal si pas d'exercices)$(NC)"
+	@if [ -d "$(DOCS_DIR)/_build/exo-pdf" ]; then \
+		cp -r "$(DOCS_DIR)/_build/exo-pdf"/* "$(BUILD_DIR)/exercices/" 2>/dev/null || true; \
+		echo "$(GREEN)✓ PDFs d'exercices générés$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ Aucun PDF trouvé$(NC)"; \
+	fi
+	@echo "  📂 Sortie: $(BUILD_DIR)/exercices/"
+	@echo ""
+
+build: check-deps build-docs build-manifest build-slides build-exercices-pdf
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
 	@echo "$(GREEN)✓ Build complet terminé !$(NC)"
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
@@ -232,6 +248,7 @@ build: check-deps build-docs build-manifest build-slides
 	@echo "  📚 Documentation: $(BUILD_DIR)/cours/index.html"
 	@echo "  📋 Manifest:      $(BUILD_DIR)/tardis/index.html"
 	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/index.php"
+	@echo "  📄 Exercices PDF: $(BUILD_DIR)/exercices/"
 	@echo ""
 	@echo "$(YELLOW)Prochaine étape:$(NC)"
 	@echo "  $(GREEN)make serve$(NC)  pour lancer un serveur local"
@@ -254,6 +271,7 @@ serve:
 	@echo "  📚 Documentation: http://localhost:8000/cours/"
 	@echo "  📋 Manifest:      http://localhost:8000/tardis/"
 	@echo "  🎬 Présentations: http://localhost:8000/presentations/"
+	@echo "  📄 Exercices PDF: http://localhost:8000/exercices/"
 	@echo ""
 	@echo "$(YELLOW)Appuyez sur Ctrl+C pour arrêter$(NC)"
 	@echo ""
