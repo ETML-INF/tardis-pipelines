@@ -59,14 +59,18 @@ check-deps:
 	fi
 	@echo ""
 
-$(VENV_DIR):
-	@echo "$(BLUE)📦 Création du venv Python...$(NC)"
-	python3 -m venv $(VENV_DIR)
-	$(PIP) install --upgrade pip >/dev/null 2>&1
-	@echo "$(GREEN)✓ venv créé$(NC)"
+venv-create:
+	@if [ ! -d "$(VENV_DIR)" ]; then \
+		echo "$(BLUE)📦 Création du venv Python...$(NC)"; \
+		python3 -m venv $(VENV_DIR); \
+		$(PIP) install --upgrade pip >/dev/null 2>&1; \
+		echo "$(GREEN)✓ venv créé$(NC)"; \
+	else \
+		echo "$(GREEN)✓ venv existe déjà$(NC)"; \
+	fi
 	@echo ""
 
-install-deps: check-deps $(VENV_DIR)
+install-deps: check-deps venv-create
 	@echo "$(BLUE)📦 Installation des dépendances Python...$(NC)"
 	$(PIP) install -q -r tardis-pipelines/requirements.txt || \
 		{ echo "$(RED)❌ Erreur lors de l'installation$(NC)"; $(PIP) install -r tardis-pipelines/requirements.txt; exit 1; }
@@ -114,7 +118,7 @@ setup:
 # Build: Documentation Sphinx
 # ─────────────────────────────────────────────────────────────────────────
 
-build-docs: setup
+build-docs: setup venv-create
 	@echo "$(BLUE)📚 Compilation de la documentation Sphinx...$(NC)"
 	@mkdir -p "$(BUILD_DIR)"
 	$(PYTHON) -m sphinx \
@@ -135,7 +139,7 @@ build-docs: setup
 # Build: Manifest TARDIS
 # ─────────────────────────────────────────────────────────────────────────
 
-build-manifest: setup
+build-manifest: setup venv-create
 	@echo "$(BLUE)📋 Génération du manifest TARDIS...$(NC)"
 	@mkdir -p "$(BUILD_DIR)/tardis/manifests"
 	@cd tardis-pipelines && $(NPM) --silent install yaml@2 glob@10 >/dev/null 2>&1
