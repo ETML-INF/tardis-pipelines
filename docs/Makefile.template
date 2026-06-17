@@ -15,6 +15,11 @@ DOCS_DIR := b-UnitesEnseignement/Support
 PRESENTATIONS_DIR := b-UnitesEnseignement/Presentations
 MANIFEST_DIR := b-UnitesEnseignement/_build/manifests
 
+# Configuration depuis .env
+ICT_MODULE := $(shell [ -f .env ] && grep '^ICT_MODULE=' .env | cut -d= -f2 || echo "346")
+BRANCH_NAME := $(shell git branch --show-current 2>/dev/null || echo "main")
+BRANCH_PREFIX := $(shell if [ "$(BRANCH_NAME)" = "main" ] || [ "$(BRANCH_NAME)" = "master" ]; then echo ""; else echo "$(BRANCH_NAME)/"; fi)
+
 # Couleurs pour output
 RED := \033[0;31m
 GREEN := \033[0;32m
@@ -152,7 +157,12 @@ build-manifest: setup venv-create
 	fi
 	@cp tardis-pipelines/themes/tardis/etml-2025/index.html "$(BUILD_DIR)/tardis/" 2>/dev/null || true
 	@cp tardis-pipelines/themes/tardis/etml-2025/styles.css "$(BUILD_DIR)/tardis/" 2>/dev/null || true
+	@if [ -f "$(BUILD_DIR)/tardis/index.html" ]; then \
+		sed -i "s|%%ICT_MODULE%%|$(ICT_MODULE)|g" "$(BUILD_DIR)/tardis/index.html"; \
+		sed -i "s|%%BRANCH_PREFIX%%|$(BRANCH_PREFIX)|g" "$(BUILD_DIR)/tardis/index.html"; \
+	fi
 	@echo "  📂 Sortie: $(BUILD_DIR)/tardis/"
+	@echo "  🔧 Configuration: ICT_MODULE=$(ICT_MODULE), BRANCH=$(BRANCH_NAME)"
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────────────────
