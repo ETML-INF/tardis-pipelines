@@ -103,30 +103,58 @@ $hasContent = !empty($hierarchy['slides']) || !empty($hierarchy['folders']);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    :root {
+      --color-primary: #004595;
+      --color-primary-light: #2563EB;
+      --color-primary-lighter: #DBEAFE;
+      --color-primary-dark: #003366;
+      --color-text: #1F2937;
+      --color-text-light: #6B7280;
+      --color-bg: #FFFFFF;
+      --color-bg-soft: #F9FAFB;
+      --color-bg-accent: #F0F4FF;
+      --color-border: #E5E7EB;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --radius-md: 8px;
+      --transition-fast: 0.15s ease-in-out;
+    }
+
+    * {
+      font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--color-bg-soft);
+      color: var(--color-text);
       min-height: 100vh;
       padding: 2rem 1rem;
     }
 
     .container {
-      background: white;
-      border-radius: 0.75rem;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      background: var(--color-bg);
+      border-radius: var(--radius-md);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-md);
+      max-width: 1200px;
     }
 
     h1 {
-      color: #667eea;
-      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 2rem;
       font-weight: 700;
+      font-size: 2rem;
     }
 
     .slides-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1.5rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     .slide-card {
@@ -134,44 +162,94 @@ $hasContent = !empty($hierarchy['slides']) || !empty($hierarchy['folders']);
     }
 
     .card {
-      border: none;
-      border-radius: 0.75rem;
-      transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
       overflow: hidden;
+      background: var(--color-bg);
     }
 
     .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--color-primary-light);
+    }
+
+    .card-body {
+      padding: 1.25rem;
+    }
+
+    .card-title {
+      margin-bottom: 0.75rem;
     }
 
     .card a {
-      color: #667eea;
+      color: var(--color-primary);
       font-weight: 600;
-      transition: color 0.15s ease-in-out;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      position: relative;
     }
 
-    .card a:hover {
-      color: #764ba2;
-      text-decoration: none;
+    .card a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+      transition: width var(--transition-fast);
+    }
+
+    .card a:hover::after {
+      width: 100%;
+    }
+
+    .card-text {
+      color: var(--color-text-light);
+    }
+
+    .accordion .card {
+      border: 1px solid var(--color-border);
+      margin-bottom: 0.75rem;
     }
 
     .accordion .card-header {
       border-bottom: none;
-      border-radius: 0.5rem;
-      margin-bottom: 0.5rem;
+      background: var(--color-bg-soft);
+      padding: 0;
     }
 
     .accordion .btn-link {
-      color: #667eea;
+      color: var(--color-primary);
       font-weight: 600;
       padding: 1rem;
       text-decoration: none;
+      display: block;
+      width: 100%;
+      text-align: left;
+      transition: all var(--transition-fast);
     }
 
     .accordion .btn-link:hover {
-      color: #764ba2;
+      color: var(--color-primary-dark);
+      background: var(--color-bg-accent);
       text-decoration: none;
+    }
+
+    .accordion .btn-link::after {
+      float: right;
+      transition: transform var(--transition-fast);
+    }
+
+    .accordion .btn-link[aria-expanded="true"]::after {
+      transform: rotate(-180deg);
+    }
+
+    .accordion .card-body {
+      padding: 1.5rem;
+      background: var(--color-bg);
     }
 
     .folder-icon {
@@ -180,9 +258,10 @@ $hasContent = !empty($hierarchy['slides']) || !empty($hierarchy['folders']);
     }
 
     .alert {
-      background: #f8f9fa;
-      border: 2px dashed #dee2e6;
-      color: #495057;
+      background: var(--color-bg-accent);
+      border: 1px solid var(--color-primary-lighter);
+      color: var(--color-primary-dark);
+      border-radius: var(--radius-md);
     }
   </style>
 </head>
@@ -191,8 +270,8 @@ $hasContent = !empty($hierarchy['slides']) || !empty($hierarchy['folders']);
     <h1>📊 Présentations disponibles</h1>
 
     <?php if (!$hasContent): ?>
-      <div class="alert alert-warning">
-        <strong>Aucune présentation trouvée.</strong> Les fichiers HTML générés par MARP apparaîtront ici.
+      <div class="alert">
+        <strong>ℹ️ Aucune présentation trouvée.</strong> Les fichiers HTML générés par MARP apparaîtront ici.
       </div>
     <?php else: ?>
       <?php echo renderHierarchy($hierarchy); ?>
