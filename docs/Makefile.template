@@ -138,12 +138,12 @@ install-deps: _system-deps venv-create
 	@echo "$(GREEN)✓ Dépendances Python$(NC)"
 	@echo ""
 	@echo "$(BLUE)📦 Installation de Marp CLI...$(NC)"
-	$(NPM) list -g @marp-team/marp-cli >/dev/null 2>&1 || \
-		{ echo "$(YELLOW)  Installation de @marp-team/marp-cli...$(NC)"; $(NPM) install -g @marp-team/marp-cli >/dev/null 2>&1; }
+	@$(NPM) list -g @marp-team/marp-cli >/dev/null 2>&1 || \
+		{ echo "  Installation de @marp-team/marp-cli..."; $(NPM) install -g @marp-team/marp-cli || { echo "$(RED)❌ Erreur installation Marp CLI$(NC)"; exit 1; }; }
 	@echo "$(GREEN)✓ Marp CLI$(NC)"
 	@echo ""
 	@echo "$(BLUE)📦 Installation des dépendances tardis-pipelines (Node.js)...$(NC)"
-	@cd tardis-pipelines && $(NPM) ci >/dev/null 2>&1
+	@cd tardis-pipelines && $(NPM) ci || { echo "$(RED)❌ Erreur installation npm ci$(NC)"; exit 1; }
 	@echo "$(GREEN)✓ Dépendances tardis-pipelines$(NC)"
 	@echo ""
 
