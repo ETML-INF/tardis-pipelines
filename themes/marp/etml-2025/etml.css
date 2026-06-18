@@ -1,5 +1,12 @@
 /* @theme etml */
 
+@font-face {
+  font-family: "Bangers";
+  src: url("Bangers-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* ⚠ Important, ne modifiez pas etml.css, mais copiez-le si vous voulez faire votre propre thème.
    Dans votre propre thème renommer le nom du style (par exemple : mystyle) en ligne 1 avec la directive @theme.
 
@@ -224,10 +231,47 @@ section a:hover{ border-bottom-color: rgba(126,184,255,.9); }
    Slide "transition" : permet de créer des moments et de séparer les blocs
    ========================================= */
 
-/* Title */
-section.title{ display: grid; place-items: center; text-align: center; background: var(--brand-dark); }
+/* Title — style bande dessinée (Franquin) */
+section.title {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2rem;
+  text-align: center;
+  background: var(--brand-dark);
+}
 section.title header, section.title footer, section.title::after, section.title::before {
   display: none !important; content: none !important;
+}
+section.title h1 {
+  font-family: "Bangers", cursive;
+  font-size: 4rem;
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+  color: #111;
+  background: #fff;
+  border: 6px solid #111;
+  padding: 0.4rem 1.4rem;
+  margin: 0;
+  box-shadow: 7px 7px 0 #111;
+  transform: rotate(-1.5deg);
+  text-shadow: none;
+  font-weight: normal;
+}
+section.title p {
+  font-family: "Bangers", cursive;
+  font-size: 1.8rem;
+  letter-spacing: 0.07em;
+  color: #111;
+  background: #fff;
+  border: 4px solid #111;
+  padding: 0.3rem 1.2rem;
+  margin: 0;
+  box-shadow: 5px 5px 0 #111;
+  transform: rotate(1deg);
+}
+section.title p strong {
+  font-weight: normal;
 }
 
 /* Question */
