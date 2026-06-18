@@ -432,6 +432,9 @@ section.warning{
 section.warning h1{ color:var(--brand-accent); margin-top:0; text-shadow:none; }
 
 /* Summary */
+section.summary {
+  background: linear-gradient(160deg, #1e2a38 0%, #2a3f55 100%);
+}
 section.summary ul{ list-style: "◾ "; }
 
 
