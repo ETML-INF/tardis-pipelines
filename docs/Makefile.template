@@ -289,12 +289,25 @@ build-slides: setup
 # Build: Slides Marp (PDF → Support_PDF/)
 # ─────────────────────────────────────────────────────────────────────────
 
-build-slides-pdf: setup
+build-slides-pdf: setup _npm-deps
 	@echo "$(BLUE)📄 Export PDF des slides Marp...$(NC)"
 	@mkdir -p "$(BUILD_DIR)/Support_PDF"
 	@SLIDES_PDF_COUNT=0; \
 	THEME_SET_DIR="tardis-pipelines/themes/marp"; \
 	OUT_PDF="$(BUILD_DIR)/Support_PDF"; \
+	\
+	echo "  🔍 Recherche de Chromium (Playwright)..."; \
+	CHROMIUM_PATH=$$(find "$$HOME/.cache/ms-playwright" -path "*/chromium-*/chrome-linux/chrome" -type f 2>/dev/null | sort | tail -1); \
+	if [ -z "$$CHROMIUM_PATH" ] || [ ! -f "$$CHROMIUM_PATH" ]; then \
+		echo "  ⏳ Installation de Chromium via Playwright..."; \
+		cd tardis-pipelines && $(NPM) run playwright:install 2>&1 | grep -E "downloaded|Chromium|browser" || true; cd ..; \
+		CHROMIUM_PATH=$$(find "$$HOME/.cache/ms-playwright" -path "*/chromium-*/chrome-linux/chrome" -type f 2>/dev/null | sort | tail -1); \
+	fi; \
+	if [ -z "$$CHROMIUM_PATH" ] || [ ! -f "$$CHROMIUM_PATH" ]; then \
+		echo "$(RED)✗ Chromium introuvable — lancez: cd tardis-pipelines && npm run playwright:install$(NC)"; \
+		exit 1; \
+	fi; \
+	echo "  ✓ Chromium: $$CHROMIUM_PATH"; \
 	\
 	if [ ! -d "$(PRESENTATIONS_DIR)" ]; then \
 		echo "$(YELLOW)⚠ Dossier Presentations non trouvé$(NC)"; \
@@ -308,6 +321,7 @@ build-slides-pdf: setup
 			echo "    ➜ $${base}.pdf"; \
 			$(MARP) "$$f" --pdf --allow-local-files \
 				--theme-set "$$THEME_SET_DIR" \
+				--browser-executable-path "$$CHROMIUM_PATH" \
 				--browser-arg "--no-sandbox" \
 				--output "$$OUT_PDF/$${base}.pdf" 2>&1 | grep -iE "error|fail" >&2 || true; \
 			[ -f "$$OUT_PDF/$${base}.pdf" ] && SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)) || true; \
@@ -329,6 +343,7 @@ build-slides-pdf: setup
 					echo "    ➜ $${out_name}.pdf"; \
 					$(MARP) "$$f" --pdf --allow-local-files \
 						--theme-set "$$THEME_SET_DIR" \
+						--browser-executable-path "$$CHROMIUM_PATH" \
 						--browser-arg "--no-sandbox" \
 						--output "$$OUT_PDF/$${out_name}.pdf" 2>&1 | grep -iE "error|fail" >&2 || true; \
 					[ -f "$$OUT_PDF/$${out_name}.pdf" ] && SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)) || true; \
