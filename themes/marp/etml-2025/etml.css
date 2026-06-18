@@ -332,20 +332,28 @@ section.schema {
   text-align: center;
   gap: 0.6rem;
 }
-section.schema h2 {
+section.schema h1, section.schema h2 {
   border-left: none;
   padding-left: 0;
   font-size: 1.8rem;
   margin: 0;
-  align-self: center;
+  text-shadow: none;
+}
+section.schema p:has(img) {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
 }
 section.schema img {
   max-width: 90%;
-  max-height: 62%;
+  max-height: 100%;
   object-fit: contain;
   display: block;
 }
-section.schema p {
+section.schema p:not(:has(img)) {
   font-size: 0.8rem;
   font-style: italic;
   color: var(--brand-secondary);
