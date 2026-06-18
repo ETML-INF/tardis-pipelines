@@ -13,8 +13,9 @@
   
   /* Palette modernisée (bleu électrique + orange contraste) */
   --brand-primary:   #0f2a6d; /* accent bleu électrique */
-  --brand-secondary: #475569; /* bleu profond pour titres */
-  --brand-accent:    #ff7a1a; 
+  --brand-secondary: #475569; /* gris bleuté */
+  --brand-etml:      #004595; /* bleu ETML — cohérent avec l'index des présentations */
+  --brand-accent:    #ff7a1a;
 
   --text-main:  #0b1220;
   --bg-slide:   #ffffff;
@@ -59,7 +60,7 @@ section{
   padding-bottom: calc(var(--footer-h) + 1.2rem);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
 }
 
@@ -104,9 +105,10 @@ section h1{
   font-weight: 700;
   text-shadow: var(--h1-shadow);
 }
-section h2{ 
-  font-size: 1.9rem; 
-  color: var(--brand-secondary); 
+section h2{
+  font-size: 2.2rem;
+  color: var(--brand-etml);
+  margin-bottom: 1rem;
 }
 section h3{ 
   font-size: 1.2rem; 
