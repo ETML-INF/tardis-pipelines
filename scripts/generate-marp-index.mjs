@@ -77,48 +77,41 @@ async function collectPresentations(dir, metaMap, baseUrl = './', relBase = '') 
   return result;
 }
 
-function renderCard(slide) {
-  const thumb = slide.previewUrl
-    ? `<img src="${escapeHtml(slide.previewUrl)}" alt="" class="thumb-img" loading="lazy">`
-    : `<div class="thumb-placeholder"></div>`;
-
-  return `
-      <a class="pres-card" href="${escapeHtml(slide.path)}" target="_blank" rel="noreferrer">
-        <div class="thumb">
-          ${thumb}
-          <div class="thumb-overlay">
-            <span class="thumb-title">${escapeHtml(slide.title)}</span>
-          </div>
-        </div>${slide.description ? `
-        <p class="pres-desc">${escapeHtml(slide.description)}</p>` : ''}
-      </a>`;
+function flattenSlides(data) {
+  const slides = [...data.slides];
+  for (const sub of Object.values(data.groups)) {
+    slides.push(...flattenSlides(sub));
+  }
+  return slides;
 }
 
-function renderGroup(label, data, depth = 0) {
-  let html = '';
-  if (label) {
-    const tag = depth === 0 ? 'h2' : 'h3';
-    html += `\n    <section class="pres-section">
-      <${tag} class="section-title">${escapeHtml(label)}</${tag}>`;
-  }
-  if (data.slides.length > 0) {
-    html += `\n      <div class="pres-grid">${data.slides.map(renderCard).join('')}\n      </div>`;
-  }
-  for (const [name, sub] of Object.entries(data.groups)) {
-    html += renderGroup(name, sub, depth + 1);
-  }
-  if (label) html += `\n    </section>`;
-  return html;
+function renderTableRow(slide, index) {
+  return `
+    <tr>
+      <td>${index + 1}</td>
+      <td><a href="${escapeHtml(slide.path)}" target="_blank" rel="noreferrer" class="pres-link">${escapeHtml(slide.title)}</a></td>
+      <td>${slide.description ? escapeHtml(slide.description) : '-'}</td>
+    </tr>`;
 }
 
 (async () => {
   try {
     const metaMap = await buildMetaMap(SRC_DIR);
     const data = await collectPresentations(OUT_DIR, metaMap);
-    const hasContent = data.slides.length > 0 || Object.keys(data.groups).length > 0;
+    const allSlides = flattenSlides(data);
 
-    const mainContent = hasContent
-      ? renderGroup('', data)
+    const mainContent = allSlides.length > 0
+      ? `\n    <table class="pres-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th class="col-title">Présentation</th>
+          <th class="col-desc">Description</th>
+        </tr>
+      </thead>
+      <tbody>${allSlides.map((slide, idx) => renderTableRow(slide, idx)).join('')}
+      </tbody>
+    </table>`
       : `\n    <div class="empty-state">
       <p><strong>Aucune présentation trouvée.</strong> Les fichiers HTML générés par MARP apparaîtront ici.</p>
     </div>`;
@@ -161,78 +154,62 @@ function renderGroup(label, data, depth = 0) {
       background-clip: text;
       margin-bottom: 2rem;
     }
-    .pres-section { margin-bottom: 2.5rem; }
-    .section-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--text);
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--primary-light);
-      margin-bottom: 1.25rem;
-    }
-    h3.section-title {
-      font-size: 1rem;
-      border-bottom-color: var(--border);
-      margin-top: 1.25rem;
-    }
-    .pres-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.25rem;
-    }
-    .pres-card {
-      display: flex;
-      flex-direction: column;
+    .pres-table {
+      width: 100%;
+      border-collapse: collapse;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      text-decoration: none;
-      color: inherit;
       box-shadow: var(--shadow);
-      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      margin-top: 2rem;
     }
-    .pres-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
-      border-color: var(--primary-light);
-    }
-    .thumb {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
+    .pres-table thead {
       background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
-      flex-shrink: 0;
+      color: white;
     }
-    .thumb-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .thumb-placeholder { width: 100%; height: 100%; }
-    .thumb-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: flex-end;
-      padding: 0.75rem;
-      background: linear-gradient(to top, rgba(0,0,0,.65) 0%, transparent 55%);
-    }
-    .thumb-title {
-      color: #fff;
-      font-size: .95rem;
+    .pres-table th {
+      padding: 1rem;
+      text-align: left;
       font-weight: 600;
-      line-height: 1.3;
-      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+      font-size: 0.95rem;
     }
-    .pres-desc {
-      padding: 0.65rem 0.9rem 0.75rem;
-      color: var(--text-muted);
-      font-size: .85rem;
-      line-height: 1.5;
+    .pres-table th.col-num {
+      width: 60px;
+      text-align: center;
+    }
+    .pres-table th.col-title {
+      width: 40%;
+    }
+    .pres-table th.col-desc {
       flex: 1;
+    }
+    .pres-table tbody tr {
+      border-top: 1px solid var(--border);
+      transition: background .15s ease;
+    }
+    .pres-table tbody tr:hover {
+      background: #F5F6FA;
+    }
+    .pres-table td {
+      padding: 0.9rem 1rem;
+      font-size: 0.95rem;
+    }
+    .pres-table td:first-child {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .pres-link {
+      color: var(--primary-light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color .15s ease;
+    }
+    .pres-link:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
     }
     .empty-state {
       padding: 2rem;
