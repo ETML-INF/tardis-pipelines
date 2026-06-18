@@ -314,6 +314,9 @@ build-slides-pdf: setup _npm-deps
 		exit 0; \
 	fi; \
 	\
+	export PUPPETEER_EXECUTABLE_PATH="$$CHROMIUM_PATH"; \
+	export CHROME_PATH="$$CHROMIUM_PATH"; \
+	\
 	echo "  Slides à la racine:"; \
 	for f in "$(PRESENTATIONS_DIR)"/*.md; do \
 		if [ -f "$$f" ]; then \
@@ -321,7 +324,6 @@ build-slides-pdf: setup _npm-deps
 			echo "    ➜ $${base}.pdf"; \
 			$(MARP) "$$f" --pdf --allow-local-files \
 				--theme-set "$$THEME_SET_DIR" \
-				--browser-executable-path "$$CHROMIUM_PATH" \
 				--browser-arg "--no-sandbox" \
 				--output "$$OUT_PDF/$${base}.pdf" 2>&1 | grep -iE "error|fail" >&2 || true; \
 			[ -f "$$OUT_PDF/$${base}.pdf" ] && SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)) || true; \
@@ -343,7 +345,6 @@ build-slides-pdf: setup _npm-deps
 					echo "    ➜ $${out_name}.pdf"; \
 					$(MARP) "$$f" --pdf --allow-local-files \
 						--theme-set "$$THEME_SET_DIR" \
-						--browser-executable-path "$$CHROMIUM_PATH" \
 						--browser-arg "--no-sandbox" \
 						--output "$$OUT_PDF/$${out_name}.pdf" 2>&1 | grep -iE "error|fail" >&2 || true; \
 					[ -f "$$OUT_PDF/$${out_name}.pdf" ] && SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)) || true; \
