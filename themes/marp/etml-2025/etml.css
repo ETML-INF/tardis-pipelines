@@ -93,6 +93,22 @@ section footer {
   color: var(--bar-fg);
 }
 
+/* Numéro de page centré dans le footer */
+section::after {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bar-fg);
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 600;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 /* Titres */
 section h1{
   font-size: 3.4rem;
