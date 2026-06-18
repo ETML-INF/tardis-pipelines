@@ -11,19 +11,20 @@
 */
 :root{
   
-  /* Palette modernisée (bleu électrique + orange contraste) */
-  --brand-primary:   #0f2a6d; /* accent bleu électrique */
-  --brand-secondary: #475569; /* gris bleuté */
-  --brand-etml:      #004595; /* bleu ETML — cohérent avec l'index des présentations */
-  --brand-accent:    #ff7a1a;
+  /* Palette ETML — bleu institutionnel dominant, orange accent unique */
+  --brand-primary:   #004595; /* bleu ETML — fond principal des slides */
+  --brand-dark:      #003270; /* bleu plus sombre — barres, transitions */
+  --brand-secondary: rgba(255,255,255,0.65); /* texte secondaire sur fond bleu */
+  --brand-etml:      #004595;
+  --brand-accent:    #ff7a1a; /* orange — seul accent chaud */
 
-  --text-main:  #0b1220;
-  --bg-slide:   #ffffff;
+  --text-main:  #f0f4ff;   /* quasi-blanc légèrement teinté de bleu */
+  --bg-slide:   #004595;
 
-  /* Barres */
-  --bar-bg:     #f2f6ff;
-  --bar-fg:     #0b1220;
-  --bar-border: #d6e2ff;
+  /* Barres header / footer */
+  --bar-bg:     #003270;
+  --bar-fg:     #ffffff;
+  --bar-border: rgba(255,255,255,0.12);
 
   /* Code */
   --code-bg: #0b1220;
@@ -48,13 +49,7 @@ section{
   box-sizing: border-box;
   font-family: var(--font-ui);
   color: var(--text-main);
-  background: repeating-linear-gradient(
-    0deg,
-    #f6f8fc,
-    #f6f8fc 3px,
-    #f8f9fb 3px,
-    #f8f9fb 6px
-  );
+  background: linear-gradient(160deg, #004595 0%, #003a7a 100%);
   padding: 4rem 2.2rem;
   padding-top: calc(var(--header-h) + 1.2rem);
   padding-bottom: calc(var(--footer-h) + 1.2rem);
@@ -101,27 +96,30 @@ section footer {
 /* Titres */
 section h1{
   font-size: 3.4rem;
-  color: var(--brand-primary);
+  color: #ffffff;
   font-weight: 700;
-  text-shadow: var(--h1-shadow);
+  text-shadow: 0 2px 8px rgba(0,0,0,.3);
 }
 section h2{
   font-size: 2.2rem;
-  color: var(--brand-etml);
+  color: #ffffff;
+  font-weight: 700;
   margin-bottom: 1rem;
+  padding-left: 0.85rem;
+  border-left: 4px solid var(--brand-accent);
 }
-section h3{ 
-  font-size: 1.2rem; 
-  color: var(--brand-secondary); 
+section h3{
+  font-size: 1.2rem;
+  color: var(--brand-secondary);
 }
 
 section .badge{
   display: inline-flex; align-items: center; gap: .35rem;
   padding: .25rem .6rem; border-radius: 999px;
-  background: #eaf2ff;               
-  color: var(--brand-secondary);
-  border: 1px solid rgba(37,99,255,.28);
-  font-weight: 600; font-size: 1.05rem; line-height: 1.2; white-space: nowrap;
+  background: var(--brand-accent);
+  color: #ffffff;
+  border: none;
+  font-weight: 700; font-size: 1.05rem; line-height: 1.2; white-space: nowrap;
 }
 
 
@@ -145,12 +143,12 @@ section ol {
   margin-bottom: 0.9rem;
 }
 section li::marker{
-  color: var(--brand-secondary);
+  color: var(--brand-accent);
 }
 
 /* Fragment actif : met en évidence le dernier item apparu (mode présentation uniquement) */
 li[data-bespoke-marp-current-fragment="current"] {
-  color: var(--brand-primary);
+  color: #ffffff;
   font-weight: 700;
 }
 li[data-bespoke-marp-current-fragment="current"]::marker {
@@ -169,13 +167,13 @@ section li {
   margin: 0 0 0.45rem 0;
 }
 
-/* Liens (bleu électrique cohérent) */
+/* Liens */
 section a{
-  color: var(--brand-primary);
+  color: #7eb8ff;
   text-decoration: none;
-  border-bottom: 1px solid rgba(37,99,255,.35);
+  border-bottom: 1px solid rgba(126,184,255,.4);
 }
-section a:hover{ border-bottom-color: rgba(37,99,255,.7); }
+section a:hover{ border-bottom-color: rgba(126,184,255,.9); }
 
 
 /* =========================================
@@ -194,14 +192,15 @@ section a:hover{ border-bottom-color: rgba(37,99,255,.7); }
    Slide "transition" : permet de créer des moments et de séparer les blocs
    ========================================= */
 
-/* Title */   
-section.title{ display: grid; place-items: center; text-align: center; background: #ffffff; }
+/* Title */
+section.title{ display: grid; place-items: center; text-align: center; background: #002d6b; }
 section.title header, section.title footer, section.title::after {
   display: none !important; content: none !important;
 }
 
 /* Question */
 section.question{ display: flex; align-items: center; justify-content: center; text-align: center; }
+section.question h2 { border-left: none; padding-left: 0; }
 
 /* Pour les slides qui utilisent des mascots en bg right/left :
    contain évite le recadrage, bottom ancre le pied du personnage */
@@ -214,10 +213,12 @@ section.schema[data-marpit-advanced-background="background"] figure {
 
 /* Schéma */
 section.schema{ text-align: center; }
+section.schema h2 { border-left: none; padding-left: 0; }
 section.schema img{ max-width: 92%; height: auto; }
 
 /* Citation */
 section.quote{ text-align: center; font-style: italic; }
+section.quote h2 { border-left: none; padding-left: 0; }
 
 /* Concept */
 section.concept {
@@ -284,16 +285,15 @@ section.concept::after {
 /* Définition */
 section.definition h1::before {
   content: "(Def.) ";
-  color: var(--brand-primary);
+  color: var(--brand-accent);
   font-weight: 600;
   font-size: 1.6rem;
   margin-right: 0.4rem;
-  opacity: 0.75;
+  opacity: 0.85;
 }
 section.definition{
-  border-left: 8px solid var(--brand-primary);
+  border-left: 8px solid var(--brand-accent);
   padding-left: 2rem;
-  
 }
 
 section.definition h1 {
@@ -317,17 +317,19 @@ section.check ul{ list-style: "✅  "; }
 
 /* Warning */
 section.warning{
-  background: #fff4e6;
-  border: 16px solid var(--brand-accent);
+  background: #7a2800;
+  border: 12px solid var(--brand-accent);
   box-sizing: border-box;
   padding: 1.2rem 1.4rem;
+  color: #ffffff;
 }
-section.warning h1{ color:#a14a00; margin-top:0; }
+section.warning h1{ color:var(--brand-accent); margin-top:0; text-shadow:none; }
 
 /* Summary */
 section.summary{
-  background: #eef4ff;           
-  color: var(--text-main);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #ffffff;
   border-radius: .6rem;
   padding: 1.2rem 1.4rem;
 }
@@ -338,16 +340,18 @@ section.summary ul{ list-style: "◾ "; }
 section.transition {
   display: grid;
   place-items: center;
-  background: #f8fafc;
+  background: var(--brand-dark);
   text-align: center;
 }
 
 section.transition h1 {
-  color: var(--brand-primary);
+  color: var(--brand-accent);
   font-size: 10rem;
   text-transform: uppercase;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  text-shadow: 0 2px 12px rgba(255,122,26,.4);
   opacity: 0;
+  border-left: none;
+  padding-left: 0;
   animation: fadeInSlow 2s ease forwards;
 }
 
@@ -362,15 +366,18 @@ section.transition header, section.transition footer, section.transition::after 
 }
 
 /* Activity */
-section.activity{ align-items:flex-start; background:#fff; }
+section.activity{ align-items:flex-start; background: linear-gradient(160deg, #004595 0%, #003a7a 100%); }
 section.activity h1{
-  font-size:2.4rem; color:var(--brand-primary);
+  font-size:2.4rem; color:#ffffff;
   margin:0 0 .4rem 0; text-shadow:none;
+  border-left: 4px solid var(--brand-accent);
+  padding-left: 0.85rem;
 }
 section.activity h2{
-  font-size:1.4rem; color:var(--brand-secondary);
+  font-size:1.4rem; color:var(--brand-accent);
   margin:1rem 0 .4rem 0; letter-spacing:.02em;
   text-transform:uppercase; font-weight:700;
+  border-left: none; padding-left: 0;
 }
 section.activity p,
 section.activity ul,
@@ -378,6 +385,7 @@ section.activity ol{
   margin-left:var(--text-left-small);
   margin-right:var(--text-right-small);
   font-size:1.3rem; line-height:1.5; margin-bottom:.6rem; box-sizing:border-box;
+  color: var(--text-main);
 }
 section.activity ul, section.activity ol{ padding-left:1rem; }
 section.activity li{ margin-bottom:.4rem; }
