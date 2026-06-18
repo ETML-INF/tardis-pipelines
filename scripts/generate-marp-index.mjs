@@ -85,13 +85,21 @@ function flattenSlides(data) {
   return slides;
 }
 
-function renderTableRow(slide, index) {
+function renderCard(slide) {
+  const thumb = slide.previewUrl
+    ? `<img src="${escapeHtml(slide.previewUrl)}" alt="" class="thumb-img" loading="lazy">`
+    : `<div class="thumb-placeholder"></div>`;
+
   return `
-    <tr>
-      <td>${index + 1}</td>
-      <td><a href="${escapeHtml(slide.path)}" target="_blank" rel="noreferrer" class="pres-link">${escapeHtml(slide.title)}</a></td>
-      <td>${slide.description ? escapeHtml(slide.description) : '-'}</td>
-    </tr>`;
+      <a class="pres-card" href="${escapeHtml(slide.path)}" target="_blank" rel="noreferrer">
+        <div class="thumb">
+          ${thumb}
+          <div class="thumb-overlay">
+            <span class="thumb-title">${escapeHtml(slide.title)}</span>
+          </div>
+        </div>${slide.description ? `
+        <p class="pres-desc">${escapeHtml(slide.description)}</p>` : ''}
+      </a>`;
 }
 
 (async () => {
@@ -101,17 +109,7 @@ function renderTableRow(slide, index) {
     const allSlides = flattenSlides(data);
 
     const mainContent = allSlides.length > 0
-      ? `\n    <table class="pres-table">
-      <thead>
-        <tr>
-          <th class="col-num">#</th>
-          <th class="col-title">Présentation</th>
-          <th class="col-desc">Description</th>
-        </tr>
-      </thead>
-      <tbody>${allSlides.map((slide, idx) => renderTableRow(slide, idx)).join('')}
-      </tbody>
-    </table>`
+      ? `\n    <div class="pres-grid">${allSlides.map(renderCard).join('')}\n    </div>`
       : `\n    <div class="empty-state">
       <p><strong>Aucune présentation trouvée.</strong> Les fichiers HTML générés par MARP apparaîtront ici.</p>
     </div>`;
@@ -154,62 +152,65 @@ function renderTableRow(slide, index) {
       background-clip: text;
       margin-bottom: 2rem;
     }
-    .pres-table {
-      width: 100%;
-      border-collapse: collapse;
+    .pres-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+    .pres-card {
+      display: flex;
+      flex-direction: column;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: var(--shadow);
-      margin-top: 2rem;
-    }
-    .pres-table thead {
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
-      color: white;
-    }
-    .pres-table th {
-      padding: 1rem;
-      text-align: left;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-    .pres-table th.col-num {
-      width: 60px;
-      text-align: center;
-    }
-    .pres-table th.col-title {
-      width: 40%;
-    }
-    .pres-table th.col-desc {
-      flex: 1;
-    }
-    .pres-table tbody tr {
-      border-top: 1px solid var(--border);
-      transition: background .15s ease;
-    }
-    .pres-table tbody tr:hover {
-      background: #F5F6FA;
-    }
-    .pres-table td {
-      padding: 0.9rem 1rem;
-      font-size: 0.95rem;
-    }
-    .pres-table td:first-child {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    .pres-link {
-      color: var(--primary-light);
       text-decoration: none;
-      font-weight: 500;
-      transition: color .15s ease;
+      color: inherit;
+      box-shadow: var(--shadow);
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
-    .pres-link:hover {
-      color: var(--primary-dark);
-      text-decoration: underline;
+    .pres-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary-light);
+    }
+    .thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+      flex-shrink: 0;
+    }
+    .thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .thumb-placeholder { width: 100%; height: 100%; }
+    .thumb-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 0.75rem;
+      background: linear-gradient(to top, rgba(0,0,0,.65) 0%, transparent 55%);
+    }
+    .thumb-title {
+      color: #fff;
+      font-size: .95rem;
+      font-weight: 600;
+      line-height: 1.3;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+    }
+    .pres-desc {
+      padding: 0.65rem 0.9rem 0.75rem;
+      color: var(--text-muted);
+      font-size: .85rem;
+      line-height: 1.5;
+      flex: 1;
     }
     .empty-state {
       padding: 2rem;
