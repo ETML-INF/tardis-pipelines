@@ -93,27 +93,32 @@ section footer {
   color: var(--bar-fg);
 }
 
-/* Numéro de page centré dans le footer
-   !important nécessaire : Marp injecte ses règles ::after après le thème */
-section[data-marpit-pagination]::after {
-  content: attr(data-marpit-pagination) !important;
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: auto !important;
-  height: var(--footer-h) !important;
-  width: auto !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+/* Supprime la pagination native Marp (positionnée hors de la barre footer
+   dans le contexte SVG foreignObject) */
+section::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Compteur CSS — on incrémente uniquement sur les sections avec id
+   (les vraies slides de contenu ; les sections background générées par Marp
+   pour ![bg] n'ont pas d'id et ne comptent donc pas) */
+body { counter-reset: etml-slide 0; }
+section[id] { counter-increment: etml-slide; }
+
+/* Numéro affiché dans le footer bar, centré, via ::after du footer lui-même */
+section footer::after {
+  content: counter(etml-slide);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   color: var(--bar-fg);
   font-family: var(--font-ui);
   font-size: 0.88rem;
   font-weight: 600;
   opacity: 0.7;
   pointer-events: none;
-  z-index: 2;
 }
 
 /* Titres */
