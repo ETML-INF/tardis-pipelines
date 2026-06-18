@@ -51,7 +51,7 @@ align_ict: ["ICT-117-OO1"]
 
 ## Layout du texte (slides normales)
 
-Le contenu paragraphe/liste est décalé de **15% à gauche et 15% à droite** par défaut (`--text-left` / `--text-right`). Les slides `activity` utilisent une marge réduite de 5%.
+Le contenu paragraphe/liste est décalé de **6% à gauche et 6% à droite** par défaut (`--text-left` / `--text-right`). Les slides `activity` utilisent une marge réduite de 3%.
 
 ---
 
@@ -76,9 +76,27 @@ Le contenu paragraphe/liste est décalé de **15% à gauche et 15% à droite** p
 | `happy_ghosts.png` / `proud_ghost.png` | Fin de séquence / félicitations |
 | `scared_ghosts.png` | Warning / difficulté |
 
+### Utilisation des images de fond (mascots)
+
+Toujours utiliser `![bg opacity:X]` pour mettre un mascot **en fond sous le texte**.
+`![bg right:40%]` crée un split côte à côte — l'image et le texte ne se superposent pas.
+
 ```markdown
-![bg right:40%](../img/ghost_questions.png)
+<!-- _class: question -->
+
+![bg opacity:0.12](../img/ghost_questions.png)
+
+## Ta question ici
 ```
+
+Valeurs d'opacité recommandées : `0.10`–`0.15` selon la lisibilité du texte sur le fond.
+
+### Ratio recommandé pour les images de fond
+
+| Usage | Dimensions idéales | Format |
+|---|---|---|
+| Mascot fond pleine slide (`![bg]`) | 720×1080 px | PNG transparent |
+| Image paysage pleine slide | 1280×720 px | PNG / JPG |
 
 ---
 
