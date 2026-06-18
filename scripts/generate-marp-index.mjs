@@ -29,7 +29,11 @@ async function buildMetaMap(srcDir) {
         if (!fmStr) continue;
         const data = YAML.parse(fmStr) ?? {};
         const relHtml = path.relative(srcDir, f).replace(/\.md$/, '.html');
-        meta.set(relHtml, { title: data.title ?? null, description: data.description ?? null });
+        meta.set(relHtml, {
+          title: data.title ?? null,
+          description: data.description ?? null,
+          seq: data.seq ?? null,
+        });
       } catch { /* skip malformed files */ }
     }
   } catch { /* SRC_DIR unavailable */ }
@@ -68,6 +72,7 @@ async function collectPresentations(dir, metaMap, baseUrl = './', relBase = '') 
       result.slides.push({
         title: meta.title ?? defaultTitle,
         description: meta.description ?? null,
+        seq: meta.seq ?? null,
         path: baseUrl + encodeURIComponent(item),
         previewUrl,
       });
@@ -91,15 +96,56 @@ function renderCard(slide) {
     : `<div class="thumb-placeholder"></div>`;
 
   return `
-      <a class="pres-card" href="${escapeHtml(slide.path)}" target="_blank" rel="noreferrer">
-        <div class="thumb">
-          ${thumb}
-          <div class="thumb-overlay">
-            <span class="thumb-title">${escapeHtml(slide.title)}</span>
-          </div>
-        </div>${slide.description ? `
-        <p class="pres-desc">${escapeHtml(slide.description)}</p>` : ''}
-      </a>`;
+        <a class="pres-card" href="${escapeHtml(slide.path)}" target="_blank" rel="noreferrer">
+          <div class="thumb">
+            ${thumb}
+            <div class="thumb-overlay">
+              <span class="thumb-title">${escapeHtml(slide.title)}</span>
+            </div>
+          </div>${slide.description ? `
+          <p class="pres-desc">${escapeHtml(slide.description)}</p>` : ''}
+        </a>`;
+}
+
+function groupBySeq(slides) {
+  const groups = new Map();
+  for (const slide of slides) {
+    const key = slide.seq ?? '__none__';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(slide);
+  }
+  // Sort: SEQ-01, SEQ-02, … then ungrouped last
+  return [...groups.entries()].sort(([a], [b]) => {
+    if (a === '__none__') return 1;
+    if (b === '__none__') return -1;
+    return a.localeCompare(b, 'en', { numeric: true });
+  });
+}
+
+function seqLabel(key) {
+  if (key === '__none__') return 'Autres';
+  // SEQ-01 → Séquence 1, SEQ-12 → Séquence 12
+  const m = key.match(/(\d+)$/);
+  return m ? `Séquence ${parseInt(m[1], 10)}` : key;
+}
+
+function renderMainContent(allSlides) {
+  if (allSlides.length === 0) {
+    return `
+    <div class="empty-state">
+      <p><strong>Aucune présentation trouvée.</strong> Les fichiers HTML générés par MARP apparaîtront ici.</p>
+    </div>`;
+  }
+
+  const groups = groupBySeq(allSlides);
+  const hasMultipleGroups = groups.length > 1 || (groups.length === 1 && groups[0][0] !== '__none__');
+
+  return groups.map(([key, slides]) => `
+    <section class="seq-section">
+      ${hasMultipleGroups ? `<h2 class="seq-heading"><span class="seq-badge">${escapeHtml(key === '__none__' ? '—' : key)}</span>${escapeHtml(seqLabel(key))}</h2>` : ''}
+      <div class="pres-grid">${slides.map(renderCard).join('')}
+      </div>
+    </section>`).join('');
 }
 
 (async () => {
@@ -108,61 +154,94 @@ function renderCard(slide) {
     const data = await collectPresentations(OUT_DIR, metaMap);
     const allSlides = flattenSlides(data);
 
-    const mainContent = allSlides.length > 0
-      ? `\n    <div class="pres-grid">${allSlides.map(renderCard).join('')}\n    </div>`
-      : `\n    <div class="empty-state">
-      <p><strong>Aucune présentation trouvée.</strong> Les fichiers HTML générés par MARP apparaîtront ici.</p>
-    </div>`;
+    const mainContent = renderMainContent(allSlides);
 
     const htmlContent = `<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Présentations disponibles</title>
+  <title>Présentations — TARDIS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --primary:       #004595;
-      --primary-dark:  #003366;
-      --primary-light: #2563EB;
-      --text:          #1F2937;
-      --text-muted:    #6B7280;
-      --bg:            #F9FAFB;
-      --card-bg:       #FFFFFF;
-      --border:        #E5E7EB;
-      --radius:        10px;
-      --shadow:        0 4px 6px -1px rgba(0,0,0,.10);
-      --shadow-hover:  0 10px 20px -3px rgba(0,0,0,.15);
+      --brand:      #004595;
+      --brand-dark: #003366;
+      --bg:         #f7f9fc;
+      --fg:         #0f172a;
+      --muted:      #4b5563;
+      --bd:         #c4d7fb;
+      --card-bg:    #ffffff;
+      --radius:     10px;
+      --shadow:     0 4px 6px -1px rgba(0,0,0,.10);
+      --shadow-hover: 0 10px 20px -3px rgba(0,0,0,.15);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg);
-      color: var(--text);
+      color: var(--fg);
       min-height: 100vh;
-      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
     }
-    .page { max-width: 1200px; margin: 0 auto; }
-    h1 {
-      font-size: 2rem;
+
+    /* ===== Header ===== */
+    .site-header {
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0,21,51,.12);
+    }
+    .site-header .inner {
+      width: min(95vw, 1400px);
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .site-title { margin: 0; font-size: 1.35rem; line-height: 1.2; }
+    .site-subtitle { margin: 4px 0 0; opacity: .9; font-size: .95rem; }
+
+    /* ===== Main ===== */
+    .wrap {
+      width: min(95vw, 1400px);
+      margin: 24px auto;
+      padding: 0 0 40px;
+      flex: 1;
+    }
+
+    /* ===== Section séquence ===== */
+    .seq-section { margin-bottom: 2.5rem; }
+    .seq-heading {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 2rem;
+      color: var(--brand-dark);
+      margin-bottom: 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 2px solid var(--bd);
     }
+    .seq-badge {
+      display: inline-block;
+      background: var(--brand);
+      color: #fff;
+      font-size: .75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: .04em;
+    }
+
+    /* ===== Grid ===== */
     .pres-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.25rem;
-      margin-top: 2rem;
     }
     .pres-card {
       display: flex;
       flex-direction: column;
       background: var(--card-bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--bd);
       border-radius: var(--radius);
       overflow: hidden;
       text-decoration: none;
@@ -173,29 +252,24 @@ function renderCard(slide) {
     .pres-card:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-hover);
-      border-color: var(--primary-light);
+      border-color: var(--brand);
     }
     .thumb {
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
       overflow: hidden;
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+      background: linear-gradient(135deg, var(--brand-dark) 0%, #2563EB 100%);
       flex-shrink: 0;
     }
-    .thumb-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .thumb-placeholder { width: 100%; height: 100%; }
     .thumb-overlay {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: flex-end;
-      padding: 0.75rem;
+      padding: .75rem;
       background: linear-gradient(to top, rgba(0,0,0,.65) 0%, transparent 55%);
     }
     .thumb-title {
@@ -206,25 +280,46 @@ function renderCard(slide) {
       text-shadow: 0 1px 3px rgba(0,0,0,.5);
     }
     .pres-desc {
-      padding: 0.65rem 0.9rem 0.75rem;
-      color: var(--text-muted);
+      padding: .65rem .9rem .75rem;
+      color: var(--muted);
       font-size: .85rem;
       line-height: 1.5;
       flex: 1;
     }
     .empty-state {
       padding: 2rem;
-      background: #EEF2FF;
-      border: 1px solid #C7D2FE;
+      background: #e6eefb;
+      border: 1px solid var(--bd);
       border-radius: var(--radius);
-      color: var(--primary-dark);
+      color: var(--brand-dark);
     }
+
+    /* ===== Footer ===== */
+    .site-footer {
+      background: var(--brand-dark);
+      color: rgba(255,255,255,.75);
+      font-size: .8rem;
+      text-align: center;
+      padding: 14px 16px;
+    }
+    .site-footer a { color: rgba(255,255,255,.85); text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <div class="page">
-    <h1>Présentations</h1>${mainContent}
-  </div>
+  <header class="site-header">
+    <div class="inner">
+      <h1 class="site-title">TARDIS — Présentations</h1>
+      <p class="site-subtitle">Slides générées par Marp, organisées par séquence</p>
+    </div>
+  </header>
+
+  <main class="wrap">${mainContent}
+  </main>
+
+  <footer class="site-footer">
+    <p>TARDIS — Teaching And Resources Development for Integrated Sequences &nbsp;|&nbsp; <a href="..">Retour à l'accueil</a></p>
+  </footer>
 </body>
 </html>`;
 
