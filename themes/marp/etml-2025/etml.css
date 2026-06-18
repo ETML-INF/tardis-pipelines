@@ -31,11 +31,11 @@
   /* Layout */
   --header-h: 8%;
   --footer-h: 8%;
-  --text-left: 15%;
-  --text-left-small: 5%;
-  --text-width: 85%;
-  --text-right: 15%;
-  --text-right-small: 5%;
+  --text-left: 6%;
+  --text-left-small: 3%;
+  --text-width: 94%;
+  --text-right: 6%;
+  --text-right-small: 3%;
   --font-ui: Tahoma, "Segoe UI", Arial, sans-serif;
   --h1-shadow: 1px 2px 4px rgba(0,0,0,.15);
 }
@@ -137,10 +137,10 @@ section ol {
   box-sizing: border-box;
 
   /* style général */
-  font-size: 2rem;
-  line-height: 1.7;
+  font-size: 1.35rem;
+  line-height: 1.55;
   margin-top: 0;
-  margin-bottom: 1.6rem;  
+  margin-bottom: 0.9rem;
 }
 section li::marker{
   color: var(--brand-secondary);
@@ -155,7 +155,7 @@ section ol {
 section li {
   font-size: inherit;
   line-height: inherit;
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.45rem 0;
 }
 
 /* Liens (bleu électrique cohérent) */
