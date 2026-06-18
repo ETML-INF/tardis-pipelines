@@ -297,11 +297,11 @@ build-slides-pdf: setup _npm-deps
 	OUT_PDF="$(BUILD_DIR)/Support_PDF"; \
 	\
 	echo "  🔍 Recherche de Chromium (Playwright)..."; \
-	CHROMIUM_PATH=$$(find "$$HOME/.cache/ms-playwright" -path "*/chromium-*/chrome-linux/chrome" -type f 2>/dev/null | sort | tail -1); \
+	CHROMIUM_PATH=$$(find "$$HOME/.cache/ms-playwright" -path "*/chromium-*/chrome-linux*/chrome" -type f 2>/dev/null | sort | tail -1); \
 	if [ -z "$$CHROMIUM_PATH" ] || [ ! -f "$$CHROMIUM_PATH" ]; then \
 		echo "  ⏳ Installation de Chromium via Playwright..."; \
-		cd tardis-pipelines && $(NPM) run playwright:install 2>&1 | grep -E "downloaded|Chromium|browser" || true; cd ..; \
-		CHROMIUM_PATH=$$(find "$$HOME/.cache/ms-playwright" -path "*/chromium-*/chrome-linux/chrome" -type f 2>/dev/null | sort | tail -1); \
+		(cd tardis-pipelines && $(NPM) run playwright:install 2>&1 | grep -E "downloaded|Chromium|browser" || true); \
+		CHROMIUM_PATH=$$(find "$$HOME/.cache/ms-playwright" -path "*/chromium-*/chrome-linux*/chrome" -type f 2>/dev/null | sort | tail -1); \
 	fi; \
 	if [ -z "$$CHROMIUM_PATH" ] || [ ! -f "$$CHROMIUM_PATH" ]; then \
 		echo "$(RED)✗ Chromium introuvable — lancez: cd tardis-pipelines && npm run playwright:install$(NC)"; \
