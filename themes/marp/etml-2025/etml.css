@@ -432,13 +432,6 @@ section.warning{
 section.warning h1{ color:var(--brand-accent); margin-top:0; text-shadow:none; }
 
 /* Summary */
-section.summary{
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #ffffff;
-  border-radius: .6rem;
-  padding: 1.2rem 1.4rem;
-}
 section.summary ul{ list-style: "◾ "; }
 
 
