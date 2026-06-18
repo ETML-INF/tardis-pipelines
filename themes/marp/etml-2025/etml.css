@@ -11,20 +11,20 @@
 */
 :root{
   
-  /* Palette ETML — bleu institutionnel dominant, orange accent unique */
-  --brand-primary:   #004595; /* bleu ETML — fond principal des slides */
-  --brand-dark:      #003270; /* bleu plus sombre — barres, transitions */
+  /* Palette ETML — bleu sérein #1e81b0, orange accent unique */
+  --brand-primary:   #1e81b0; /* bleu principal — fond des slides */
+  --brand-dark:      #0d3d5c; /* bleu profond — title, transitions */
   --brand-secondary: rgba(255,255,255,0.65); /* texte secondaire sur fond bleu */
-  --brand-etml:      #004595;
+  --brand-etml:      #1e81b0;
   --brand-accent:    #ff7a1a; /* orange — seul accent chaud */
 
-  --text-main:  #f0f4ff;   /* quasi-blanc légèrement teinté de bleu */
-  --bg-slide:   #004595;
+  --text-main:  #f0f7fc;   /* quasi-blanc légèrement teinté de bleu */
+  --bg-slide:   #1e81b0;
 
-  /* Barres header / footer */
-  --bar-bg:     #003270;
-  --bar-fg:     #ffffff;
-  --bar-border: rgba(255,255,255,0.12);
+  /* Barres header / footer — blanc teinté, ligne orange */
+  --bar-bg:     #e8f4fb;
+  --bar-fg:     #0d2235;
+  --bar-border: #ff7a1a;
 
   /* Code */
   --code-bg: #0b1220;
@@ -49,7 +49,7 @@ section{
   box-sizing: border-box;
   font-family: var(--font-ui);
   color: var(--text-main);
-  background: linear-gradient(160deg, #004595 0%, #003a7a 100%);
+  background: linear-gradient(160deg, #1e81b0 0%, #155f8a 100%);
   padding: 4rem 2.2rem;
   padding-top: calc(var(--header-h) + 1.2rem);
   padding-bottom: calc(var(--footer-h) + 1.2rem);
@@ -69,7 +69,7 @@ section header {
   justify-content: space-between;
   padding: 0.8rem 1.4rem;
   background: var(--bar-bg);
-  border-bottom: 1px solid var(--bar-border);
+  border-bottom: 3px solid var(--bar-border);
   color: var(--bar-fg);
 }
 
@@ -89,7 +89,7 @@ section footer {
   justify-content: space-between;
   padding: 0.8rem 1.4rem;
   background: var(--bar-bg);
-  border-top: 1px solid var(--bar-border);
+  border-top: 3px solid var(--bar-border);
   color: var(--bar-fg);
 }
 
@@ -193,7 +193,7 @@ section a:hover{ border-bottom-color: rgba(126,184,255,.9); }
    ========================================= */
 
 /* Title */
-section.title{ display: grid; place-items: center; text-align: center; background: #002d6b; }
+section.title{ display: grid; place-items: center; text-align: center; background: var(--brand-dark); }
 section.title header, section.title footer, section.title::after {
   display: none !important; content: none !important;
 }
@@ -340,7 +340,7 @@ section.summary ul{ list-style: "◾ "; }
 section.transition {
   display: grid;
   place-items: center;
-  background: var(--brand-dark);
+  background: linear-gradient(160deg, var(--brand-dark) 0%, #091e30 100%);
   text-align: center;
 }
 
@@ -366,7 +366,7 @@ section.transition header, section.transition footer, section.transition::after 
 }
 
 /* Activity */
-section.activity{ align-items:flex-start; background: linear-gradient(160deg, #004595 0%, #003a7a 100%); }
+section.activity{ align-items:flex-start; background: linear-gradient(160deg, #1e81b0 0%, #155f8a 100%); }
 section.activity h1{
   font-size:2.4rem; color:#ffffff;
   margin:0 0 .4rem 0; text-shadow:none;
