@@ -31,8 +31,8 @@
   --code-fg: #e5e7eb;
 
   /* Layout */
-  --header-h: 8%;
-  --footer-h: 8%;
+  --header-h: 58px;
+  --footer-h: 58px;
   --text-left: 6%;
   --text-left-small: 3%;
   --text-width: 94%;
@@ -94,8 +94,11 @@ section footer {
 }
 
 /* Pagination : section::after est l'unique endroit où attr(data-marpit-pagination)
-   peut être lu (élément hôte = section). On en fait un flex item poussé en bas
-   par margin-top:auto, superposé sur la barre footer via z-index.
+   peut être lu (élément hôte = section). margin-top:auto pousse l'élément au bord
+   inférieur du padding-box ; translateY(footer-h + 1.2rem) le décale exactement
+   dans la barre footer (les deux valeurs = padding-bottom de la section).
+   --header-h / --footer-h doivent être en px (pas en %) car padding-% est calculé
+   sur la LARGEUR du conteneur (1280px), pas la hauteur — ce qui fausse le décalage.
    !important nécessaire car Marp injecte ses règles ::after après le thème. */
 section::after {
   display: none !important;
@@ -112,6 +115,7 @@ section[data-marpit-pagination]::after {
   width: 100% !important;
   height: var(--footer-h) !important;
   box-sizing: border-box !important;
+  transform: translateY(calc(var(--footer-h) + 1.2rem)) !important;
   color: var(--bar-fg);
   font-family: var(--font-ui);
   font-size: 0.88rem;
