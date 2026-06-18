@@ -323,10 +323,35 @@ section.schema[data-marpit-advanced-background="background"] figure {
   background-position: center bottom;
 }
 
-/* Schéma */
-section.schema{ text-align: center; }
-section.schema h2 { border-left: none; padding-left: 0; }
-section.schema img{ max-width: 92%; height: auto; }
+/* Schéma — image centrale avec titre optionnel et légende */
+section.schema {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+}
+section.schema h2 {
+  border-left: none;
+  padding-left: 0;
+  font-size: 1.8rem;
+  margin: 0;
+  align-self: center;
+}
+section.schema img {
+  max-width: 90%;
+  max-height: 62%;
+  object-fit: contain;
+  display: block;
+}
+section.schema p {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--brand-secondary);
+  margin: 0;
+  opacity: 0.85;
+}
 
 /* Citation */
 section.quote{ text-align: center; font-style: italic; }
