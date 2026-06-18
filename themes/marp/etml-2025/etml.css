@@ -93,28 +93,25 @@ section footer {
   color: var(--bar-fg);
 }
 
-/* Supprime la pagination native Marp (positionnée hors de la barre footer
-   dans le contexte SVG foreignObject) */
+/* Pagination : section::after est l'unique endroit où attr(data-marpit-pagination)
+   peut être lu (élément hôte = section). On en fait un flex item poussé en bas
+   par margin-top:auto, superposé sur la barre footer via z-index.
+   !important nécessaire car Marp injecte ses règles ::after après le thème. */
 section::after {
   display: none !important;
   content: none !important;
 }
-
-/* Transmet data-marpit-pagination (posé par Marp sur la section) via une
-   custom property héritée par section footer::after.
-   attr() dans les custom properties est supporté depuis Chrome 117. */
-section[data-marpit-pagination] {
-  --marp-page:  attr(data-marpit-pagination);
-  --marp-total: attr(data-marpit-pagination-total);
-}
-
-/* Numéro affiché dans le footer bar, centré, via ::after du footer lui-même */
-section footer::after {
-  content: var(--marp-page) " / " var(--marp-total);
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+section[data-marpit-pagination]::after {
+  content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  z-index: 2 !important;
+  margin-top: auto !important;
+  width: 100% !important;
+  height: var(--footer-h) !important;
+  box-sizing: border-box !important;
   color: var(--bar-fg);
   font-family: var(--font-ui);
   font-size: 0.88rem;
