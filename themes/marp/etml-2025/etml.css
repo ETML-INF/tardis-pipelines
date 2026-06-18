@@ -374,7 +374,10 @@ section.concept h2 {
   font-weight: normal;
   border-left: 3px solid #111;
 }
-section.concept > :not(h1):not(h2):not(header):not(footer):not(figure) {
+section.concept[data-marpit-advanced-background="content"] > :not(h1):not(h2):not(header):not(footer) {
+  display: none !important;
+}
+section.concept:not([data-marpit-advanced-background]) > :not(h1):not(h2):not(header):not(footer) {
   display: none !important;
 }
 section.concept header,
