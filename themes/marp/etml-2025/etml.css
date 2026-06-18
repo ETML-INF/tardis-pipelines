@@ -93,29 +93,30 @@ section footer {
   color: var(--bar-fg);
 }
 
-/* Pagination : section::after est l'unique endroit où attr(data-marpit-pagination)
-   peut être lu (élément hôte = section). margin-top:auto pousse l'élément au bord
-   inférieur du padding-box ; translateY(footer-h + 1.2rem) le décale exactement
-   dans la barre footer (les deux valeurs = padding-bottom de la section).
-   --header-h / --footer-h doivent être en px (pas en %) car padding-% est calculé
-   sur la LARGEUR du conteneur (1280px), pas la hauteur — ce qui fausse le décalage.
-   !important nécessaire car Marp injecte ses règles ::after après le thème. */
+/* Pagination via ::before — Marp n'injecte aucune règle sur section::before,
+   donc pas de conflit de cascade et pas besoin de !important.
+   position:absolute + bottom:0 ancre exactement dans la barre footer
+   (section a position:relative comme containing block). */
 section::after {
   display: none !important;
   content: none !important;
 }
-section[data-marpit-pagination]::after {
-  content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
-  z-index: 2 !important;
-  margin-top: auto !important;
-  width: 100% !important;
-  height: var(--footer-h) !important;
-  box-sizing: border-box !important;
-  transform: translateY(calc(var(--footer-h) + 1.2rem)) !important;
+section::before {
+  content: none;
+  display: none;
+}
+section[data-marpit-pagination]::before {
+  content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  z-index: 2;
   color: var(--bar-fg);
   font-family: var(--font-ui);
   font-size: 0.88rem;
@@ -225,7 +226,7 @@ section a:hover{ border-bottom-color: rgba(126,184,255,.9); }
 
 /* Title */
 section.title{ display: grid; place-items: center; text-align: center; background: var(--brand-dark); }
-section.title header, section.title footer, section.title::after {
+section.title header, section.title footer, section.title::after, section.title::before {
   display: none !important; content: none !important;
 }
 
@@ -292,7 +293,8 @@ section.concept > :not(h1):not(header):not(footer) {
 }
 section.concept header,
 section.concept footer,
-section.concept::after {
+section.concept::after,
+section.concept::before {
   display: none !important;
   content: none !important;
 }
@@ -392,7 +394,7 @@ section.transition h1 {
 }
 
 /* supprime header, footer et pagination */
-section.transition header, section.transition footer, section.transition::after {
+section.transition header, section.transition footer, section.transition::after, section.transition::before {
   display: none !important; content: none !important;
 }
 
