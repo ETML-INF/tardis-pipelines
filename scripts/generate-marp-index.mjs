@@ -19,8 +19,13 @@ function extractFM(md) {
 }
 
 function extractFMField(fmStr, key) {
-  const m = fmStr.match(new RegExp(`^${key}:\\s*["']?([^"'\\n]+?)["']?\\s*$`, 'm'));
-  return m ? m[1].trim() : null;
+  const m = fmStr.match(new RegExp(`^${key}:\\s*(.+?)\\s*$`, 'm'));
+  if (!m) return null;
+  const v = m[1];
+  if (v.length >= 2 && ((v[0] === '"' && v[v.length - 1] === '"') || (v[0] === "'" && v[v.length - 1] === "'"))) {
+    return v.slice(1, -1);
+  }
+  return v;
 }
 
 async function loadModuleMeta(srcDir) {
