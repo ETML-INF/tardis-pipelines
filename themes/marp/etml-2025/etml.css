@@ -343,6 +343,9 @@ section.concept {
   background: radial-gradient(circle at center,
               #1b1b1f 0%, #0a0a0d 80%, #000 100%);
 }
+section.concept[data-marpit-advanced-background="content"] {
+  background: transparent;
+}
 section.concept h1 {
   font-family: "Bangers", cursive;
   font-size: 6rem;
