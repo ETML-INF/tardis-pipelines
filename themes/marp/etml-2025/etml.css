@@ -228,7 +228,6 @@ section a:hover{ border-bottom-color: rgba(126,184,255,.9); }
    Slide "check" : permet de lister (✅) les éléments vérifiés
    Slide "warning" : met en évidence un point d'attention avec une couleur orange
    Slide "summary" : résume les points importants
-   Slide "transition" : permet de créer des moments et de séparer les blocs
    ========================================= */
 
 /* Title — style bande dessinée (Franquin) */
@@ -450,14 +449,6 @@ section.summary{
 section.summary ul{ list-style: "◾ "; }
 
 
-/* Transition */
-section.transition {
-  display: grid;
-  place-items: center;
-  background: linear-gradient(160deg, var(--brand-dark) 0%, #091e30 100%);
-  text-align: center;
-}
-
 /* Q&A — questions à chaud en fin de séquence */
 section.qa {
   display: flex;
@@ -518,27 +509,6 @@ section.qa p {
 }
 section.qa p strong, section.qa ul strong {
   font-weight: normal;
-}
-
-section.transition h1 {
-  color: var(--brand-accent);
-  font-size: 10rem;
-  text-transform: uppercase;
-  text-shadow: 0 2px 12px rgba(255,122,26,.4);
-  opacity: 0;
-  border-left: none;
-  padding-left: 0;
-  animation: fadeInSlow 2s ease forwards;
-}
-
-@keyframes fadeInSlow {
-  from { opacity: 0; letter-spacing: 0.08em; }
-  to   { opacity: 1; letter-spacing: 0.04em; }
-}
-
-/* supprime header, footer et pagination */
-section.transition header, section.transition footer, section.transition::after, section.transition::before {
-  display: none !important; content: none !important;
 }
 
 /* Activity */
