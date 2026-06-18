@@ -104,12 +104,13 @@ section::after {
    custom property héritée par section footer::after.
    attr() dans les custom properties est supporté depuis Chrome 117. */
 section[data-marpit-pagination] {
-  --marp-page: attr(data-marpit-pagination);
+  --marp-page:  attr(data-marpit-pagination);
+  --marp-total: attr(data-marpit-pagination-total);
 }
 
 /* Numéro affiché dans le footer bar, centré, via ::after du footer lui-même */
 section footer::after {
-  content: var(--marp-page);
+  content: var(--marp-page) " / " var(--marp-total);
   position: absolute;
   left: 50%;
   top: 50%;
