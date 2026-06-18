@@ -93,22 +93,27 @@ section footer {
   color: var(--bar-fg);
 }
 
-/* Numéro de page centré dans le footer */
+/* Numéro de page centré dans le footer
+   !important nécessaire : Marp injecte ses règles ::after après le thème */
 section[data-marpit-pagination]::after {
-  content: attr(data-marpit-pagination);
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: var(--footer-h);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  content: attr(data-marpit-pagination) !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: auto !important;
+  height: var(--footer-h) !important;
+  width: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   color: var(--bar-fg);
   font-family: var(--font-ui);
   font-size: 0.88rem;
   font-weight: 600;
   opacity: 0.7;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* Titres */
