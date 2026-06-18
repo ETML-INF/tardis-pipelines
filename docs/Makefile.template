@@ -1,4 +1,4 @@
-.PHONY: help install-deps check-deps setup build build-docs build-manifest build-slides serve clean
+.PHONY: help install-deps check-deps setup build build-docs build-manifest build-slides build-slides-pdf serve clean
 
 # Configuration
 SHELL := /bin/bash
@@ -38,7 +38,8 @@ help:
 	@echo "  $(YELLOW)make build$(NC)            - Compile tout (docs + manifest + slides)"
 	@echo "  $(YELLOW)make build-docs$(NC)      - Compile la documentation Sphinx"
 	@echo "  $(YELLOW)make build-manifest$(NC)  - Génère le manifest TARDIS"
-	@echo "  $(YELLOW)make build-slides$(NC)    - Compile les slides Marp"
+	@echo "  $(YELLOW)make build-slides$(NC)    - Compile les slides Marp (HTML)"
+	@echo "  $(YELLOW)make build-slides-pdf$(NC) - Exporte les slides Marp en PDF (→ Support_PDF/)"
 	@echo "  $(YELLOW)make serve$(NC)            - Lance un serveur local (port 8000)"
 	@echo "  $(YELLOW)make clean$(NC)            - Nettoie les fichiers générés"
 	@echo ""
@@ -285,6 +286,64 @@ build-slides: setup
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────────────────
+# Build: Slides Marp (PDF → Support_PDF/)
+# ─────────────────────────────────────────────────────────────────────────
+
+build-slides-pdf: setup
+	@echo "$(BLUE)📄 Export PDF des slides Marp...$(NC)"
+	@mkdir -p "$(BUILD_DIR)/Support_PDF"
+	@SLIDES_PDF_COUNT=0; \
+	THEME_SET_DIR="tardis-pipelines/themes/marp"; \
+	OUT_PDF="$(BUILD_DIR)/Support_PDF"; \
+	\
+	if [ ! -d "$(PRESENTATIONS_DIR)" ]; then \
+		echo "$(YELLOW)⚠ Dossier Presentations non trouvé$(NC)"; \
+		exit 0; \
+	fi; \
+	\
+	echo "  Slides à la racine:"; \
+	for f in "$(PRESENTATIONS_DIR)"/*.md; do \
+		if [ -f "$$f" ]; then \
+			base="$$(basename "$${f%.md}")"; \
+			echo "    ➜ $${base}.pdf"; \
+			$(MARP) "$$f" --pdf --allow-local-files \
+				--theme-set "$$THEME_SET_DIR" \
+				--output "$$OUT_PDF/$${base}.pdf" 2>/dev/null; \
+			SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)); \
+		fi; \
+	done; \
+	\
+	echo "  Slides dans les sous-dossiers:"; \
+	for subdir in "$(PRESENTATIONS_DIR)"/*; do \
+		if [ -d "$$subdir" ] && [ "$$(basename "$$subdir")" != "dist" ]; then \
+			SUB_NAME="$$(basename "$$subdir")"; \
+			for f in "$$subdir"/*.md; do \
+				if [ -f "$$f" ]; then \
+					base="$$(basename "$${f%.md}")"; \
+					if [ "$$base" = "index" ]; then \
+						out_name="$$SUB_NAME"; \
+					else \
+						out_name="$$base"; \
+					fi; \
+					echo "    ➜ $${out_name}.pdf"; \
+					$(MARP) "$$f" --pdf --allow-local-files \
+						--theme-set "$$THEME_SET_DIR" \
+						--output "$$OUT_PDF/$${out_name}.pdf" 2>/dev/null; \
+					SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)); \
+				fi; \
+			done; \
+		fi; \
+	done; \
+	\
+	if [ "$$SLIDES_PDF_COUNT" -gt 0 ]; then \
+		echo "$(GREEN)✓ $$SLIDES_PDF_COUNT PDF(s) généré(s)$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ Aucune slide trouvée$(NC)"; \
+	fi
+	@echo "  📂 Sortie: $(BUILD_DIR)/Support_PDF/"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
 # Build: Tout compiler
 # ─────────────────────────────────────────────────────────────────────────
 
@@ -306,7 +365,7 @@ build-exercices-pdf: setup venv-create build-docs _npm-deps
 	@echo "  📂 Sortie: $(BUILD_DIR)/exercices/"
 	@echo ""
 
-build: check-deps build-docs build-manifest build-slides build-exercices-pdf
+build: check-deps build-docs build-manifest build-slides build-slides-pdf build-exercices-pdf
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
 	@echo "$(GREEN)✓ Build complet terminé !$(NC)"
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
@@ -315,6 +374,7 @@ build: check-deps build-docs build-manifest build-slides build-exercices-pdf
 	@echo "  📚 Documentation: $(BUILD_DIR)/cours/index.html"
 	@echo "  📋 Manifest:      $(BUILD_DIR)/tardis/index.html"
 	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/index.html"
+	@echo "  📄 Slides PDF:    $(BUILD_DIR)/Support_PDF/"
 	@echo "  📄 Exercices PDF: $(BUILD_DIR)/exercices/"
 	@echo ""
 	@echo "$(YELLOW)Prochaine étape:$(NC)"
@@ -389,4 +449,4 @@ publish:
 	echo "$(GREEN)✓ Déploiement terminé$(NC)"
 	@echo ""
 
-.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-exercices-pdf serve publish clean help
+.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-slides-pdf build-exercices-pdf serve publish clean help
