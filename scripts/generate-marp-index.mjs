@@ -18,6 +18,18 @@ function extractFM(md) {
   return m ? m[1] : null;
 }
 
+async function loadModuleMeta(srcDir) {
+  const base = srcDir ?? OUT_DIR;
+  const candidate = path.resolve(base, '..', 'Support', 'legal', 'index.md');
+  try {
+    const fmStr = extractFM(stripBOM(await fs.readFile(candidate, 'utf8')));
+    if (!fmStr) return null;
+    const data = YAML.parse(fmStr) ?? {};
+    if (data.type !== 'legal') return null;
+    return { module: data.module ?? null, title: data.title ?? null };
+  } catch { return null; }
+}
+
 async function buildMetaMap(srcDir) {
   const meta = new Map();
   if (!srcDir) return meta;
@@ -150,11 +162,21 @@ function renderMainContent(allSlides) {
 
 (async () => {
   try {
-    const metaMap = await buildMetaMap(SRC_DIR);
+    const [metaMap, moduleMeta] = await Promise.all([
+      buildMetaMap(SRC_DIR),
+      loadModuleMeta(SRC_DIR),
+    ]);
     const data = await collectPresentations(OUT_DIR, metaMap);
     const allSlides = flattenSlides(data);
 
     const mainContent = renderMainContent(allSlides);
+
+    const headerTitle = moduleMeta?.module
+      ? `Module ${escapeHtml(moduleMeta.module)} — Présentations`
+      : 'TARDIS — Présentations';
+    const headerSubtitle = moduleMeta?.title
+      ? escapeHtml(moduleMeta.title)
+      : 'Slides générées par Marp, organisées par séquence';
 
     const htmlContent = `<!DOCTYPE html>
 <html lang="fr">
@@ -309,8 +331,8 @@ function renderMainContent(allSlides) {
 <body>
   <header class="site-header">
     <div class="inner">
-      <h1 class="site-title">TARDIS — Présentations</h1>
-      <p class="site-subtitle">Slides générées par Marp, organisées par séquence</p>
+      <h1 class="site-title">${headerTitle}</h1>
+      <p class="site-subtitle">${headerSubtitle}</p>
     </div>
   </header>
 
