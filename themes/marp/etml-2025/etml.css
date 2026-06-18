@@ -192,6 +192,15 @@ section.title header, section.title footer, section.title::after {
 /* Question */
 section.question{ display: flex; align-items: center; justify-content: center; text-align: center; }
 
+/* Pour les slides qui utilisent des mascots en bg right/left :
+   contain évite le recadrage, bottom ancre le pied du personnage */
+section.question[data-marpit-advanced-background="background"] figure,
+section.activity[data-marpit-advanced-background="background"] figure,
+section.schema[data-marpit-advanced-background="background"] figure {
+  background-size: contain;
+  background-position: center bottom;
+}
+
 /* Schéma */
 section.schema{ text-align: center; }
 section.schema img{ max-width: 92%; height: auto; }
