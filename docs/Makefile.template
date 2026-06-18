@@ -308,8 +308,9 @@ build-slides-pdf: setup
 			echo "    ➜ $${base}.pdf"; \
 			$(MARP) "$$f" --pdf --allow-local-files \
 				--theme-set "$$THEME_SET_DIR" \
-				--output "$$OUT_PDF/$${base}.pdf" 2>/dev/null; \
-			SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)); \
+				--browser-arg "--no-sandbox" \
+				--output "$$OUT_PDF/$${base}.pdf" 2>&1 | grep -iE "error|fail" >&2 || true; \
+			[ -f "$$OUT_PDF/$${base}.pdf" ] && SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)) || true; \
 		fi; \
 	done; \
 	\
@@ -328,8 +329,9 @@ build-slides-pdf: setup
 					echo "    ➜ $${out_name}.pdf"; \
 					$(MARP) "$$f" --pdf --allow-local-files \
 						--theme-set "$$THEME_SET_DIR" \
-						--output "$$OUT_PDF/$${out_name}.pdf" 2>/dev/null; \
-					SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)); \
+						--browser-arg "--no-sandbox" \
+						--output "$$OUT_PDF/$${out_name}.pdf" 2>&1 | grep -iE "error|fail" >&2 || true; \
+					[ -f "$$OUT_PDF/$${out_name}.pdf" ] && SLIDES_PDF_COUNT=$$((SLIDES_PDF_COUNT + 1)) || true; \
 				fi; \
 			done; \
 		fi; \
@@ -338,7 +340,7 @@ build-slides-pdf: setup
 	if [ "$$SLIDES_PDF_COUNT" -gt 0 ]; then \
 		echo "$(GREEN)✓ $$SLIDES_PDF_COUNT PDF(s) généré(s)$(NC)"; \
 	else \
-		echo "$(YELLOW)⚠ Aucune slide trouvée$(NC)"; \
+		echo "$(RED)✗ Aucun PDF créé — vérifiez les erreurs ci-dessus$(NC)"; \
 	fi
 	@echo "  📂 Sortie: $(BUILD_DIR)/Support_PDF/"
 	@echo ""
