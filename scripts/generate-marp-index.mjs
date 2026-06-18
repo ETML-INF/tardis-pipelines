@@ -18,17 +18,28 @@ function extractFM(md) {
   return m ? m[1] : null;
 }
 
+function extractFMField(fmStr, key) {
+  const m = fmStr.match(new RegExp(`^${key}:\\s*["']?([^"'\\n]+?)["']?\\s*$`, 'm'));
+  return m ? m[1].trim() : null;
+}
+
 async function loadModuleMeta(srcDir) {
   const base = srcDir ?? OUT_DIR;
   const candidate = path.resolve(base, '..', 'Support', 'legal', 'index.md');
-  console.log(`ℹ️  Recherche legal/index.md : ${candidate}`);
   try {
     const fmStr = extractFM(stripBOM(await fs.readFile(candidate, 'utf8')));
-    if (!fmStr) { console.warn('⚠️  legal/index.md trouvé mais sans front matter'); return null; }
-    const data = YAML.parse(fmStr) ?? {};
-    if (data.type !== 'legal') { console.warn(`⚠️  legal/index.md : type="${data.type}" (attendu "legal")`); return null; }
-    return { module: data.module ?? null, title: data.title ?? null };
-  } catch (e) { console.warn(`⚠️  legal/index.md introuvable : ${e.message}`); return null; }
+    if (!fmStr) return null;
+
+    let data = null;
+    try { data = YAML.parse(fmStr) ?? {}; } catch { /* fall through to regex */ }
+
+    const type   = data?.type   ?? extractFMField(fmStr, 'type');
+    const module = data?.module ?? extractFMField(fmStr, 'module');
+    const title  = data?.title  ?? extractFMField(fmStr, 'title');
+
+    if (type !== 'legal') return null;
+    return { module: module ?? null, title: title ?? null };
+  } catch { return null; }
 }
 
 async function buildMetaMap(srcDir) {
