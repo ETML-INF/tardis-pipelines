@@ -94,7 +94,8 @@ section footer {
 }
 
 /* Numéro de page centré dans le footer */
-section::after {
+section[data-marpit-pagination]::after {
+  content: attr(data-marpit-pagination);
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: var(--footer-h);
@@ -107,6 +108,7 @@ section::after {
   font-weight: 600;
   opacity: 0.7;
   pointer-events: none;
+  z-index: 1;
 }
 
 /* Titres */
