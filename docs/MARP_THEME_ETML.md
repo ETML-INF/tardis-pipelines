@@ -47,6 +47,20 @@ align_ict: ["ICT-117-OO1"]
 # Le protocole TCP/IP
 ```
 
+### Listes fragmentées (apparition item par item)
+
+Remplacer `-` par `*` comme marqueur de liste. Chaque item apparaît au clic suivant lors de la présentation. En PDF/preview statique, tous les items sont visibles.
+
+Le dernier item apparu est automatiquement mis en évidence (bleu primaire + puce orange) via le CSS du thème.
+
+```markdown
+## Objectifs d'apprentissage
+
+* **C1** Premier objectif
+* **C2** Deuxième objectif
+* **C1** Troisième objectif
+```
+
 ---
 
 ## Layout du texte (slides normales)

@@ -25,11 +25,11 @@ align_ict: ["ICT-117-OO1"]
 
 ## Objectifs d'apprentissage
 
-- **C1** Citer les composants d'un réseau local
+* **C1** Citer les composants d'un réseau local
   *(switch, routeur, point d'accès, câblage)*
-- **C2** Distinguer un LAN d'un WAN
-- **C1** Citer les 7 couches du modèle OSI dans l'ordre
-- **C2** Relier un équipement réseau à sa couche OSI
+* **C2** Distinguer un LAN d'un WAN
+* **C1** Citer les 7 couches du modèle OSI dans l'ordre
+* **C2** Relier un équipement réseau à sa couche OSI
 
 ---
 

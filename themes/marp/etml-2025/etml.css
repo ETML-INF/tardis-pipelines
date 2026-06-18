@@ -146,6 +146,15 @@ section li::marker{
   color: var(--brand-secondary);
 }
 
+/* Fragment actif : met en évidence le dernier item apparu (mode présentation uniquement) */
+li[data-bespoke-marp-current-fragment="current"] {
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+li[data-bespoke-marp-current-fragment="current"]::marker {
+  color: var(--brand-accent);
+}
+
 /* Listes : indentation interne pour les puces ou numéros */
 section ul,
 section ol {
