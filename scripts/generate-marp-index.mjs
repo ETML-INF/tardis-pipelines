@@ -21,13 +21,14 @@ function extractFM(md) {
 async function loadModuleMeta(srcDir) {
   const base = srcDir ?? OUT_DIR;
   const candidate = path.resolve(base, '..', 'Support', 'legal', 'index.md');
+  console.log(`ℹ️  Recherche legal/index.md : ${candidate}`);
   try {
     const fmStr = extractFM(stripBOM(await fs.readFile(candidate, 'utf8')));
-    if (!fmStr) return null;
+    if (!fmStr) { console.warn('⚠️  legal/index.md trouvé mais sans front matter'); return null; }
     const data = YAML.parse(fmStr) ?? {};
-    if (data.type !== 'legal') return null;
+    if (data.type !== 'legal') { console.warn(`⚠️  legal/index.md : type="${data.type}" (attendu "legal")`); return null; }
     return { module: data.module ?? null, title: data.title ?? null };
-  } catch { return null; }
+  } catch (e) { console.warn(`⚠️  legal/index.md introuvable : ${e.message}`); return null; }
 }
 
 async function buildMetaMap(srcDir) {

@@ -275,7 +275,7 @@ build-slides: setup
 	done; \
 	\
 	echo "  Génération de index.html..."; \
-	(cd tardis-pipelines && SRC_DIR="../$(PRESENTATIONS_DIR)" OUT_DIR="../$$OUT_HTML" $(NPM) run build-marp-index 2>&1 | grep -E "✅|❌"); \
+	(cd tardis-pipelines && SRC_DIR="../$(PRESENTATIONS_DIR)" OUT_DIR="../$$OUT_HTML" $(NPM) run build-marp-index 2>&1 | grep -E "✅|❌|⚠️|ℹ️"); \
 	if [ "$$PRESENTATIONS_COUNT" -gt 0 ]; then \
 		echo "$(GREEN)✓ $$PRESENTATIONS_COUNT slides compilées$(NC)"; \
 	else \
