@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { chromium } from "playwright";
 import crypto from "crypto";
+import YAML from "yaml";
 
 // ---------------------------------------------------------------------------
 // ENV + CONSTANTES
@@ -21,6 +22,22 @@ const TODAY = new Date().toLocaleDateString("fr-CH");
 const PDF_THEME_SELECTED = process.env.PDF_THEME
   ? path.join(THEMES_DIR, process.env.PDF_THEME)
   : path.join(THEMES_DIR, "etml-2025");
+
+// ---------------------------------------------------------------------------
+// MÉTADONNÉES MODULE (auteur depuis legal/index.md)
+// ---------------------------------------------------------------------------
+async function loadAuthor(srcDir) {
+  try {
+    const legalPath = path.join(srcDir, "legal", "index.md");
+    const raw = await fs.readFile(legalPath, "utf8");
+    const m = raw.replace(/^﻿/, '').match(/^---\s*\n([\s\S]*?)\n(?:---|\.\.\.)/);
+    if (!m) return null;
+    const data = YAML.parse(m[1]) ?? {};
+    return data.author ?? data.authors ?? null;
+  } catch { return null; }
+}
+
+const AUTHOR = await loadAuthor(SRC);
 
 // ---------------------------------------------------------------------------
 // UTILS
@@ -112,16 +129,19 @@ function buildHeaderTemplate(title) {
 
 function buildFooterTemplate() {
   const cssBlock = footerCss ? `<style>${footerCss}</style>` : "";
+  const authorLabel = AUTHOR ? `Auteur : ${brutalClean(String(AUTHOR))}` : "";
   return `
     ${cssBlock}
     <div class="ftr-wrap">
       <div class="ftr-left muted">
-        <span class="hdr-date">${TODAY}</span>
+        ${authorLabel}
       </div>
       <div class="ftr-center muted">
         Page <span class="pageNumber"></span>/<span class="totalPages"></span>
       </div>
-      <div class="ftr-right muted"></div>
+      <div class="ftr-right muted">
+        <span class="hdr-date">${TODAY}</span>
+      </div>
     </div>
   `;
 }
