@@ -69,18 +69,6 @@ async function safeLoadBinaryDataURL(filePath, mime = "image/png") {
   }
 }
 
-// Détection "a des cartes" côté source MD (rapide, robuste)
-async function mdHasCards(mdPath) {
-  try {
-    const s = await fs.readFile(mdPath, "utf8");
-    // tes sources utilisent surtout les fences MyST: ```{card}
-    // on accepte aussi :::{card} au cas où
-    return /```{card\b|:::{card\b|```{cardgrid\b|:::{cardgrid\b/i.test(s);
-  } catch {
-    return false;
-  }
-}
-
 // ---------------------------------------------------------------------------
 // CHARGEMENT DU THEME (CSS + logos)
 // ---------------------------------------------------------------------------
@@ -88,9 +76,6 @@ const headerCss = await safeLoad(path.join(PDF_THEME_SELECTED, "css", "header.cs
 const footerCss = await safeLoad(path.join(PDF_THEME_SELECTED, "css", "footer.css"));
 
 const PRINT_EXO_CSS_PATH = path.join(PDF_THEME_SELECTED, "css", "print-exo.css");
-
-// CSS cartes (ton fichier "print-cards.css" dédié cartes)
-const PRINT_CARDS_CSS_PATH = path.join(PDF_THEME_SELECTED, "css", "print-cards.css");
 
 const LOGO_DATA = await safeLoadBinaryDataURL(
   path.join(PDF_THEME_SELECTED, "images", "etml_logo_complet.png")
@@ -180,82 +165,6 @@ async function pdfExerciseFull(page, htmlAbs, pdfTarget, baseName) {
 }
 
 // ---------------------------------------------------------------------------
-// PDF - PASS 2 : PDF "cartes only" + page blanche après chaque planche
-// ---------------------------------------------------------------------------
-async function pdfCardsOnlyWithBlank(page, htmlAbs, pdfTargetCards) {
-  const fileUrl = "file://" + path.resolve(htmlAbs);
-
-  await page.goto(fileUrl, { waitUntil: "load" });
-  await page.waitForLoadState("networkidle");
-
-  // Si pas de planches, on skip
-  const hasSheets = await page.evaluate(() => {
-    return document.querySelectorAll(".tardis-cardsheet").length > 0;
-  });
-  if (!hasSheets) return false;
-
-  // Isoler uniquement les planches + intercaler une page blanche après chaque planche
-  await page.evaluate(() => {
-    const sheets = Array.from(document.querySelectorAll(".tardis-cardsheet"));
-    if (!sheets.length) return;
-
-    // purge body
-    document.body.innerHTML = "";
-
-    const wrap = document.createElement("div");
-    wrap.id = "cards-only";
-    document.body.appendChild(wrap);
-
-    for (const s of sheets) {
-      wrap.appendChild(s); // déplacement DOM
-
-      // page blanche après la planche
-      const blank = document.createElement("div");
-      blank.className = "tardis-blank-page";
-      wrap.appendChild(blank);
-    }
-  });
-
-  // Marges CARTES : à régler (imprimante / découpe). Exemple: 10mm.
-  await page.addStyleTag({
-    content: `
-      @page { size: A4; margin: 10mm; }
-      html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-    `,
-  });
-
-  // CSS cartes (ton layout + cards)
-  if (PRINT_CARDS_CSS_PATH) {
-    await page.addStyleTag({ path: PRINT_CARDS_CSS_PATH });
-  }
-
-  // CSS page blanche intercalée
-  await page.addStyleTag({
-    content: `
-      @media print{
-        .tardis-blank-page{
-          height: 0;
-          page-break-before: always;
-          break-before: page;
-        }
-      }
-    `,
-  });
-
-  // Important: pas de header/footer sinon la "page blanche" ne sera plus blanche
-  await page.pdf({
-    path: pdfTargetCards,
-    printBackground: true,
-    preferCSSPageSize: true,
-    format: "A4",
-    margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
-    displayHeaderFooter: false,
-  });
-
-  return true;
-}
-
-// ---------------------------------------------------------------------------
 // MAIN
 // ---------------------------------------------------------------------------
 async function main() {
@@ -284,11 +193,9 @@ async function main() {
 
   const bucketExo = path.join(PDF_OUT, "exercices");
   const bucketSol = path.join(PDF_OUT, "solutions");
-  const bucketCards = path.join(PDF_OUT, "exercices");
 
   await fs.mkdir(bucketExo, { recursive: true });
   await fs.mkdir(bucketSol, { recursive: true });
-  await fs.mkdir(bucketCards, { recursive: true });
 
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ locale: "fr-CH" });
@@ -296,8 +203,6 @@ async function main() {
 
   let converted = 0;
   let skipped = 0;
-  let cardsMade = 0;
-  let cardsSkipped = 0;
 
   for (const mdPath of mdFiles) {
     const rel = path.relative(SRC, mdPath);
@@ -317,60 +222,24 @@ async function main() {
 
     const baseName = path.basename(mdPath, ".md");
 
-    // --- PASS 1 : PDF complet exo/solution
-    {
-      let pdfName = `${baseName}.pdf`;
-      let pdfTarget = path.join(bucket, pdfName);
+    let pdfName = `${baseName}.pdf`;
+    let pdfTarget = path.join(bucket, pdfName);
 
-      try {
-        await fs.access(pdfTarget);
-        const h = shortHash(rel);
-        pdfName = `${baseName}-${h}.pdf`;
-        pdfTarget = path.join(bucket, pdfName);
-      } catch {}
+    try {
+      await fs.access(pdfTarget);
+      const h = shortHash(rel);
+      pdfName = `${baseName}-${h}.pdf`;
+      pdfTarget = path.join(bucket, pdfName);
+    } catch {}
 
-      await pdfExerciseFull(page, htmlAbs, pdfTarget, baseName);
-      console.log("✓ PDF", path.relative(PDF_OUT, pdfTarget));
-      converted++;
-    }
-
-    // --- PASS 2 : PDF cartes-only si le MD contient des cards
-    // (tu peux aussi décider de faire le check côté HTML, mais ce check MD évite des navigateurs inutiles)
-    const hasCards = await mdHasCards(mdPath);
-    if (!hasCards) {
-      cardsSkipped++;
-      continue;
-    }
-
-    {
-      let pdfCardsName = `${baseName}--cards.pdf`;
-      let pdfCardsTarget = path.join(bucketCards, pdfCardsName);
-
-      try {
-        await fs.access(pdfCardsTarget);
-        const h = shortHash(rel);
-        pdfCardsName = `${baseName}--cards-${h}.pdf`;
-        pdfCardsTarget = path.join(bucketCards, pdfCardsName);
-      } catch {}
-
-      const ok = await pdfCardsOnlyWithBlank(page, htmlAbs, pdfCardsTarget);
-      if (ok) {
-        console.log("✓ PDF cards", path.relative(PDF_OUT, pdfCardsTarget));
-        cardsMade++;
-      } else {
-        // si le MD disait "cards" mais que le HTML n’a pas de cardsheet (erreur build / directive)
-        console.warn("⚠️ Cardsheet introuvable (cards skippé):", htmlAbs);
-        cardsSkipped++;
-      }
-    }
+    await pdfExerciseFull(page, htmlAbs, pdfTarget, baseName);
+    console.log("✓ PDF", path.relative(PDF_OUT, pdfTarget));
+    converted++;
   }
 
   await browser.close();
 
-  console.log(
-    `Terminé: ${converted} PDF exo/sol créés, ${skipped} ignorés. ` +
-      `Cards: ${cardsMade} créés, ${cardsSkipped} ignorés.`
-  );
+  console.log(`Terminé: ${converted} PDF exo/sol créés, ${skipped} ignorés.`);
 }
 
 await main();
