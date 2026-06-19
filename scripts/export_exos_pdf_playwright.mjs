@@ -7,6 +7,9 @@ import crypto from "crypto";
 // ---------------------------------------------------------------------------
 // ENV + CONSTANTES
 // ---------------------------------------------------------------------------
+const SCRIPT_DIR = path.dirname(new URL(import.meta.url).pathname);
+const THEMES_DIR = path.resolve(SCRIPT_DIR, "..", "themes", "pdf");
+
 const SRC = process.env.SPHINX_SRC_DIR || "b-UnitesEnseignement/Support";
 const HTML_OUT = process.env.HTML_OUT_DIR || path.join(SRC, "_build/html");
 const PDF_OUT = process.env.PDF_OUT_DIR || path.join(SRC, "_build/exo-pdf");
@@ -14,10 +17,10 @@ const PDF_OUT = process.env.PDF_OUT_DIR || path.join(SRC, "_build/exo-pdf");
 const ICT_MODULE = process.env.ICT_MODULE || "Module ICT";
 const TODAY = new Date().toLocaleDateString("fr-CH");
 
-// Theme PDF (header/footer/css)
+// Theme PDF (header/footer/css) — chemin absolu basé sur l'emplacement du script
 const PDF_THEME_SELECTED = process.env.PDF_THEME
-  ? path.join("tardis-pipelines", "themes", "pdf", process.env.PDF_THEME)
-  : path.join("tardis-pipelines", "themes", "pdf", "etml-2025");
+  ? path.join(THEMES_DIR, process.env.PDF_THEME)
+  : path.join(THEMES_DIR, "etml-2025");
 
 // ---------------------------------------------------------------------------
 // UTILS
