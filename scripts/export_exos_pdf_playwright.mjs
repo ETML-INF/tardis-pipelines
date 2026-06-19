@@ -256,6 +256,12 @@ async function pdfCardsOnlyWithBlank(page, htmlAbs, pdfTargetCards) {
 // MAIN
 // ---------------------------------------------------------------------------
 async function main() {
+  const srcStat = await fs.stat(SRC).catch(() => null);
+  if (!srcStat?.isDirectory()) {
+    console.log(`Dossier source introuvable: ${SRC} — aucun exercice à exporter.`);
+    return;
+  }
+
   // collecte des .md sous /exercices (hors index.md)
   const mdFiles = [];
   for await (const p of walk(SRC)) {
