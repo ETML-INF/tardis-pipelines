@@ -1,4 +1,4 @@
-.PHONY: help install-deps check-deps setup build build-docs build-manifest build-slides build-slides-pdf serve clean
+.PHONY: help install-deps check-deps setup build build-docs build-manifest build-slides build-slides-pdf build-cards-pdf serve clean
 
 # Configuration
 SHELL := /bin/bash
@@ -40,6 +40,7 @@ help:
 	@echo "  $(YELLOW)make build-manifest$(NC)  - Génère le manifest TARDIS"
 	@echo "  $(YELLOW)make build-slides$(NC)    - Compile les slides Marp (HTML)"
 	@echo "  $(YELLOW)make build-slides-pdf$(NC) - Exporte les slides Marp en PDF (→ Support_PDF/)"
+	@echo "  $(YELLOW)make build-cards-pdf$(NC)  - Génère les PDFs de cartes (→ Support_PDF/cards/)"
 	@echo "  $(YELLOW)make serve$(NC)            - Lance un serveur local (port 8000)"
 	@echo "  $(YELLOW)make clean$(NC)            - Nettoie les fichiers générés"
 	@echo ""
@@ -362,6 +363,21 @@ build-slides-pdf: setup _npm-deps
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────────────────
+# Build: Cartes (PDF par fichier .md)
+# ─────────────────────────────────────────────────────────────────────────
+
+build-cards-pdf: setup _npm-deps
+	@echo "$(BLUE)🃏 Génération des PDFs de cartes...$(NC)"
+	@mkdir -p "$(BUILD_DIR)/exercices/cards"
+	@cd tardis-pipelines && \
+		CARDS_SRC_DIR="../b-UnitesEnseignement" \
+		CARDS_OUT_DIR="../$(BUILD_DIR)/exercices/cards" \
+		$(NPM) run build-cards-pdf 2>&1 || \
+		echo "$(YELLOW)⚠ Aucune carte générée$(NC)"
+	@echo "  📂 Sortie: $(BUILD_DIR)/exercices/cards/"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
 # Build: Tout compiler
 # ─────────────────────────────────────────────────────────────────────────
 
@@ -383,7 +399,7 @@ build-exercices-pdf: setup venv-create build-docs _npm-deps
 	@echo "  📂 Sortie: $(BUILD_DIR)/exercices/"
 	@echo ""
 
-build: check-deps build-docs build-manifest build-slides build-slides-pdf build-exercices-pdf
+build: check-deps build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
 	@echo "$(GREEN)✓ Build complet terminé !$(NC)"
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
@@ -393,6 +409,7 @@ build: check-deps build-docs build-manifest build-slides build-slides-pdf build-
 	@echo "  📋 Manifest:      $(BUILD_DIR)/tardis/index.html"
 	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/index.html"
 	@echo "  📄 Slides PDF:    $(BUILD_DIR)/Support_PDF/"
+	@echo "  🃏 Cartes PDF:    $(BUILD_DIR)/exercices/cards/"
 	@echo "  📄 Exercices PDF: $(BUILD_DIR)/exercices/"
 	@echo ""
 	@echo "$(YELLOW)Prochaine étape:$(NC)"
@@ -467,4 +484,4 @@ publish:
 	echo "$(GREEN)✓ Déploiement terminé$(NC)"
 	@echo ""
 
-.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-slides-pdf build-exercices-pdf serve publish clean help
+.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf serve publish clean help
