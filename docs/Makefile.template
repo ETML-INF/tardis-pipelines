@@ -372,7 +372,7 @@ build-exercices-pdf: setup venv-create build-docs _npm-deps
 	@echo "  ⏳ Installation de Chromium..."
 	@cd tardis-pipelines && $(NPM) run playwright:install 2>&1 | grep -E "downloaded|Chromium" || true
 	@echo "  ⏳ Génération des PDFs (cela peut prendre un moment)..."
-	@cd tardis-pipelines && SPHINX_SRC_DIR="../$(DOCS_DIR)" $(NPM) run build-exos-pdf 2>&1 || \
+	@cd tardis-pipelines && SPHINX_SRC_DIR="../$(DOCS_DIR)" HTML_OUT_DIR="../$(BUILD_DIR)/cours" $(NPM) run build-exos-pdf 2>&1 || \
 		echo "$(YELLOW)⚠ Aucun PDF généré (normal si pas d'exercices)$(NC)"
 	@if [ -d "$(DOCS_DIR)/_build/exo-pdf" ]; then \
 		cp -r "$(DOCS_DIR)/_build/exo-pdf"/* "$(BUILD_DIR)/exercices/" 2>/dev/null || true; \
