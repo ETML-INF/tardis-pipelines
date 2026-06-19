@@ -1,4 +1,4 @@
-.PHONY: help install-deps check-deps setup build build-docs build-manifest build-slides build-slides-pdf build-cards-pdf serve clean
+.PHONY: help install-deps check-deps setup build build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf build-exo-index serve clean
 
 # Configuration
 SHELL := /bin/bash
@@ -40,7 +40,8 @@ help:
 	@echo "  $(YELLOW)make build-manifest$(NC)  - Génère le manifest TARDIS"
 	@echo "  $(YELLOW)make build-slides$(NC)    - Compile les slides Marp (HTML)"
 	@echo "  $(YELLOW)make build-slides-pdf$(NC) - Exporte les slides Marp en PDF (→ Support_PDF/)"
-	@echo "  $(YELLOW)make build-cards-pdf$(NC)  - Génère les PDFs de cartes (→ Support_PDF/cards/)"
+	@echo "  $(YELLOW)make build-cards-pdf$(NC)  - Génère les PDFs de cartes (→ exercices/cards/)"
+	@echo "  $(YELLOW)make build-exo-index$(NC)  - Génère la landing page des exercices PDF"
 	@echo "  $(YELLOW)make serve$(NC)            - Lance un serveur local (port 8000)"
 	@echo "  $(YELLOW)make clean$(NC)            - Nettoie les fichiers générés"
 	@echo ""
@@ -399,7 +400,18 @@ build-exercices-pdf: setup venv-create build-docs _npm-deps
 	@echo "  📂 Sortie: $(BUILD_DIR)/exercices/"
 	@echo ""
 
-build: check-deps build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf
+build-exo-index: setup _npm-deps
+	@echo "$(BLUE)📋 Génération de la landing page exercices...$(NC)"
+	@mkdir -p "$(BUILD_DIR)/exercices"
+	@cd tardis-pipelines && \
+		EXO_ROOT="../$(BUILD_DIR)/exercices" \
+		SRC_DIR="../$(PRESENTATIONS_DIR)" \
+		$(NPM) run build-exo-index 2>&1 || \
+		echo "$(YELLOW)⚠ Index exercices non généré$(NC)"
+	@echo "  📂 Sortie: $(BUILD_DIR)/exercices/index.html"
+	@echo ""
+
+build: check-deps build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf build-exo-index
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
 	@echo "$(GREEN)✓ Build complet terminé !$(NC)"
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
@@ -409,8 +421,7 @@ build: check-deps build-docs build-manifest build-slides build-slides-pdf build-
 	@echo "  📋 Manifest:      $(BUILD_DIR)/tardis/index.html"
 	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/index.html"
 	@echo "  📄 Slides PDF:    $(BUILD_DIR)/Support_PDF/"
-	@echo "  🃏 Cartes PDF:    $(BUILD_DIR)/exercices/cards/"
-	@echo "  📄 Exercices PDF: $(BUILD_DIR)/exercices/"
+	@echo "  📋 Exercices PDF: $(BUILD_DIR)/exercices/index.html"
 	@echo ""
 	@echo "$(YELLOW)Prochaine étape:$(NC)"
 	@echo "  $(GREEN)make serve$(NC)  pour lancer un serveur local"
@@ -484,4 +495,4 @@ publish:
 	echo "$(GREEN)✓ Déploiement terminé$(NC)"
 	@echo ""
 
-.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf serve publish clean help
+.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf build-exo-index serve publish clean help

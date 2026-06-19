@@ -9,6 +9,7 @@
     "build-exos-pdf": "node scripts/export_exos_pdf_playwright.mjs",
     "build-marp-index": "node scripts/generate-marp-index.mjs",
     "build-cards-pdf": "node scripts/build-cards-pdf.mjs",
+    "build-exo-index": "node scripts/build_exo_index.mjs",
     "playwright:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
