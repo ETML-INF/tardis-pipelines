@@ -38,6 +38,8 @@ myst_substitutions = {
     "today": datetime.now().strftime("%d.%m.%Y")
 }
 
+language = 'fr'
+
 templates_path = ["_templates"]
 exclude_patterns = []
 

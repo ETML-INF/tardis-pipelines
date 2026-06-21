@@ -37,6 +37,7 @@ help:
 	@echo "  $(YELLOW)make setup$(NC)            - Clone/update tardis-pipelines"
 	@echo "  $(YELLOW)make build$(NC)            - Compile tout (docs + manifest + slides)"
 	@echo "  $(YELLOW)make build-docs$(NC)      - Compile la documentation Sphinx"
+	@echo "  $(YELLOW)make build-docs-pdf$(NC)  - Génère un PDF de toute la documentation (→ cours-pdf/)"
 	@echo "  $(YELLOW)make build-manifest$(NC)  - Génère le manifest TARDIS"
 	@echo "  $(YELLOW)make build-slides$(NC)    - Compile les slides Marp (HTML)"
 	@echo "  $(YELLOW)make build-slides-pdf$(NC) - Exporte les slides Marp en PDF (→ Support_PDF/)"
@@ -67,6 +68,11 @@ check-deps:
 		echo "$(GREEN)✓ PHP$(NC)"; \
 	else \
 		echo "$(YELLOW)⚠ PHP manquant (optionnel)$(NC)"; \
+	fi
+	@if command -v latexmk >/dev/null 2>&1; then \
+		echo "$(GREEN)✓ latexmk$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ latexmk manquant (optionnel, pour build-docs-pdf)$(NC)"; \
 	fi
 	@echo ""
 
@@ -109,6 +115,19 @@ _system-deps:
 		echo "$(GREEN)✓ PHP disponible$(NC)"; \
 	else \
 		echo "$(YELLOW)⚠ PHP non disponible (optionnel)$(NC)"; \
+	fi
+	@if ! command -v latexmk >/dev/null 2>&1; then \
+		echo "  Installation de texlive..."; \
+		if command -v apt >/dev/null 2>&1; then \
+			sudo apt install -y texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-lang-french latexmk || echo "$(YELLOW)⚠ Erreur installation texlive (optionnel)$(NC)"; \
+		elif command -v brew >/dev/null 2>&1; then \
+			brew install --cask mactex-no-gui || echo "$(YELLOW)⚠ Erreur installation texlive (optionnel)$(NC)"; \
+		fi; \
+	fi
+	@if command -v latexmk >/dev/null 2>&1; then \
+		echo "$(GREEN)✓ texlive (latexmk) disponible$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ texlive non disponible (optionnel, pour build-docs-pdf)$(NC)"; \
 	fi
 	@echo ""
 
@@ -196,6 +215,32 @@ build-docs: setup venv-create
 		echo "$(YELLOW)⚠ Documentation non trouvée$(NC)"; \
 	fi
 	@echo "  📂 Sortie: $(BUILD_DIR)/cours/"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
+# Build: Documentation Sphinx (PDF)
+# ─────────────────────────────────────────────────────────────────────────
+
+build-docs-pdf: setup venv-create
+	@echo "$(BLUE)📄 Génération du PDF de la documentation Sphinx...$(NC)"
+	@if ! command -v latexmk >/dev/null 2>&1; then \
+		echo "$(RED)✗ latexmk manquant — lancez: make install-deps$(NC)"; exit 1; \
+	fi
+	@echo "  Module ICT: $(ICT_MODULE)"
+	@mkdir -p "$(BUILD_DIR)/cours-pdf"
+	ICT_MODULE=$(ICT_MODULE) $(PYTHON) -m sphinx \
+		-c tardis-pipelines \
+		-b latexpdf \
+		"$(DOCS_DIR)" \
+		"$(BUILD_DIR)/cours-pdf" \
+		2>&1 | grep -v "WARNING.*toctree" || true
+	@PDF_FILE=$$(ls "$(BUILD_DIR)/cours-pdf/"*.pdf 2>/dev/null | head -1); \
+	if [ -n "$$PDF_FILE" ]; then \
+		echo "$(GREEN)✓ PDF généré: $$PDF_FILE$(NC)"; \
+	else \
+		echo "$(RED)✗ PDF non généré — vérifiez les erreurs ci-dessus$(NC)"; exit 1; \
+	fi
+	@echo "  📂 Sortie: $(BUILD_DIR)/cours-pdf/"
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -494,4 +539,4 @@ publish:
 	echo "$(GREEN)✓ Déploiement terminé$(NC)"
 	@echo ""
 
-.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf build-exo-index serve publish clean help
+.PHONY: check-deps install-deps setup build build-docs build-docs-pdf build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf build-exo-index serve publish clean help
