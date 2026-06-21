@@ -76,8 +76,8 @@ async function collectPresentations(dir, metaMap, baseUrl = './', relBase = '') 
 
   const items = (await fs.readdir(dir)).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
 
-  const hasPreview = await fs.stat(path.join(dir, 'preview.png')).catch(() => null) !== null;
-  const previewUrl = hasPreview ? baseUrl + 'preview.png' : null;
+  const imgDir = path.join(dir, 'img');
+  const hasFallbackPreview = await fs.stat(path.join(imgDir, 'preview.png')).catch(() => null) !== null;
 
   for (const item of items) {
     const fullPath = path.join(dir, item);
@@ -93,6 +93,14 @@ async function collectPresentations(dir, metaMap, baseUrl = './', relBase = '') 
     } else if (item.endsWith('.html') && item !== 'index.php') {
       // Skip root-level index.html — that's our generated file
       if (relBase === '' && item === 'index.html') continue;
+
+      const baseName = item.replace(/\.html$/, '');
+      let previewUrl = null;
+      if (await fs.stat(path.join(imgDir, `preview_${baseName}.png`)).catch(() => null)) {
+        previewUrl = baseUrl + 'img/' + encodeURIComponent(`preview_${baseName}.png`);
+      } else if (hasFallbackPreview) {
+        previewUrl = baseUrl + 'img/preview.png';
+      }
 
       const relHtml = relBase ? `${relBase}/${item}` : item;
       const meta = metaMap.get(relHtml) ?? {};
