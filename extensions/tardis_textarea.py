@@ -125,9 +125,11 @@ def depart_export_html(self, node):  # SkipNode -> rien
 # ---------------------------------------------------------------------------
 
 def visit_answer_latex(self, node: answer_node):
-    # Mappe vers les macros LaTeX définies dans ton .sty :
     lines = int(node.get("lines", 6) or 6)
-    self.body.append(rf"\AnswerSpace[{lines}]" + "\n")
+    self.body.append(r'\par\vspace{0.5ex}' + '\n')
+    for _ in range(lines):
+        self.body.append(r'\noindent\dotfill\par\vspace{0.5\baselineskip}' + '\n')
+    self.body.append('\n')
     raise nodes.SkipNode
 
 def depart_answer_latex(self, node):  # SkipNode -> rien
