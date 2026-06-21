@@ -245,6 +245,27 @@ class AutoCardSheetsTransform(Transform):
             first_parent.children[first_index:first_index] = sheets
 
 
+# --- LaTeX visitors (layout ignoré, contenu rendu comme blocs cités) ---------
+
+def visit_cardsheet_latex(self, node):
+    pass
+
+def depart_cardsheet_latex(self, node):
+    pass
+
+def visit_cardgrid_latex(self, node):
+    pass
+
+def depart_cardgrid_latex(self, node):
+    pass
+
+def visit_card_latex(self, node):
+    self.body.append('\n\\begin{quote}\n\\rule{\\linewidth}{0.4pt}\n')
+
+def depart_card_latex(self, node):
+    self.body.append('\\rule{\\linewidth}{0.4pt}\n\\end{quote}\n')
+
+
 # --- HTML visitors ------------------------------------------------------------
 
 def visit_cardsheet_html(self, node: tardis_cardsheet):
@@ -313,9 +334,9 @@ def setup(app):
     # NEW: global default for counter display
     app.add_config_value("tardis_cards_counter", True, "env")
 
-    app.add_node(tardis_cardsheet, html=(visit_cardsheet_html, depart_cardsheet_html))
-    app.add_node(tardis_cardgrid, html=(visit_cardgrid_html, depart_cardgrid_html))
-    app.add_node(tardis_card, html=(visit_card_html, depart_card_html))
+    app.add_node(tardis_cardsheet, html=(visit_cardsheet_html, depart_cardsheet_html), latex=(visit_cardsheet_latex, depart_cardsheet_latex))
+    app.add_node(tardis_cardgrid, html=(visit_cardgrid_html, depart_cardgrid_html), latex=(visit_cardgrid_latex, depart_cardgrid_latex))
+    app.add_node(tardis_card, html=(visit_card_html, depart_card_html), latex=(visit_card_latex, depart_card_latex))
 
     app.add_directive("card", CardDirective)
     app.add_transform(AutoCardSheetsTransform)
