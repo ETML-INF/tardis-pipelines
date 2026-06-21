@@ -230,9 +230,9 @@ build-docs-pdf: setup venv-create
 	@mkdir -p "$(BUILD_DIR)/cours-pdf"
 	ICT_MODULE=$(ICT_MODULE) $(PYTHON) -m sphinx \
 		-M latexpdf \
-		-c tardis-pipelines \
 		"$(DOCS_DIR)" \
 		"$(BUILD_DIR)/cours-pdf" \
+		-c tardis-pipelines \
 		2>&1 | grep -v "WARNING.*toctree" || true
 	@PDF_FILE=$$(ls "$(BUILD_DIR)/cours-pdf/latexpdf/"*.pdf 2>/dev/null | head -1); \
 	if [ -n "$$PDF_FILE" ]; then \
