@@ -63,6 +63,7 @@ const seqKey = seq => {
           title: data.title || null,
           seq: data.seq || null,
           order: Number.isFinite(Number(data.order)) ? Number(data.order) : 9999,
+          duree: data.duree || null,
           method: data.method || null,
           align_ict: Array.isArray(data.align_ict) ? data.align_ict : [],
           goals: Array.isArray(data.goals) ? data.goals : []
