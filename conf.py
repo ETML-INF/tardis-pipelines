@@ -39,6 +39,7 @@ myst_substitutions = {
 }
 
 language = 'fr'
+latex_engine = 'xelatex'
 
 templates_path = ["_templates"]
 exclude_patterns = []

@@ -119,7 +119,7 @@ _system-deps:
 	@if ! command -v latexmk >/dev/null 2>&1; then \
 		echo "  Installation de texlive..."; \
 		if command -v apt >/dev/null 2>&1; then \
-			sudo apt install -y texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-lang-french latexmk || echo "$(YELLOW)⚠ Erreur installation texlive (optionnel)$(NC)"; \
+			sudo apt install -y texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-lang-french texlive-xetex latexmk || echo "$(YELLOW)⚠ Erreur installation texlive (optionnel)$(NC)"; \
 		elif command -v brew >/dev/null 2>&1; then \
 			brew install --cask mactex-no-gui || echo "$(YELLOW)⚠ Erreur installation texlive (optionnel)$(NC)"; \
 		fi; \
