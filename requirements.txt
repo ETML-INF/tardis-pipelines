@@ -1,4 +1,5 @@
 sphinx
 myst-parser
 sphinx-rtd-theme
+sphinx-external-toc
 linkify-it-py

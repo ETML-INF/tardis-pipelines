@@ -8,13 +8,14 @@ project = os.getenv("ICT_MODULE", "Module ICT non défini")
 author = "ETML (Section Informatique)"
 copyright = f"{datetime.now().year}, {author}"
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-SPHINX_THEME  = os.getenv("SPHINX_THEME", "etml-2025")
+SPHINX_THEME  = os.getenv("SPHINX_THEME", "etml-2026-furo")
 
 # -- Extensions Sphinx --------------------------------------------------------
 EXTENSIONS_DIR = os.path.join(BASE_DIR, "extensions")
 sys.path.insert(0, EXTENSIONS_DIR)
 
 extensions = [
+    "sphinx_external_toc",
     "myst_parser",
     "tardis_textarea",
     "tardis_qcm",
@@ -45,10 +46,15 @@ templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- Options HTML --------------------------------------------------------------
+html_title = "ETML"
 html_copy_source = False
 html_show_sourcelink = False
 
-html_theme = "sphinx_rtd_theme"
+html_theme = "furo"
+
+html_theme_options = {
+    "navigation_with_keys": True,
+}
 
 # Determine html_baseurl based on context
 # - Local dev: /cours/
@@ -66,7 +72,7 @@ html_static_path = [
     os.path.join("themes", "sphinx", "js"),
 ]
 html_css_files = [
-    "customLight.css",
+    "etml.css",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/editor/editor.main.css",
     "cards.css",
 ]

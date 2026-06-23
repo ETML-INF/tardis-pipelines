@@ -404,13 +404,6 @@ textarea:focus-visible {
     color: var(--color-text) !important;
 }
 
-/* Masquage des titres profonds */
-.toctree-l3,
-.toctree-l4,
-.toctree-l5,
-.toctree-l6 {
-    display: none;
-}
 
 
 /* ----------------------------------------------------------
@@ -502,6 +495,30 @@ textarea:focus-visible {
 .wy-menu-vertical li.toctree-l2.current > a {
     border-left-color: var(--color-primary);
     background: var(--color-bg-accent);
+}
+
+/* Afficher les entrées l3 dès qu'on est dans un l1 actif :
+   surcharge la règle RTD qui cache le <ul> conteneur */
+.wy-menu-vertical li.toctree-l1.current li.toctree-l2 > ul {
+    display: block;
+}
+
+.wy-menu-vertical li.toctree-l1.current li.toctree-l3 > a {
+    display: block;
+}
+
+.wy-menu-vertical li.toctree-l3 > a {
+    font-size: 0.85rem;
+    padding-left: calc(var(--space-xl) + var(--space-lg));
+    margin-left: var(--space-md);
+    color: var(--color-text-muted, #555);
+}
+
+/* Masquer les niveaux trop profonds (l4+) */
+.wy-menu-vertical li.toctree-l4,
+.wy-menu-vertical li.toctree-l5,
+.wy-menu-vertical li.toctree-l6 {
+    display: none;
 }
 
 /* Focus clavier */

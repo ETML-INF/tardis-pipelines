@@ -1,0 +1,375 @@
+/*
+ * ETML 2026 — thème Furo
+ * Un seul fichier, light + dark via variables Furo
+ */
+
+/* ----------------------------------------------------------
+   0. Polices
+---------------------------------------------------------- */
+
+@font-face {
+    font-family: 'Lexend';
+    src: url('fonts/Lexend-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lexend';
+    src: url('fonts/Lexend-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lexend';
+    src: url('fonts/Lexend-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: ETMLFont;
+    src: url('fonts/ETML-new.ttf');
+}
+
+/* ----------------------------------------------------------
+   1. Variables Furo — mode clair
+---------------------------------------------------------- */
+
+body {
+    /* Marque ETML — palette MARP 2025 */
+    --color-brand-primary: #155f80;   /* bleu MARP sombre, contraste AA sur blanc */
+    --color-brand-content: #1e81b0;   /* bleu MARP vif */
+    --color-brand-visited: #5B21B6;
+
+    /* Fonds */
+    --color-background-primary: #FFFFFF;
+    --color-background-secondary: #F9FAFB;
+    --color-background-hover: #e8f5fb;
+    --color-background-border: #E5E7EB;
+
+    /* Texte */
+    --color-foreground-primary: #1F2937;
+    --color-foreground-secondary: #4B5563;
+    --color-foreground-muted: #6B7280;
+    --color-foreground-border: #D1D5DB;
+
+    /* Sidebar */
+    --color-sidebar-background: #F9FAFB;
+    --color-sidebar-background-border: #E5E7EB;
+    --color-sidebar-brand-text: #155f80;
+    --color-sidebar-caption-text: #6B7280;
+    --color-sidebar-link-text: #1F2937;
+    --color-sidebar-link-text--top-level: #155f80;
+    --color-sidebar-item-background: transparent;
+    --color-sidebar-item-background--current: #d4eaf4;
+    --color-sidebar-item-background--hover: #e8f5fb;
+    --color-sidebar-search-background: #FFFFFF;
+    --color-sidebar-search-background--focus: #FFFFFF;
+    --color-sidebar-search-border: #D1D5DB;
+    --color-sidebar-search-icon: #9CA3AF;
+    --color-sidebar-search-text: #1F2937;
+
+    /* Header */
+    --color-header-background: #1e81b0;
+    --color-header-border: #155f80;
+    --color-header-text: #FFFFFF;
+
+    /* Liens */
+    --color-link: #1e81b0;
+    --color-link--hover: #155f80;
+    --color-link--visited: #5B21B6;
+    --color-link-underline: transparent;
+    --color-link-underline--hover: #1e81b0;
+
+    /* Tables */
+    --color-table-header-background: #1e81b0;
+    --color-table-border: #E5E7EB;
+
+    /* Code inline */
+    --color-inline-code-background: #e8f5fb;
+
+    /* Highlighted / cible */
+    --color-highlight-on-target: #d4eaf4;
+
+    /* TOC */
+    --color-toc-background: transparent;
+    --color-toc-title-text: #6B7280;
+    --color-toc-item-text: #4B5563;
+    --color-toc-item-text--hover: #155f80;
+    --color-toc-item-text--active: #e28743;
+
+    /* Admonition générique — orange MARP */
+    --color-admonition-title: #e28743;
+    --color-admonition-title-background: rgba(226, 135, 67, 0.12);
+
+    /* Tokens utilitaires ETML (non-Furo) */
+    --etml-space-xs: 0.25rem;
+    --etml-space-sm: 0.5rem;
+    --etml-space-md: 1rem;
+    --etml-space-lg: 1.5rem;
+    --etml-space-xl: 2rem;
+    --etml-space-2xl: 3rem;
+    --etml-radius-sm: 4px;
+    --etml-radius-md: 8px;
+    --etml-radius-lg: 12px;
+    --etml-shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+    --etml-shadow-md: 0 4px 6px -1px rgba(0,0,0,.1);
+    --etml-shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1);
+    --etml-color-warning: #e28743;   /* orange MARP */
+    --etml-color-accent: #ffd166;    /* jaune MARP */
+    --etml-color-success: #059669;
+    --etml-color-info: #0891B2;
+
+    /* Polices Furo */
+    --font-stack: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-stack--headings: 'Lexend', system-ui, sans-serif;
+}
+
+/* ----------------------------------------------------------
+   2. Variables Furo — mode sombre
+---------------------------------------------------------- */
+
+body[data-theme="dark"] {
+    --color-brand-primary: #5bbfe8;   /* bleu MARP éclairci pour dark */
+    --color-brand-content: #7dcdf0;
+    --color-brand-visited: #C4B5FD;
+
+    --color-background-primary: #0F172A;
+    --color-background-secondary: #1E293B;
+    --color-background-hover: #0d3a4d;
+    --color-background-border: #334155;
+
+    --color-foreground-primary: #E5E7EB;
+    --color-foreground-secondary: #CBD5E1;
+    --color-foreground-muted: #94A3B8;
+    --color-foreground-border: #475569;
+
+    --color-sidebar-background: #1E293B;
+    --color-sidebar-background-border: #334155;
+    --color-sidebar-brand-text: #7dcdf0;
+    --color-sidebar-caption-text: #94A3B8;
+    --color-sidebar-link-text: #CBD5E1;
+    --color-sidebar-link-text--top-level: #7dcdf0;
+    --color-sidebar-item-background: transparent;
+    --color-sidebar-item-background--current: #0d3a4d;
+    --color-sidebar-item-background--hover: #0d3a4d;
+    --color-sidebar-search-background: #0F172A;
+    --color-sidebar-search-background--focus: #0F172A;
+    --color-sidebar-search-border: #475569;
+    --color-sidebar-search-icon: #94A3B8;
+    --color-sidebar-search-text: #E5E7EB;
+
+    --color-header-background: #0F172A;
+    --color-header-border: #334155;
+    --color-header-text: #E5E7EB;
+
+    --color-link: #7dcdf0;
+    --color-link--hover: #5bbfe8;
+    --color-link--visited: #C4B5FD;
+    --color-link-underline: transparent;
+    --color-link-underline--hover: #5bbfe8;
+
+    --color-table-header-background: #0d3a4d;
+    --color-table-border: #334155;
+    --color-inline-code-background: #0d2a38;
+    --color-highlight-on-target: #0d3a4d;
+
+    --color-toc-title-text: #94A3B8;
+    --color-toc-item-text: #CBD5E1;
+    --color-toc-item-text--hover: #7dcdf0;
+    --color-toc-item-text--active: #e28743;
+
+    /* Admonition générique — orange MARP (dark) */
+    --color-admonition-title: #e28743;
+    --color-admonition-title-background: rgba(226, 135, 67, 0.12);
+
+    --etml-shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+    --etml-shadow-md: 0 4px 6px -1px rgba(0,0,0,.5);
+    --etml-shadow-lg: 0 10px 15px -3px rgba(0,0,0,.6);
+    --etml-color-warning: #e28743;
+    --etml-color-accent: #ffd166;
+    --etml-color-success: #10B981;
+    --etml-color-info: #06B6D4;
+}
+
+/* ----------------------------------------------------------
+   3. Typographie
+---------------------------------------------------------- */
+
+body {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Titres avec gradient bleu ETML */
+article h1,
+article h2,
+article h3,
+article h4 {
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+    background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-content) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+article h1 { font-size: 2.2rem; }
+article h2 { font-size: 1.8rem; }
+article h3 { font-size: 1.4rem; font-weight: 600; }
+article h4 { font-size: 1.1rem; font-weight: 600; }
+
+article h1:first-child { margin-top: var(--etml-space-md); }
+
+/* ----------------------------------------------------------
+   4. Logo ETML (police custom)
+---------------------------------------------------------- */
+
+.sidebar-brand-text {
+    font-family: ETMLFont;
+    letter-spacing: 1px;
+    font-size: 1.4rem;
+}
+
+/* ----------------------------------------------------------
+   5. Tables
+---------------------------------------------------------- */
+
+article table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--etml-radius-md);
+    overflow: hidden;
+    box-shadow: var(--etml-shadow-sm);
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+article table th {
+    background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-content) 100%);
+    color: #ffffff;
+    font-weight: 700;
+    text-align: left;
+    padding: var(--etml-space-md);
+    border-bottom: none;
+}
+
+body[data-theme="dark"] article table th {
+    background: linear-gradient(135deg, #0d3a4d 0%, #124d66 100%);
+}
+
+article table td {
+    padding: var(--etml-space-md);
+    border-bottom: 1px solid var(--color-table-border);
+    vertical-align: top;
+}
+
+article table tr:nth-child(even) {
+    background: var(--color-background-secondary);
+}
+
+@media (hover: hover) {
+    article table tr:hover {
+        background: var(--color-background-hover);
+    }
+}
+
+/* ----------------------------------------------------------
+   6. Images
+---------------------------------------------------------- */
+
+article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--etml-radius-md);
+    box-shadow: var(--etml-shadow-md);
+    margin: var(--etml-space-lg) 0;
+}
+
+/* ----------------------------------------------------------
+   7. Zones de réponse (tardis_textarea)
+---------------------------------------------------------- */
+
+.answer-block {
+    margin: var(--etml-space-lg) 0 var(--etml-space-2xl);
+}
+
+.answer-area {
+    width: 100%;
+    min-height: 9rem;
+    resize: vertical;
+    padding: var(--etml-space-md);
+    border: 2px solid var(--etml-color-warning);
+    border-radius: var(--etml-radius-lg);
+    font-family: var(--font-stack);
+    background: rgba(255, 209, 102, 0.18);   /* jaune MARP #ffd166 à 18% */
+    color: #5c3a00;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: var(--etml-shadow-sm);
+}
+
+body[data-theme="dark"] .answer-area {
+    background: rgba(255, 209, 102, 0.08);
+    color: #ffd166;
+    border-color: #e28743;
+}
+
+.answer-area:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(226, 135, 67, 0.25), var(--etml-shadow-md);
+}
+
+/* Bouton export */
+.export-btn {
+    display: inline-block;
+    padding: var(--etml-space-sm) var(--etml-space-lg);
+    margin: var(--etml-space-md) 0;
+    border: none;
+    border-radius: var(--etml-radius-md);
+    background: linear-gradient(135deg, var(--etml-color-success) 0%, #10B981 100%);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-family: var(--font-stack);
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: var(--etml-shadow-md);
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--etml-shadow-lg);
+}
+
+.export-btn:active {
+    transform: translateY(0);
+}
+
+/* Monaco : reste en monospace */
+.answer-block .monaco-editor,
+.answer-block .monaco-editor .view-lines {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* ----------------------------------------------------------
+   8. Impression
+---------------------------------------------------------- */
+
+@media print {
+    #export-answers { display: none; }
+
+    .answer-area {
+        border-color: #999;
+        background: #fff;
+        min-height: 6rem;
+    }
+}
