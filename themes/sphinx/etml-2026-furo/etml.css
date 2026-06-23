@@ -225,16 +225,42 @@ article h2 { font-size: 1.8rem; }
 article h3 { font-size: 1.4rem; font-weight: 600; }
 article h4 { font-size: 1.1rem; font-weight: 600; }
 
+/* Rubric — identique à h2, sans créer de section dans la TdM */
+article p.rubric {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+    background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-content) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
 article h1:first-child { margin-top: var(--etml-space-md); }
 
 /* ----------------------------------------------------------
-   4. Logo ETML (police custom)
+   4. Logo ETML (police custom) + label "Accueil"
 ---------------------------------------------------------- */
 
 .sidebar-brand-text {
     font-family: ETMLFont;
     letter-spacing: 1px;
     font-size: 1.4rem;
+}
+
+.sidebar-brand-text::after {
+    content: "← Accueil du module";
+    display: block;
+    font-family: var(--font-stack);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--color-sidebar-caption-text);
+    -webkit-text-fill-color: var(--color-sidebar-caption-text);
+    margin-top: 0.1rem;
 }
 
 /* ----------------------------------------------------------
