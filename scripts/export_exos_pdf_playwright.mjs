@@ -99,7 +99,7 @@ const LOGO_DATA = await safeLoadBinaryDataURL(
 );
 
 const SECTION_LOGO_DATA = await safeLoadBinaryDataURL(
-  path.join(PDF_THEME_SELECTED, "images", "section_info_logo.png")
+  path.join(PDF_THEME_SELECTED, "images", "logo.png")
 );
 
 // ---------------------------------------------------------------------------

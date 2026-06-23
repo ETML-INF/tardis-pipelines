@@ -5,7 +5,7 @@ from datetime import datetime
 
 # -- Informations générales ---------------------------------------------------
 project = os.getenv("ICT_MODULE", "Module ICT non défini")
-author = "ETML (Section Informatique)"
+author = os.getenv("AUTHOR", "ETML (Section Informatique)")
 copyright = f"{datetime.now().year}, {author}"
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 SPHINX_THEME  = os.getenv("SPHINX_THEME", "etml-2026-furo")
@@ -41,6 +41,41 @@ myst_substitutions = {
 
 language = 'fr'
 latex_engine = 'xelatex'
+
+def _latex_escape(s):
+    """Échappe les caractères spéciaux LaTeX dans une chaîne."""
+    for ch, rep in [('\\', r'\textbackslash{}'), ('&', r'\&'), ('%', r'\%'),
+                    ('$', r'\$'), ('#', r'\#'), ('^', r'\textasciicircum{}'),
+                    ('_', r'\_'), ('{', r'\{'), ('}', r'\}')]:
+        s = s.replace(ch, rep)
+    return s
+
+_pub_date    = datetime.now().strftime("%d.%m.%Y")
+_author_tex  = _latex_escape(author)
+_logo_file   = "etml_logo_complet.png"
+
+latex_additional_files = [
+    os.path.join(BASE_DIR, "themes", "pdf", "etml-2025", "images", _logo_file),
+]
+
+latex_elements = {
+    'extrapackages': r'\usepackage{lastpage}',
+    'preamble': (
+        r'\setlength{\headheight}{24pt}' '\n'
+        r'\addtolength{\topmargin}{-12pt}' '\n'
+        r'\makeatletter' '\n'
+        r'\AtBeginDocument{%' '\n'
+        r'  \g@addto@macro\ps@normal{%' '\n'
+        r'    \fancyhead[L]{\includegraphics[height=0.7cm]{' + _logo_file + r'}}%' '\n'
+        r'    \fancyhead[R]{\small\leftmark}%' '\n'
+        r'    \fancyfoot[L]{\small Auteur~: ' + _author_tex + r'}%' '\n'
+        r'    \fancyfoot[C]{\small \thepage~/~\pageref*{LastPage}}%' '\n'
+        r'    \fancyfoot[R]{\small Publi\'{e} le~: ' + _pub_date + r'}%' '\n'
+        r'  }%' '\n'
+        r'}' '\n'
+        r'\makeatother'
+    ),
+}
 
 templates_path = ["_templates"]
 exclude_patterns = []
