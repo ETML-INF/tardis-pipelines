@@ -40,7 +40,7 @@
    1. Variables Furo — mode clair
 ---------------------------------------------------------- */
 
-:root {
+body {
     /* Marque ETML — palette MARP 2025 */
     --color-brand-primary: #155f80;   /* bleu MARP sombre, contraste AA sur blanc */
     --color-brand-content: #1e81b0;   /* bleu MARP vif */
