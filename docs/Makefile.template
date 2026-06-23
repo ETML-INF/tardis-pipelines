@@ -8,7 +8,7 @@ VENV_DIR := .venv
 PYTHON := $(VENV_DIR)/bin/python3
 UV := uv
 NODE := node
-NODE_MAJOR := 20
+NODE_MIN := 20
 NPM := npm
 MARP := npx @marp-team/marp-cli
 
@@ -69,10 +69,10 @@ check-deps:
 		printf '%b\n' "$(YELLOW)⚠ uv manquant - sera installé par install-deps$(NC)"; \
 	fi
 	@if ! command -v $(NODE) >/dev/null 2>&1 || ! command -v $(NPM) >/dev/null 2>&1; then \
-		printf '%b\n' "$(RED)✗ Node.js $(NODE_MAJOR)/NPM manquant — lancez: make install-deps$(NC)"; \
+		printf '%b\n' "$(RED)✗ Node.js/NPM manquant — lancez: make install-deps$(NC)"; \
 		exit 1; \
-	elif [ "$$($(NODE) --version | sed 's/^v//' | cut -d. -f1)" != "$(NODE_MAJOR)" ]; then \
-		printf '%b\n' "$(RED)✗ Node.js $(NODE_MAJOR) requis, version active: $$($(NODE) --version)$(NC)"; \
+	elif [ "$$($(NODE) --version | sed 's/^v//' | cut -d. -f1)" -lt "$(NODE_MIN)" ]; then \
+		printf '%b\n' "$(RED)✗ Node.js >= $(NODE_MIN) requis, version active: $$($(NODE) --version)$(NC)"; \
 		printf '%b\n' "  Lancez: $(GREEN)make install-deps$(NC)"; \
 		exit 1; \
 	else \
@@ -120,27 +120,26 @@ _system-deps:
 		printf '%b\n' "$(RED)❌ uv toujours indisponible après installation$(NC)"; exit 1; \
 	fi
 	@printf '%b\n' "$(GREEN)✓ uv disponible$(NC)"
-	@if ! command -v $(NODE) >/dev/null 2>&1 || \
-		[ "$$($(NODE) --version 2>/dev/null | sed 's/^v//' | cut -d. -f1)" != "$(NODE_MAJOR)" ] || \
-		! command -v $(NPM) >/dev/null 2>&1; then \
-		printf '%b\n' "  Installation de Node.js $(NODE_MAJOR) + NPM..."; \
+	@if ! command -v $(NODE) >/dev/null 2>&1 || ! command -v $(NPM) >/dev/null 2>&1 || \
+		[ "$$($(NODE) --version 2>/dev/null | sed 's/^v//' | cut -d. -f1)" -lt "$(NODE_MIN)" ]; then \
+		printf '%b\n' "  Installation de Node.js >= $(NODE_MIN) + NPM..."; \
 		if command -v apt >/dev/null 2>&1; then \
 			if ! command -v curl >/dev/null 2>&1; then \
 				sudo apt update && sudo apt install -y curl; \
 			fi; \
-			curl -fsSL https://deb.nodesource.com/setup_$(NODE_MAJOR).x | sudo -E bash - && \
-				sudo apt install -y nodejs || { printf '%b\n' "$(RED)❌ Erreur installation Node.js $(NODE_MAJOR)$(NC)"; exit 1; }; \
+			curl -fsSL https://deb.nodesource.com/setup_$(NODE_MIN).x | sudo -E bash - && \
+				sudo apt install -y nodejs || { printf '%b\n' "$(RED)❌ Erreur installation Node.js$(NC)"; exit 1; }; \
 		elif command -v brew >/dev/null 2>&1; then \
-			brew install node@$(NODE_MAJOR) || { printf '%b\n' "$(RED)❌ Erreur installation Node.js $(NODE_MAJOR)$(NC)"; exit 1; }; \
+			brew install node || { printf '%b\n' "$(RED)❌ Erreur installation Node.js$(NC)"; exit 1; }; \
 		else \
-			printf '%b\n' "$(RED)❌ Impossible d'installer Node.js $(NODE_MAJOR) automatiquement$(NC)"; exit 1; \
+			printf '%b\n' "$(RED)❌ Impossible d'installer Node.js automatiquement$(NC)"; exit 1; \
 		fi; \
 	fi
 	@if ! command -v $(NODE) >/dev/null 2>&1 || ! command -v $(NPM) >/dev/null 2>&1; then \
-		printf '%b\n' "$(RED)❌ Node.js $(NODE_MAJOR)/NPM toujours indisponibles après installation$(NC)"; exit 1; \
+		printf '%b\n' "$(RED)❌ Node.js/NPM toujours indisponibles après installation$(NC)"; exit 1; \
 	fi
-	@if [ "$$($(NODE) --version | sed 's/^v//' | cut -d. -f1)" != "$(NODE_MAJOR)" ]; then \
-		printf '%b\n' "$(RED)❌ Node.js $(NODE_MAJOR) requis, version active: $$($(NODE) --version)$(NC)"; exit 1; \
+	@if [ "$$($(NODE) --version | sed 's/^v//' | cut -d. -f1)" -lt "$(NODE_MIN)" ]; then \
+		printf '%b\n' "$(RED)❌ Node.js >= $(NODE_MIN) requis, version active: $$($(NODE) --version)$(NC)"; exit 1; \
 	fi
 	@printf '%b\n' "$(GREEN)✓ Node.js $$($(NODE) --version) + NPM $$($(NPM) --version) disponibles$(NC)"
 	@if ! command -v php >/dev/null 2>&1; then \
