@@ -455,13 +455,14 @@ build-exo-index: setup _npm-deps
 	@echo "  📂 Sortie: $(BUILD_DIR)/exercices/index.html"
 	@echo ""
 
-build: check-deps build-docs build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf build-exo-index
+build: check-deps build-docs build-docs-pdf build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf build-exo-index
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
 	@echo "$(GREEN)✓ Build complet terminé !$(NC)"
 	@echo "$(BLUE)==════════════════════════════════════════════════$(NC)"
 	@echo ""
 	@echo "$(YELLOW)Fichiers générés:$(NC)"
 	@echo "  📚 Documentation: $(BUILD_DIR)/cours/index.html"
+	@echo "  📄 Documentation PDF: $(BUILD_DIR)/cours-pdf/latexpdf/"
 	@echo "  📋 Manifest:      $(BUILD_DIR)/tardis/index.html"
 	@echo "  🎬 Présentations: $(BUILD_DIR)/presentations/index.html"
 	@echo "  📄 Slides PDF:    $(BUILD_DIR)/Support_PDF/"
