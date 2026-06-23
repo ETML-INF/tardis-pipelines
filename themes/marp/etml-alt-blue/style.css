@@ -1,0 +1,1174 @@
+@charset "UTF-8";
+/*!
+ * Marp ETML theme.
+ * @theme etml-alt-blue
+ * @author ETML
+ *
+ * @auto-scaling true
+ * @size 4:3 960px 720px
+ * @size 16:9 1280px 720px
+ */
+
+/*
+ * Note: On évite les imports distants (Google Fonts) afin de rendre l'export Marp
+ * fiable hors-ligne / derrière des proxies (sinon Puppeteer peut dépasser le timeout).
+ * Le thème utilise des fallbacks système si Roboto n'est pas installé.
+ */
+
+/* Root Variables for ETML Colors */
+:root {
+  /* Neutres */
+  --etml-white: #ffffff;
+  --etml-gray-dark: #1e293b;   /* plus profond, proche du slate */
+  --etml-gray-medium: #475569; /* gris équilibré */
+  --etml-gray-light: #cbd5e1;  /* gris clair doux */
+  --etml-gray-pale: #f1f5f9;   /* gris très pâle, proche du background */
+
+  /* Palette bleue principale */
+  --etml-blue-dark: #0a3d91;   /* bleu profond, élégant */
+  --etml-blue-main: #1d4ed8;   /* bleu vif, moderne */
+  --etml-blue-bright: #2563eb; /* bleu lumineux */
+  --etml-blue-light: #60a5fa;  /* bleu clair */
+  --etml-blue-sky: #93c5fd;    /* bleu ciel doux */
+  --etml-blue-pale: #e0f2fe;   /* bleu très pâle, fond subtil */
+
+  /* Couleurs d’accent */
+  --etml-cyan: #06b6d4;
+  --etml-teal: #14b8a6;
+  --etml-green: #22c55e;
+  --etml-lime: #84cc16;
+  --etml-orange: #f97316;
+  --etml-amber: #fbbf24;
+  --etml-red: #ef4444;
+  --etml-purple: #8b5cf6;
+  --etml-pink: #ec4899;
+
+  /* Alias fonctionnels */
+  --etml-accent: var(--etml-blue-bright);
+  --etml-success: var(--etml-green);
+  --etml-warning: var(--etml-orange);
+  --etml-danger: var(--etml-red);
+  --etml-info: var(--etml-cyan);
+}
+
+
+/* Syntax Highlighting */
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.7em;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
+  border-left: 5px solid var(--etml-blue-main);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 61, 130, 0.1);
+}
+
+.hljs,
+.hljs-subst,
+.hljs-typing,
+.hljs-variable,
+.hljs-template-variable {
+  color: var(--etml-gray-dark);
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion {
+  color: var(--etml-gray-medium);
+  font-style: italic;
+}
+
+.hljs-meta .hljs-doctag,
+.hljs-built_in,
+.hljs-selector-tag,
+.hljs-section,
+.hljs-link,
+.hljs-class {
+  color: var(--etml-blue-main);
+}
+
+.hljs-title {
+  color: var(--etml-purple);
+  font-weight: 700;
+}
+
+.hljs-params {
+  color: var(--etml-orange);
+}
+
+.hljs-keyword {
+  color: var(--etml-blue-dark);
+  font-weight: 700;
+}
+
+.hljs-literal,
+.hljs-number {
+  color: var(--etml-cyan);
+}
+
+.hljs-regexp {
+  color: var(--etml-red);
+}
+
+.hljs-string,
+.hljs-name,
+.hljs-type,
+.hljs-attr,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition,
+.hljs-template-tag {
+  color: var(--etml-teal);
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-type,
+.hljs-name,
+.hljs-strong {
+  font-weight: 700;
+}
+
+.hljs-params,
+.hljs-emphasis {
+  font-style: italic;
+}
+
+/* SVG Adjustment */
+svg[data-marp-fitting=svg] {
+  max-height: 580px;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0.4em 0 0.4em 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(1.7rem, 3vw, 2.2rem); /* responsive */
+  color: var(--etml-white);
+  background: linear-gradient(135deg, var(--etml-blue-dark), var(--etml-blue-main));
+  padding: 0.32em 0.75em;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 61, 130, 0.2);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.6em;
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem); /* responsive */
+  color: var(--etml-blue-dark);
+  border-bottom: 3px solid var(--etml-blue-main);
+  padding-bottom: 0.3em;
+  margin: 0.4em 0em 0.7em 0.5em;
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+}
+
+h3 {
+  font-size: 1.4em;
+  color: var(--etml-blue-bright);
+  border-left: 4px solid var(--etml-teal);
+  padding-left: 0.5em;
+}
+
+h4 {
+  font-size: 1.2em;
+  color: var(--etml-purple);
+}
+
+h5 {
+  font-size: 1.05em;
+  color: var(--etml-orange);
+}
+
+h6 {
+  font-size: 0.95em;
+  color: var(--etml-gray-medium);
+}
+
+/* Paragraphs & Lists */
+p,
+blockquote {
+  margin: 0.8em 0;
+  line-height: 1.6;
+}
+
+ul>li,
+ol>li {
+  margin: 0.1em 0;
+  color: var(--etml-gray-dark);
+  line-height: 1.43;
+}
+
+ul>li>p,
+ol>li>p {
+  margin: 0.1em 0;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 1.5em;
+}
+
+ul>li {
+  position: relative;
+  padding-left: 1.5em;
+}
+
+ul>li::before {
+  content: "▸";
+  color: var(--etml-cyan);
+  font-size: 1.2em;
+  font-weight: 700;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1em;
+  line-height: inherit;
+}
+
+ol {
+  padding-left: 1.4em;
+}
+
+ol>li {
+  counter-increment: item;
+}
+
+ol>li::marker {
+  color: var(--etml-blue-main);
+  font-weight: 700;
+}
+
+/* Code Styling */
+code {
+  display: inline-block;
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 0.85em;
+  letter-spacing: 0;
+  margin: -0.1em 0.2em;
+  padding: 0.2em 0.5em;
+  vertical-align: baseline;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
+  color: var(--etml-blue-dark);
+  border-radius: 4px;
+  border: 1px solid var(--etml-blue-light);
+  box-shadow: 0 1px 3px rgba(0, 102, 204, 0.1);
+}
+
+pre {
+  display: block;
+  margin: 1em 0;
+  min-height: 1em;
+  overflow: visible;
+  border-radius: 8px;
+}
+
+pre code {
+  box-sizing: border-box;
+  margin: 0;
+  min-width: 100%;
+  padding: 0.5em;
+  font-size: 0.6em;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 80%);
+  border: 2px solid var(--etml-blue-light);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 61, 130, 0.1);
+}
+
+/* Blockquote Styling (amélioré + variantes) */
+blockquote {
+  margin: 0.9em 0;
+  padding: 0.85em 1.15em 0.85em 3.2em;
+  position: relative;
+  background: linear-gradient(160deg, #f8fbff 0%, #eef7fc 100%);
+  border: 1px solid var(--etml-blue-light);
+  border-left: 10px solid var(--etml-info);
+  border-radius: 14px;
+  color: var(--etml-gray-dark);
+  font-style: normal;
+  font-size: 0.85em;
+  line-height: 1.55;
+  box-shadow: 0 4px 14px rgba(0, 61, 130, 0.12);
+  backdrop-filter: blur(2px);
+}
+
+/* Icône par défaut (remplacée par variantes ou data-icon) */
+blockquote::before {
+  content: "💡";
+  position: absolute;
+  left: 0.9em;
+  top: 0.75em;
+  font-size: 1.4em;
+  line-height: 1;
+  font-style: normal;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+}
+
+/* Override dynamique par attribut */
+blockquote[data-icon]::before {
+  content: attr(data-icon);
+}
+
+/* Titre optionnel : premier strong ou em en tête */
+blockquote > strong:first-child,
+blockquote > em:first-child {
+  display: block;
+  margin: 0 0 0.4em 0;
+  font-size: 0.95em;
+  letter-spacing: 0.5px;
+  color: var(--etml-blue-dark);
+}
+
+/* Mise en forme des listes internes */
+blockquote ul,
+blockquote ol {
+  margin: 0.4em 0 0.2em 0;
+}
+blockquote ul > li,
+blockquote ol > li {
+  margin: 0.25em 0;
+  font-style: normal;
+}
+
+/* Variantes sémantiques */
+blockquote.quote-info { border-left-color: var(--etml-info); }
+blockquote.quote-info::before { content: "ℹ️"; }
+
+blockquote.quote-tip { border-left-color: var(--etml-teal); }
+blockquote.quote-tip::before { content: "✨"; }
+
+blockquote.quote-success { border-left-color: var(--etml-success); }
+blockquote.quote-success::before { content: "✅"; }
+
+blockquote.quote-warning { border-left-color: var(--etml-warning); }
+blockquote.quote-warning::before { content: "⚠️"; }
+
+blockquote.quote-danger { border-left-color: var(--etml-danger); }
+blockquote.quote-danger::before { content: "⛔"; }
+
+blockquote.quote-question { border-left-color: var(--etml-purple); }
+blockquote.quote-question::before { content: "❓"; }
+
+blockquote.quote-quote { border-left-color: var(--etml-gray-medium); font-style: italic; }
+blockquote.quote-quote::before { content: "❝"; }
+
+/* Réduction visuelle compacte */
+blockquote.compact {
+  font-size: 0.75em;
+  padding: 0.6em 0.9em 0.6em 2.6em;
+  border-radius: 10px;
+}
+
+/* Mode accentué (mettre en avant) */
+blockquote.accent {
+  background: linear-gradient(140deg, var(--etml-blue-pale) 0%, #ffffff 100%);
+  box-shadow: 0 6px 20px rgba(0, 61, 130, 0.25);
+}
+
+/* Assombrir légèrement les icônes en impression (si print) */
+@media print {
+  blockquote { box-shadow: none; backdrop-filter: none; }
+  blockquote::before { filter: none; }
+}
+
+/* ========================================
+   TABLE STYLING
+   ======================================== */
+
+/* Base table */
+table {
+  border-spacing: 0;
+  border-collapse: separate;
+  margin: 1em auto;
+  width: auto;
+  max-width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 61, 130, 0.18);
+  background: var(--etml-white);
+}
+
+/* Tables pleine largeur */
+table.full-width {
+  width: 100%;
+}
+
+/* Tables dans les colonnes - responsive */
+.cols2 table, 
+.cols3 table, 
+.cols4 table {
+  width: 100%;
+  font-size: 0.8em;
+  table-layout: auto;
+}
+
+.cols2 table th,
+.cols2 table td,
+.cols3 table th,
+.cols3 table td,
+.cols4 table th,
+.cols4 table td {
+  padding: 0.35em 0.55em;
+  font-size: 0.95em;
+}
+
+/* En-têtes de tableau */
+table th {
+  padding: 0.55em 0.9em;
+  border: none;
+  background: linear-gradient(135deg, var(--etml-blue-main) 0%, var(--etml-blue-bright) 100%);
+  color: var(--etml-white);
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  letter-spacing: 0.8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 61, 130, 0.15);
+}
+
+/* En-têtes de lignes (première colonne) */
+table tbody th {
+  background: linear-gradient(90deg, var(--etml-blue-main) 0%, var(--etml-blue-bright) 100%);
+  text-align: left;
+  font-weight: 600;
+  padding-left: 1em;
+}
+
+/* Cellules de données */
+table td {
+  padding: 0.6em 0.9em;
+  font-size: 0.9em;
+  border: 1px solid var(--etml-gray-light);
+  border-left: none;
+  border-right: none;
+  background: var(--etml-white);
+  text-align: center;
+  vertical-align: middle;
+  transition: all 0.15s ease;
+}
+
+/* Alignement gauche pour colonnes texte */
+table td:first-child {
+  text-align: left;
+}
+
+/* Zebra striping */
+table tbody tr:nth-child(even) td {
+  background: var(--etml-blue-pale);
+}
+
+/* Hover effect */
+table tbody tr:hover td {
+  background: linear-gradient(90deg, #e3f2fd 0%, #f0f8ff 100%);
+  transform: scale(1.01);
+  box-shadow: 0 2px 6px rgba(0, 61, 130, 0.12);
+}
+
+/* Bordures externes */
+table tbody tr:first-child td {
+  border-top: 2px solid var(--etml-blue-light);
+}
+
+table tbody tr:last-child td {
+  border-bottom: 2px solid var(--etml-blue-light);
+}
+
+/* ========================================
+   VARIANTES TABLEAUX SPÉCIFIQUES
+   ======================================== */
+
+/* Table de Karnaugh (K-map) */
+table.kmap,
+table.karnaugh {
+  margin: 1.2em auto;
+  border: 3px solid var(--etml-blue-main);
+  box-shadow: 0 6px 20px rgba(0, 61, 130, 0.25);
+  font-family: "Roboto Mono", monospace;
+}
+
+table.kmap th,
+table.karnaugh th {
+  background: var(--etml-blue-dark);
+  font-size: 0.65em;
+  padding: 0.4em 0.6em;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+table.kmap td,
+table.karnaugh td {
+  width: 3em;
+  height: 2.5em;
+  font-size: 0.85em;
+  font-weight: 600;
+  border: 2px solid var(--etml-blue-light);
+  text-align: center;
+  padding: 0.4em;
+  background: #fafcff;
+}
+
+table.kmap td:empty::after,
+table.karnaugh td:empty::after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    var(--etml-gray-light) 4px,
+    var(--etml-gray-light) 5px
+  );
+  opacity: 0.2;
+}
+
+table.kmap tbody tr:hover td,
+table.karnaugh tbody tr:hover td {
+  background: var(--etml-blue-pale);
+  transform: none;
+}
+
+/* Table de vérité (Truth table) */
+table.truth-table {
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.75em;
+}
+
+table.truth-table th {
+  background: linear-gradient(135deg, var(--etml-teal) 0%, var(--etml-cyan) 100%);
+  font-size: 0.75em;
+  padding: 0.5em;
+}
+
+table.truth-table td {
+  font-weight: 500;
+  padding: 0.45em 0.7em;
+  font-size: 0.95em;
+}
+
+/* Mise en évidence valeurs binaires */
+table.truth-table td:contains("1"),
+table.kmap td:contains("1") {
+  color: var(--etml-success);
+  font-weight: 700;
+}
+
+/* Table compacte */
+table.compact {
+  font-size: 0.7em;
+  margin: 0.5em auto;
+}
+
+table.compact th,
+table.compact td {
+  padding: 0.3em 0.5em;
+}
+
+/* Table bordures visibles */
+table.bordered td,
+table.bordered th {
+  border: 1px solid var(--etml-gray-medium) !important;
+}
+
+/* Table sans hover */
+table.no-hover tbody tr:hover td {
+  background: inherit;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Impression */
+@media print {
+  table {
+    box-shadow: none;
+    border: 1px solid var(--etml-gray-medium);
+  }
+  table tbody tr:hover td {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+section {
+  font-size: 22px;
+  font-family: "Roboto", "Segoe UI", Arial, sans-serif;
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+  padding: 92px 55px 52px;
+  color: var(--etml-gray-dark);
+  background-color: var(--etml-white);
+  background-image: linear-gradient(to bottom, var(--etml-white) 0%, var(--etml-white) 95%, var(--etml-gray-pale) 100%);
+}
+
+section a {
+  color: var(--etml-blue-main);
+  text-decoration: none;
+  border-bottom: 1px solid var(--etml-blue-light);
+  transition: all 0.2s;
+}
+
+section a:hover {
+  color: var(--etml-blue-dark);
+  border-bottom-color: var(--etml-blue-dark);
+}
+
+section mark {
+  background: var(--etml-warning);
+  color: var(--etml-gray-dark);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+section code {
+  background: var(--etml-blue-pale);
+  color: var(--etml-blue-dark);
+}
+
+section h1 strong,
+section h2 strong,
+section h3 strong,
+section h4 strong,
+section h5 strong,
+section h6 strong {
+  color: var(--etml-blue-main);
+  font-weight: 700;
+}
+
+section pre>code {
+  background: var(--etml-gray-pale);
+  color: var(--etml-gray-dark);
+}
+
+section strong {
+  color: var(--etml-blue-main);
+  font-weight: 700;
+}
+
+section em {
+  color: var(--etml-gray-dark);
+  font-style: italic;
+}
+
+/* Footer & Header Styling */
+section header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin: 0;
+  font-size: 0.38rem;
+  height: 32px;
+  line-height: 1;
+  padding: 0 0 8px;
+  position: absolute;
+  top: 24px;
+  left: 55px;
+  right: 55px;
+  width: auto;
+  color: var(--etml-gray-medium);
+  z-index: 10;
+}
+
+header .etml {
+  font-family: "ETML", sans-serif; 
+  font-weight: bolder;                
+  font-size: 0.9rem;
+  color: var(--etml-blue-main);                  
+}
+
+
+section header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--etml-blue-light),
+    var(--etml-gray-light) 65%,
+    transparent
+  );
+  opacity: 0.55;
+}
+
+section::after {
+  box-sizing: border-box;
+  font-size: 0.55em;
+  height: auto;
+  line-height: 1.2;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  right: 55px;
+  bottom: 14px;
+  color: var(--etml-gray-medium);
+}
+
+section footer {
+  display: flex;
+  position: absolute;
+  justify-content: space-between;
+  margin: 0;
+  left: 55px;
+  right: 55px;
+  bottom: 14px;
+  align-items: center;
+  font-size: 0.45em;
+  font-family: Century Gothic, CenturyGothic, AppleGothic, Helvetica, Arial, sans-serif;
+}
+
+section footer .page-number:before {
+  content: counter(page);
+} 
+
+
+section.lead h1 {
+  color: var(--etml-blue-pale);
+  font-size: 100px;
+  text-align: center;
+  margin-top: 0.6em;
+}
+
+section.lead h2 {
+  color: var(--etml-blue-dark);
+  font-weight: lighter;
+  font-size: 60px;
+  text-align: center;
+}
+
+section.lead footer {
+  display: none;
+}
+
+section.lead header {
+  display: none;
+}
+
+section.lead paginate {
+  display: none;
+}
+
+/* Lead with medium text */
+section.lead.medium-text h1 {
+  color: var(--etml-blue-pale);
+  font-size: 90px;
+  text-align: center;
+  margin-top: 0.6em;
+}
+
+section.lead.medium-text h2 {
+  color: var(--etml-blue-dark);
+  font-weight: lighter;
+  font-size: 54px;
+  text-align: center;
+}
+
+/* Lead with small text */
+section.lead.small-text h1 {
+  color: var(--etml-blue-pale);
+  font-size: 75px;
+  text-align: center;
+  margin-top: 0.6em;
+}
+
+section.lead.small-text h2 {
+  color: var(--etml-blue-dark);
+  font-weight: lighter;
+  font-size: 45px;
+  text-align: center;
+}
+
+.background-lead {
+  display: flex;
+  position: absolute;
+  top: 55px;
+  right: 150px;
+}
+
+
+section .columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 35px;    /* espace entre les colonnes */
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+
+section .columns > * {
+  flex: 1 1 calc(50% - 35px); /* base flexible pour 2 colonnes */
+  min-width: 250px;               /* largeur minimale pour éviter que ça casse */
+  max-width: 100%;
+}
+
+/*
+  Colonnes (conteneurs) — utilisation recommandée dans Markdown/Marp :
+
+  <div class="cols2">
+    <div>Colonne A</div>
+    <div>Colonne B</div>
+  </div>
+
+  <div class="cols3">...</div>
+  <div class="cols4">...</div>
+
+  (Nécessite l'autorisation HTML dans Marp — par défaut OK dans VS Code)
+*/
+.cols2, .cols3, .cols4 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  position: relative;
+}
+.cols2 { gap: 10px 35px; }
+.cols3 { gap: 10px 30px; }
+.cols4 { gap: 10px 25px; }
+
+.cols2 > * {
+  flex: 1 1 calc(50% - 25px);
+  min-width: 300px;
+}
+
+.cols2 p {
+  text-align: left;
+  margin: 0.5em 0;
+}
+
+.cols2 ul,
+.cols2 ol {
+  text-align: left;
+  margin: 0.8em 0;
+}
+
+.cols2 ul > li,
+.cols2 ol > li {
+  margin: 0.3em 0;
+  text-align: left;
+}
+
+
+.cols3 > * {
+  flex: 1 1 calc(33.333% - 20px);
+  min-width: 200px;
+}
+.cols4 > * {
+  flex: 1 1 calc(25% - 15px);
+  min-width: 150px;
+}
+
+.cols75  {
+  display: flex;
+  gap: 10px 30px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cols75 > *:first-child {
+  flex: 0 0 75%;
+}
+
+.cols75 > *:last-child {
+  flex: 0 0 25%;
+}
+
+
+.cols25  {
+  display: flex;
+  gap: 10px 30px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cols25 > *:first-child {
+  flex: 0 0 25%;
+}
+
+.cols25 > *:last-child {
+  flex: 0 0 75%;
+}
+
+/* Layout grille */
+[alt="grid"],
+[alt="grille"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  align-items: start;
+}
+
+
+/* Centrer le contenu (alt contient 'center'/'centre') */
+/* Conteneurs (pas les images) */
+[alt~="center"]:not(img),
+[alt~="centre"]:not(img),
+[alt*="center"]:not(img),
+[alt*="centre"]:not(img) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  /* pas de height forcée pour éviter les effets indésirables */
+}
+
+/* Images seules: centrer horizontalement */
+img[alt~="center"],
+img[alt~="centre"],
+img[alt*="center"],
+img[alt*="centre"] {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Image pleine largeur */
+[alt~="full"],
+[alt~="fullwidth"],
+[alt~="pleine"],
+[alt*="full"],
+[alt*="fullwidth"],
+[alt*="pleine"] {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+/* Image petite (utiliser ![small](...) ou alt contenant 'small'/'petit') */
+[alt~="small"],
+[alt~="petit"],
+[alt*="small"],
+[alt*="petit"] {
+  max-width: 40%;
+  height: auto;
+}
+
+/* Image moyenne */
+[alt~="medium"],
+[alt~="moyen"],
+[alt*="medium"],
+[alt*="moyen"] {
+  max-width: 60%;
+  height: auto;
+}
+
+/* Image grande */
+[alt~="large"],
+[alt~="grand"],
+[alt*="large"],
+[alt*="grand"] {
+  max-width: 80%;
+  height: auto;
+}
+
+/* Image à gauche avec texte qui l'entoure (marche avec alt contenant 'left' ou 'gauche', ex: 'left:40%') */
+[alt*="left"],
+[alt*="gauche"] {
+  float: left;
+  margin: 0 30px 20px 0;
+  max-width: 45%;
+}
+
+/* Image à droite avec texte qui l'entoure (alt contenant 'right' ou 'droite', ex: 'bg right:30%') */
+[alt*="right"],
+[alt*="droite"] {
+  float: right;
+  margin: 0 0 20px 30px;
+  max-width: 45%;
+}
+
+/* Image positioning utilities */
+img[alt~="cadre"] {
+  position: absolute;
+  right: 2rem;
+  top: 15%;
+  max-width: 40%;
+  z-index: -1;
+  opacity: 0.9;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+img[alt~="cadre"][alt~="right"] {
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 35%;
+}
+
+
+/* Images d'arrière-plan atténuées UNIQUEMENT avec le mot-clé 'faded' ou 'dim' */
+/* Utilisation: ![bg dim right:40%](image.png) */
+
+/* Cacher toutes les figcaptions dans les backgrounds Marp */
+div[data-marpit-advanced-background-container] figcaption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Appliquer l'atténuation au figure quand il contient une figcaption */
+/* La présence de figcaption indique qu'un texte alt a été fourni (comme "dim") */
+div[data-marpit-advanced-background-container]:has(figcaption) figure {
+  opacity: 0.25 !important;
+  filter: brightness(1.3) contrast(0.8) !important;
+}
+
+/* Layout côte-à-côte (image + texte) */
+[alt="sidebyside"],
+[alt="cote"] {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+[alt="sidebyside"] > *,
+[alt="cote"] > * {
+  flex: 1;
+}
+
+/* Ombrage sur les images */
+[alt~="shadow"],
+[alt~="ombre"] {
+  box-shadow: 0 4px 12px rgba(0, 61, 130, 0.2);
+  border-radius: 8px;
+}
+
+/* Bordure arrondie */
+[alt~="rounded"],
+[alt~="arrondi"] {
+  border-radius: 12px;
+}
+
+/* Image en cercle */
+[alt~="circle"],
+[alt~="cercle"] {
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1;
+}
+
+
+/* Newly added style for small text */
+
+.small-text {
+  font-size: 0.75em;
+  color: var(--etml-gray-medium);
+} 
+
+.medium-text {
+  font-size: 0.9em;
+  color: var(--etml-gray-dark);
+}
+
+.reduced-section {
+  transform: scale(0.75);
+  transform-origin: top left;
+  overflow: hidden;
+  clip-path: inset(0 0 0 0);
+  margin: -30px 0px;
+}
+
+.top40 {
+  margin-top: 40px;
+}
+
+.top040 {
+  margin-top: -40px;
+}
+
+
+.top030 {
+  margin-top: -30px;
+}
+
+
+.center-vertically {
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.center-horizontally {
+  
+  text-align: center;
+  width: 100%;
+}
+
+.fragment ul > li {
+  margin: 1em 0 0 -2em !important;
+
+}
+
+.fragment ul > li::before {
+  content: "";
+  font-weight: 700;
+  position: absolute;
+  top: 0;
+  line-height: inherit;
+}
+
+/* Décalages horizontaux (gauche/droite) */
+.left10 {
+  margin-left: 10px;
+}
+
+.left20 {
+  margin-left: 20px;
+}
+
+.left30 {
+  margin-left: 30px;
+}
+
+.left40 {
+  margin-left: 40px;
+}
+
+.left50 {
+  margin-left: 50px;
+}
+
+.right10 {
+  margin-right: 10px;
+}
+
+.right20 {
+  margin-right: 20px;
+}
+
+.right30 {
+  margin-right: 30px;
+}
+
+.right40 {
+  margin-right: 40px;
+}
+
+.right50 {
+  margin-right: 50px;
+}
+
