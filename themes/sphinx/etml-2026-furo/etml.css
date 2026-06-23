@@ -101,7 +101,11 @@ body {
     --color-toc-title-text: #6B7280;
     --color-toc-item-text: #4B5563;
     --color-toc-item-text--hover: #155f80;
-    --color-toc-item-text--active: #155f80;
+    --color-toc-item-text--active: #e28743;
+
+    /* Admonition générique — orange MARP */
+    --color-admonition-title: #e28743;
+    --color-admonition-title-background: rgba(226, 135, 67, 0.12);
 
     /* Tokens utilitaires ETML (non-Furo) */
     --etml-space-xs: 0.25rem;
@@ -178,7 +182,11 @@ body[data-theme="dark"] {
     --color-toc-title-text: #94A3B8;
     --color-toc-item-text: #CBD5E1;
     --color-toc-item-text--hover: #7dcdf0;
-    --color-toc-item-text--active: #7dcdf0;
+    --color-toc-item-text--active: #e28743;
+
+    /* Admonition générique — orange MARP (dark) */
+    --color-admonition-title: #e28743;
+    --color-admonition-title-background: rgba(226, 135, 67, 0.12);
 
     --etml-shadow-sm: 0 1px 2px rgba(0,0,0,.3);
     --etml-shadow-md: 0 4px 6px -1px rgba(0,0,0,.5);

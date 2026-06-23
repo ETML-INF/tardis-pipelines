@@ -46,6 +46,7 @@ templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- Options HTML --------------------------------------------------------------
+html_title = "ETML"
 html_copy_source = False
 html_show_sourcelink = False
 
