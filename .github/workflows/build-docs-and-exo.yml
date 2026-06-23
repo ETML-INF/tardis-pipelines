@@ -201,6 +201,7 @@ jobs:
         working-directory: ${{ github.workspace }}
         env:
           EXO_ROOT: site-exo/exercices
+          SUPPORT_PDF_DIR: site-exo/support-pdf
           TARDIS_THEME_ROOT: ${{ github.workspace }}/tardis-pipelines/themes/${{ inputs.theme }}
         run: |
           node tardis-pipelines/scripts/build_exo_index.mjs
