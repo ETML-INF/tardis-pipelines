@@ -361,7 +361,50 @@ body[data-theme="dark"] .answer-area {
 }
 
 /* ----------------------------------------------------------
-   8. Impression
+   8. Strong — orange MARP (cohérence avec les slides)
+---------------------------------------------------------- */
+
+article strong {
+    color: var(--etml-color-warning);
+}
+
+/* ----------------------------------------------------------
+   9. Sidebar — liseré gauche sur l'item actif
+---------------------------------------------------------- */
+
+.sidebar-tree .current-page > .reference {
+    border-left: 3px solid var(--etml-color-warning);
+    padding-left: calc(var(--sidebar-item-spacing-horizontal) - 3px);
+    font-weight: 600;
+}
+
+/* ----------------------------------------------------------
+   10. H2 — séparateur visuel pour les longues pages
+---------------------------------------------------------- */
+
+article h2 {
+    border-bottom: 1px solid var(--color-background-border);
+    padding-bottom: var(--etml-space-sm);
+}
+
+/* ----------------------------------------------------------
+   11. Admonition — corps légèrement teinté
+---------------------------------------------------------- */
+
+.admonition {
+    background: rgba(226, 135, 67, 0.05);
+}
+
+/* ----------------------------------------------------------
+   12. Blocs de code — bordure gauche bleue
+---------------------------------------------------------- */
+
+article pre {
+    border-left: 3px solid var(--color-brand-content);
+}
+
+/* ----------------------------------------------------------
+   13. Impression
 ---------------------------------------------------------- */
 
 @media print {
