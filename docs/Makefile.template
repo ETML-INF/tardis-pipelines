@@ -539,7 +539,7 @@ build-pdf-index: setup _npm-deps
 	@printf '%b\n' "  📂 Sortie: $(PDF_DIR)/index.html"
 	@printf '%b\n' ""
 
-build: check-deps build-docs build-docs-pdf build-manifest build-slides build-slides-pdf build-cards-pdf build-exercices-pdf rename-pdfs build-pdf-index
+build: check-deps build-docs build-docs-pdf build-manifest build-slides build-slides-pdf build-slides-pdf-combined build-cards-pdf build-exercices-pdf rename-pdfs build-pdf-index
 	@printf '%b\n' "$(BLUE)==════════════════════════════════════════════════$(NC)"
 	@printf '%b\n' "$(GREEN)✓ Build complet terminé !$(NC)"
 	@printf '%b\n' "$(BLUE)==════════════════════════════════════════════════$(NC)"
