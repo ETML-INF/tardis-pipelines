@@ -173,22 +173,24 @@
     if (!sourcePath) return null;
     let p = String(sourcePath).replace(/^[.][/\\]/, "");
 
+    // Handle paths starting with ../b-UnitesEnseignement/
+    p = p.replace(/^\.\.\//, "");
+
     if (p.startsWith("b-UnitesEnseignement/Support/")) {
-      p = p.replace(/^b-UnitesEnseignement\/Support\//, "cours/");
+      p = p.replace(/^b-UnitesEnseignement\/Support\//, "../cours/");
     } else if (p.startsWith("b-UnitesEnseignement/Presentations/")) {
       p = p.replace(
         /^b-UnitesEnseignement\/Presentations\//,
-        "presentations/"
+        "../presentations/"
       );
     }
 
     p = p.replace(/\.md$/i, ".html");
     p = p.replace(/slides\.html$/i, "index.html");
 
-    // Use server-root-relative paths: /cours/..., /presentations/...
-    // Works both locally (http://localhost:8000/presentations/...)
-    // and in production (https://example.com/courseID/presentations/...)
-    return "/" + p;
+    // Use relative paths from tardis/ folder to sibling folders
+    // Works both locally and in production as long as folder structure is preserved
+    return p;
   }
 
   function actionLinks(item){

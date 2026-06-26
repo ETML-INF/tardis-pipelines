@@ -35,6 +35,41 @@ Mon-Cours-I346/
         └── index.md                  (manifest TARDIS)
 ```
 
+## Configuration
+
+### Créer le fichier `.env`
+
+Dans votre **dépôt de cours** (où se trouve le Makefile), créez un fichier `.env`:
+
+```bash
+echo "ICT_MODULE=117" > .env
+```
+
+Ou manuellement, créez `.env` avec:
+```
+ICT_MODULE=117
+```
+
+Remplacez `117` par le code de votre module ICT (ex: 346, etc.).
+
+**Remarque**: Ajoutez `.env` à votre `.gitignore` local pour ne pas commiter vos configuration personnelles.
+
+### Configuration du déploiement (optionnel)
+
+Pour utiliser `make publish`, ajoutez à votre `.env`:
+
+```
+SFTP_HOST=enseignement.section-inf.ch
+SFTP_USER=votre_username
+SFTP_KEY=~/.ssh/id_rsa
+SFTP_BASE_PATH=/moduleICT/117
+```
+
+- `SFTP_HOST`: Serveur SFTP/SSH
+- `SFTP_USER`: Nom d'utilisateur
+- `SFTP_KEY`: Chemin vers votre clé SSH privée (ex: `~/.ssh/id_rsa`)
+- `SFTP_BASE_PATH`: Chemin de base sur le serveur (ex: `/moduleICT/117`)
+
 ## Utilisation
 
 ### Vérifier les dépendances
@@ -92,6 +127,19 @@ make serve
 ```
 
 Démarre un serveur HTTP sur `http://localhost:8000` :
+
+### Publier sur le serveur (déploiement SFTP)
+
+```bash
+make publish
+```
+
+Déploie les fichiers générés vers le serveur SFTP configuré dans `.env` via SSH.
+
+Requiert:
+- Variables `.env` configurées (SFTP_HOST, SFTP_USER, SFTP_KEY, SFTP_BASE_PATH)
+- Clé SSH privée accessible
+- Accès SFTP/SSH au serveur
 - `http://localhost:8000/docs/` → Documentation
 - `http://localhost:8000/tardis/` → Manifest TARDIS
 - `http://localhost:8000/presentations/dist/html/` → Slides

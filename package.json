@@ -6,12 +6,19 @@
   "scripts": {
     "build-manifest": "node scripts/build-manifest.mjs",
     "build-exo-index": "node scripts/build_exo_index.mjs",
+    "build-pdf-index": "node scripts/build_pdf_index.mjs",
+    "rename-pdfs": "node scripts/rename-pdfs.mjs",
     "build-exos-pdf": "node scripts/export_exos_pdf_playwright.mjs",
-    "playwright:install": "playwright install --with-deps chromium"
+    "build-marp-index": "node scripts/generate-marp-index.mjs",
+    "build-cards-pdf": "node scripts/build-cards-pdf.mjs",
+    "playwright:install": "playwright install chromium",
+    "playwright:install-with-deps": "playwright install --with-deps chromium"
   },
   "dependencies": {
     "glob": "^10.3.10",
+    "markdown-it": "^14.1.0",
     "playwright": "^1.57.0",
+    "sharp": "^0.34.2",
     "yaml": "^2.4.5"
   }
 }

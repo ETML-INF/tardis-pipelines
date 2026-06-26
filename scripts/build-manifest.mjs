@@ -4,8 +4,8 @@ import path from 'path';
 import { glob } from 'glob';
 import YAML from 'yaml';
 
-const SRC_DIR = 'b-UnitesEnseignement';
-const OUT_DIR = '_build_local/tardis/manifests';
+const SRC_DIR = process.env.SRC_DIR || '../b-UnitesEnseignement';
+const OUT_DIR = process.env.OUT_DIR || '../_build_local/tardis/manifests';
 const ALLOWED_TYPES = new Set(['accroche', 'exo', 'activity', 'tp', 'slides', 'reading']);
 
 const stripBOM = s => s.replace(/^﻿/, '');
@@ -63,6 +63,7 @@ const seqKey = seq => {
           title: data.title || null,
           seq: data.seq || null,
           order: Number.isFinite(Number(data.order)) ? Number(data.order) : 9999,
+          duree: data.duree || null,
           method: data.method || null,
           align_ict: Array.isArray(data.align_ict) ? data.align_ict : [],
           goals: Array.isArray(data.goals) ? data.goals : []
