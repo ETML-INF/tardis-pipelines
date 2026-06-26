@@ -38,7 +38,8 @@ help:
 	@echo "  $(YELLOW)make build$(NC)            - Compile tout (docs + manifest + slides)"
 	@echo "  $(YELLOW)make build-docs$(NC)      - Compile la documentation Sphinx"
 	@echo "  $(YELLOW)make build-manifest$(NC)  - Génère le manifest TARDIS"
-	@echo "  $(YELLOW)make build-slides$(NC)    - Compile les slides Marp"
+	@echo "  $(YELLOW)make build-slides$(NC)    - Compile les slides Marp (HTML)"
+	@echo "  $(YELLOW)make build-slides-pdf-combined$(NC) - Fusionne les PDFs de slides en un seul document"
 	@echo "  $(YELLOW)make serve$(NC)            - Lance un serveur local (port 8000)"
 	@echo "  $(YELLOW)make clean$(NC)            - Nettoie les fichiers générés"
 	@echo ""
@@ -273,6 +274,37 @@ build-slides: setup
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────────────────
+# Build: Slides PDF (individuels + combiné)
+# ─────────────────────────────────────────────────────────────────────────
+
+PDFUNITE        := $(shell command -v pdfunite 2>/dev/null || echo "")
+SAFE_BRANCH     := $(shell echo "$(BRANCH_NAME)" | tr '/' '-')
+SLIDES_PDF_NAME := $(ICT_MODULE)-$(SAFE_BRANCH)_slides.pdf
+SLIDES_PDF_DIR  := $(BUILD_DIR)/pdf/presentations
+
+build-slides-pdf-combined: setup
+	@echo "$(BLUE)📄 Fusion des PDFs de slides en un seul document...$(NC)"
+	@if [ -z "$(PDFUNITE)" ]; then \
+		echo "$(RED)✗ pdfunite non trouvé. Installez poppler-utils:$(NC)"; \
+		echo "  Linux: sudo apt install poppler-utils"; \
+		echo "  macOS: brew install poppler"; \
+		exit 1; \
+	fi
+	@if [ ! -d "$(SLIDES_PDF_DIR)" ] || [ -z "$$(ls -A "$(SLIDES_PDF_DIR)"/*.pdf 2>/dev/null)" ]; then \
+		echo "$(RED)✗ Aucun PDF trouvé dans $(SLIDES_PDF_DIR)$(NC)"; \
+		echo "  Générez d'abord les PDFs individuels de slides."; \
+		exit 1; \
+	fi
+	@mkdir -p "$(BUILD_DIR)/pdf"
+	@SLIDES_SRC_DIR="$(PRESENTATIONS_DIR)" \
+		SLIDES_PDF_DIR="$(SLIDES_PDF_DIR)" \
+		SLIDES_OUT_PDF="$(BUILD_DIR)/pdf/$(SLIDES_PDF_NAME)" \
+		$(NODE) tardis-pipelines/scripts/merge-slides-pdf.mjs
+	@echo "$(GREEN)✓ PDF combiné généré$(NC)"
+	@echo "  📄 Sortie: $(BUILD_DIR)/pdf/$(SLIDES_PDF_NAME)"
+	@echo ""
+
+# ─────────────────────────────────────────────────────────────────────────
 # Build: Tout compiler
 # ─────────────────────────────────────────────────────────────────────────
 
@@ -349,4 +381,4 @@ clean:
 	@echo "$(GREEN)✓ Nettoyé$(NC)"
 	@echo ""
 
-.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides serve clean help
+.PHONY: check-deps install-deps setup build build-docs build-manifest build-slides build-slides-pdf-combined serve clean help build-exercices-pdf

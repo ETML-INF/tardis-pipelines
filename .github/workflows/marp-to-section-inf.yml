@@ -26,7 +26,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     env:
       ICT_MODULE: ${{ inputs.ict_module }}
       THEME_NAME: ${{ inputs.theme_name }}
@@ -64,6 +64,10 @@ jobs:
 
       - name: Install marp-cli
         run: npm i -g @marp-team/marp-cli
+
+      - name: Install pipelines dependencies
+        working-directory: pipelines
+        run: npm ci
 
       - name: Build slides (HTML)
         run: |
@@ -158,6 +162,27 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+      - name: Install pdfunite
+        run: sudo apt-get install -y poppler-utils
+
+      - name: Build combined slides PDF
+        env:
+          SLIDES_SRC_DIR: caller/b-UnitesEnseignement/Presentations
+          SLIDES_PDF_DIR: caller/b-UnitesEnseignement/Presentations/dist/pdf
+        run: |
+          SAFE_BRANCH="${{ github.ref_name }}"
+          SAFE_BRANCH="${SAFE_BRANCH//\//-}"
+          export SLIDES_OUT_PDF="caller/b-UnitesEnseignement/Presentations/dist/pdf/${ICT_MODULE}-${SAFE_BRANCH}_slides.pdf"
+          node pipelines/scripts/merge-slides-pdf.mjs
+
+      - name: Upload combined slides PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: slides-pdf-combined
+          path: caller/b-UnitesEnseignement/Presentations/dist/pdf/**
+          if-no-files-found: warn
+          retention-days: 7
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -180,6 +205,14 @@ jobs:
           name: slides-site
           path: site/dist/html
 
+      - name: ⬇️ Download combined PDF
+        id: download-pdf
+        uses: actions/download-artifact@v4
+        with:
+          name: slides-pdf-combined
+          path: site/dist/pdf
+        continue-on-error: true
+
       - name: 📂 Sync présentations (HTML)
         uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
         with:
@@ -188,6 +221,21 @@ jobs:
           ictmodule-dir: ${{ env.ICT_MODULE }}
           custom-dir:    ${{ steps.branch.outputs.prefix }}${{ vars.FTP_PRESENTATIONS_DIR }}
           state-name:    ".ftp-sync-deck.json"
+          log-level:     "minimal"
+          timeout:       "300000"
+          ftp-server:    ${{ secrets.ftp_server }}
+          ftp-username:  ${{ secrets.ftp_username }}
+          ftp-password:  ${{ secrets.ftp_password }}
+
+      - name: 📂 Sync PDF combiné
+        if: steps.download-pdf.outcome == 'success'
+        uses: ETML-INF/tardis-pipelines/.github/actions/ftp-sync@main
+        with:
+          local-dir:     site/dist/pdf/
+          ictroot-dir:   ${{ vars.ICT_ROOT_FOLDER }}
+          ictmodule-dir: ${{ env.ICT_MODULE }}
+          custom-dir:    ${{ steps.branch.outputs.prefix }}${{ vars.FTP_PRESENTATIONS_DIR }}
+          state-name:    ".ftp-sync-deck-pdf.json"
           log-level:     "minimal"
           timeout:       "300000"
           ftp-server:    ${{ secrets.ftp_server }}
