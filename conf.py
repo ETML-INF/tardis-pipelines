@@ -21,6 +21,7 @@ extensions = [
     "tardis_qcm",
     "tardis_cards",
     "tardis_video",
+    "tardis_html",
 ]
 
 myst_enable_extensions = [
