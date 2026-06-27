@@ -75,6 +75,11 @@
     return arr.join(" · ");
   }
 
+  function fmtText(s) {
+    if (!s) return "<span class='muted'>—</span>";
+    return String(s).trim().replace(/\n/g, '<br>');
+  }
+
   function bloomBadges(goals = []) {
     const badges = [];
     for (const g of goals) {
@@ -103,6 +108,7 @@
         <td class="mono">${it.duree ?? "<span class='muted'>—</span>"}</td>
         <td>${it.success_criteria ?? "<span class='muted'>—</span>"}</td>
         <td>${fmtList(it.materiel || [])}</td>
+        <td>${fmtText(it.facilitation)}</td>
       </tr>
     `).join("");
 
@@ -119,6 +125,7 @@
               <th>Durée de l'activité</th>
               <th>Critères de réussite</th>
               <th>Matériel nécessaire</th>
+              <th>Facilitation</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>

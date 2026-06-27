@@ -66,7 +66,8 @@ const seqKey = seq => {
           duree: data.duree || null,
           method: data.method || null,
           align_ict: Array.isArray(data.align_ict) ? data.align_ict : [],
-          goals: Array.isArray(data.goals) ? data.goals : []
+          goals: Array.isArray(data.goals) ? data.goals : [],
+          facilitation: data.facilitation || null
         };
 
         if (entry.id && entry.title && entry.seq) {
