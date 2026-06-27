@@ -20,6 +20,7 @@ extensions = [
     "tardis_textarea",
     "tardis_qcm",
     "tardis_cards",
+    "tardis_video",
 ]
 
 myst_enable_extensions = [
