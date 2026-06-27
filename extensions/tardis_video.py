@@ -2,10 +2,15 @@
 """
 TARDIS - Sphinx extension: {video} — Vidéo locale
 --------------------------------------------------
-Usage (MyST colon_fence) :
+Usage (MyST colon_fence — accolades obligatoires) :
 
-    :::video demo.mp4
+    :::{video} demo.mp4
     :::
+
+Ou avec la syntaxe backtick :
+
+    ```{video} demo.mp4
+    ```
 
 Le fichier est résolu depuis video/ adjacent au source MD :
     <docdir>/video/demo.mp4
