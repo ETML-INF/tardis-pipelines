@@ -2,6 +2,16 @@
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 import re
+import json
+import html as html_mod
+
+try:
+    from markdown_it import MarkdownIt as _MarkdownIt
+    _md = _MarkdownIt().enable("table")
+except ImportError:
+    _md = None
+
+HOLE_RE = re.compile(r'\[___\]')
 
 # ---------------------------------------------------------------------------
 # Utilitaires
@@ -36,6 +46,9 @@ class export_answers_node(nodes.General, nodes.Element):
     pass
 
 class qcm_answer_node(nodes.General, nodes.Element):
+    pass
+
+class hole_answer_node(nodes.General, nodes.Element):
     pass
 
 # ---------------------------------------------------------------------------
@@ -131,6 +144,41 @@ class QcmAnswerDirective(Directive):
         node["data_id"] = data_id
         node["label"]   = label
         node["items"]   = items
+        return [node]
+
+
+class HoleAnswerDirective(Directive):
+    """
+    Texte lacunaire — les trous sont marqués [___] dans le contenu Markdown.
+    Supporte le texte brut et les tableaux Markdown.
+
+    ```{hole-answer} id-optionnel
+    :label: Complétez le tableau :
+    | Couche | Protocole |
+    |--------|-----------|
+    | 7      | [___]     |
+    | 4      | [___]     |
+    ```
+    """
+    required_arguments = 0
+    optional_arguments = 1
+    has_content = True
+    option_spec = {"label": directives.unchanged}
+
+    def run(self):
+        env = getattr(self.state.document.settings, "env", None)
+        docname = env.docname if env else "page"
+        data_id = self.arguments[0] if self.arguments else ""
+        if not data_id:
+            data_id = slugify(f"{docname}-hole-L{self.lineno}")
+        label = self.options.get("label", "")
+        content = "\n".join(self.content)
+        hole_count = len(HOLE_RE.findall(content))
+        node = hole_answer_node()
+        node["data_id"]    = data_id
+        node["label"]      = label
+        node["content"]    = content
+        node["hole_count"] = hole_count
         return [node]
 
 # ---------------------------------------------------------------------------
@@ -232,6 +280,98 @@ def depart_qcm_answer_latex(self, node):
     pass
 
 # ---------------------------------------------------------------------------
+# Visitors hole_answer
+# ---------------------------------------------------------------------------
+
+def visit_hole_answer_html(self, node: hole_answer_node):
+    data_id    = node["data_id"]
+    label      = node["label"]
+    raw        = node["content"]
+    hole_count = node["hole_count"]
+
+    # Remplace [___] par des placeholders alphanumériques avant le rendu Markdown
+    inputs_html = []
+    def make_placeholder(m):
+        idx = len(inputs_html)
+        inputs_html.append(
+            f'<input type="text" class="hole-input" '
+            f'data-block="{data_id}" data-idx="{idx}" />'
+        )
+        return f"TARDISHOLE{idx:04d}"
+
+    processed = HOLE_RE.sub(make_placeholder, raw)
+    rendered  = _md.render(processed) if _md else f"<p>{html_mod.escape(processed)}</p>"
+
+    for idx, inp in enumerate(inputs_html):
+        rendered = rendered.replace(f"TARDISHOLE{idx:04d}", inp)
+
+    template_attr = html_mod.escape(json.dumps(raw))
+    label_html    = f'<p class="answer-label">{self.encode(label)}</p>' if label else ""
+
+    self.body.append(
+        f'<div class="tardis-hole-answer" data-id="{data_id}" '
+        f'data-holes="{hole_count}" data-template="{template_attr}">'
+        f'{label_html}{rendered}</div>'
+    )
+    raise nodes.SkipNode
+
+def depart_hole_answer_html(self, node):
+    pass
+
+
+def _md_table_to_latex(content, encode_fn):
+    """Convertit un bloc Markdown (texte + tableaux pipe) en LaTeX."""
+    lines   = content.split('\n')
+    result  = []
+    in_table = False
+    col_count = 0
+
+    for line in lines:
+        s = line.strip()
+        if s.startswith('|') and s.endswith('|'):
+            if re.match(r'^\|[\s\-:|]+\|$', s):
+                if in_table:
+                    result.append(r'\hline')
+                continue
+            cells = [c.strip() for c in s.strip('|').split('|')]
+            if not in_table:
+                col_count = len(cells)
+                result.append(r'\begin{tabular}{|' + 'l|' * col_count + '}')
+                result.append(r'\hline')
+                in_table = True
+            latex_cells = [
+                HOLE_RE.sub(r'\\underline{\\hspace{3cm}}', encode_fn(c))
+                for c in cells
+            ]
+            result.append(' & '.join(latex_cells) + r' \\')
+            result.append(r'\hline')
+        else:
+            if in_table:
+                result.append(r'\end{tabular}')
+                result.append('')
+                in_table = False
+            if s:
+                result.append(
+                    r'\noindent ' +
+                    HOLE_RE.sub(r'\\underline{\\hspace{3cm}}', encode_fn(s)) +
+                    r'\par'
+                )
+    if in_table:
+        result.append(r'\end{tabular}')
+    return '\n'.join(result)
+
+
+def visit_hole_answer_latex(self, node: hole_answer_node):
+    label = node.get("label", "")
+    if label:
+        self.body.append(r'\noindent\textbf{' + self.encode(label) + r'}\par' + '\n')
+    self.body.append(_md_table_to_latex(node["content"], self.encode) + '\n\n')
+    raise nodes.SkipNode
+
+def depart_hole_answer_latex(self, node):
+    pass
+
+# ---------------------------------------------------------------------------
 # Setup Sphinx
 # ---------------------------------------------------------------------------
 
@@ -251,7 +391,13 @@ def setup(app):
         html=(visit_qcm_answer_html, depart_qcm_answer_html),
         latex=(visit_qcm_answer_latex, depart_qcm_answer_latex),
     )
+    app.add_node(
+        hole_answer_node,
+        html=(visit_hole_answer_html, depart_hole_answer_html),
+        latex=(visit_hole_answer_latex, depart_hole_answer_latex),
+    )
     app.add_directive("answer", AnswerBlockDirective)
     app.add_directive("export-answers", ExportAnswersDirective)
     app.add_directive("qcm-answer", QcmAnswerDirective)
+    app.add_directive("hole-answer", HoleAnswerDirective)
     return {"parallel_read_safe": True, "parallel_write_safe": True}

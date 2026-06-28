@@ -430,11 +430,46 @@ article pre {
 }
 
 /* ----------------------------------------------------------
-   13. Impression
+   13. Texte lacunaire (hole-answer)
+---------------------------------------------------------- */
+
+.hole-input {
+    border: none;
+    border-bottom: 2px solid var(--color-foreground-primary);
+    background: transparent;
+    padding: 0 4px;
+    font-size: inherit;
+    font-family: inherit;
+    width: 120px;
+    text-align: center;
+    outline: none;
+    color: inherit;
+}
+
+.hole-input:focus {
+    border-bottom-color: var(--color-brand-primary);
+    background: color-mix(in srgb, var(--color-brand-primary) 8%, transparent);
+    border-radius: 3px 3px 0 0;
+}
+
+.tardis-hole-answer table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tardis-hole-answer td,
+.tardis-hole-answer th {
+    border: 1px solid var(--color-background-border);
+    padding: 4px 10px;
+}
+
+/* ----------------------------------------------------------
+   14. Impression
 ---------------------------------------------------------- */
 
 @media print {
     #export-answers { display: none; }
+    .hole-input { border-bottom-color: #999; }
 
     .answer-area {
         border-color: #999;

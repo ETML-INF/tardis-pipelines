@@ -56,6 +56,27 @@
     });
   }
 
+  // --------- hole-answer: autosave ----------
+  function initHoleAnswerAutosave() {
+    $$(".tardis-hole-answer").forEach(block => {
+      const id = block.dataset.id;
+      if (!id) return;
+      const holes = $$(".hole-input", block);
+
+      const saved = localStorage.getItem(KEY_PREFIX + "hole:" + id);
+      if (saved) {
+        try {
+          const values = JSON.parse(saved);
+          holes.forEach((inp, idx) => { if (values[idx] !== undefined) inp.value = values[idx]; });
+        } catch (e) {}
+      }
+
+      block.addEventListener("input", () => {
+        localStorage.setItem(KEY_PREFIX + "hole:" + id, JSON.stringify(holes.map(i => i.value)));
+      });
+    });
+  }
+
   // --------- qcm-answer: autosave ----------
   function initQcmAnswerAutosave() {
     $$(".tardis-qcm-answer").forEach(block => {
@@ -98,11 +119,20 @@
     lines.push(`_Export du ${dateISO}_`);
     lines.push("");
 
-    $$(".answer-block, .tardis-qcm-answer").forEach(block => {
+    $$(".answer-block, .tardis-qcm-answer, .tardis-hole-answer").forEach(block => {
       const label = getBlockLabel(block);
       lines.push(`## ${label}`);
 
-      if (block.classList.contains("tardis-qcm-answer")) {
+      if (block.classList.contains("tardis-hole-answer")) {
+        const template = JSON.parse(block.dataset.template || '""');
+        const holes = $$(".hole-input", block);
+        let idx = 0;
+        const result = template.replace(/\[___\]/g, () => {
+          const val = (holes[idx++]?.value || "").trim();
+          return val ? `[${val}]` : "[___]";
+        });
+        lines.push(result);
+      } else if (block.classList.contains("tardis-qcm-answer")) {
         $$("li", block).forEach(li => {
           const cb = li.querySelector(".tardis-qcm-check");
           const txt = li.querySelector("label").textContent.trim();
@@ -144,6 +174,7 @@
     if (!window.MONACO_ANSWER?.getValue) {
       initTextareaFallbackAutosave();
     }
+    initHoleAnswerAutosave();
     initQcmAnswerAutosave();
     bindExport();
   });
