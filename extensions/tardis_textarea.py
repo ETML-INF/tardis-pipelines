@@ -148,9 +148,10 @@ def visit_answer_html(self, node: answer_node):
     if lang:
         attrs.append(f'data-lang="{lang}"')
 
-    # textarea avec rows={lines} (défaut 6)
+    label_html = f'<p class="answer-label">{self.encode(label)}</p>' if label else ""
     self.body.append(
         f'<div class="answer-block" {" ".join(attrs)}>'
+        f'{label_html}'
         f'<textarea class="answer-area" rows="{int(lines)}"></textarea>'
         f'</div>'
     )
@@ -200,7 +201,9 @@ def visit_qcm_answer_html(self, node: qcm_answer_node):
     if label:
         attrs += f' data-label="{self.encode(label)}"'
 
+    label_html = f'<p class="answer-label">{self.encode(label)}</p>' if label else ""
     self.body.append(f'<div class="tardis-qcm-answer" {attrs}>')
+    self.body.append(label_html)
     self.body.append('<ul class="tardis-qcm-answer-list">')
     for idx, item in enumerate(items):
         txt = self.encode(item)
