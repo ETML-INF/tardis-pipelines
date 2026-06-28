@@ -451,13 +451,12 @@ article pre {
     margin-right: 0.5em;
     vertical-align: middle;
     accent-color: var(--color-brand-primary);
-    background-color: #ffffff;
+    color-scheme: light;
     cursor: pointer;
 }
 
 body[data-theme="dark"] .tardis-qcm-check {
-    background-color: #1e293b;
-    color-scheme: dark;
+    color-scheme: light;
 }
 
 /* ----------------------------------------------------------
