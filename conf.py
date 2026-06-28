@@ -116,7 +116,6 @@ html_css_files = [
     "cards.css",
 ]
 html_js_files = [
-    "customToggle.js",
     "https://unpkg.com/monaco-editor@0.52.0/min/vs/loader.js",
     "monaco-init.js",
     "responses.js",
