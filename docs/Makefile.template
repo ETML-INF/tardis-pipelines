@@ -246,6 +246,7 @@ build-docs: setup venv-create
 	else \
 		printf '%b\n' "$(YELLOW)⚠ Documentation non trouvée$(NC)"; \
 	fi
+	@mv "$(BUILD_DIR)/cours/_static/favicon.ico" "$(BUILD_DIR)/favicon.ico" 2>/dev/null || true
 	@printf '%b\n' "  📂 Sortie: $(BUILD_DIR)/cours/"
 	@printf '%b\n' ""
 
