@@ -35,6 +35,9 @@ class answer_node(nodes.General, nodes.Element):
 class export_answers_node(nodes.General, nodes.Element):
     pass
 
+class qcm_answer_node(nodes.General, nodes.Element):
+    pass
+
 # ---------------------------------------------------------------------------
 # Directives
 # ---------------------------------------------------------------------------
@@ -87,6 +90,49 @@ class ExportAnswersDirective(Directive):
     def run(self):
         return [export_answers_node()]
 
+
+class QcmAnswerDirective(Directive):
+    """
+    QCM exportable sans correction — les coches sont incluses dans l'export.
+
+    Usage (MyST) :
+    ```{qcm-answer} id-optionnel
+    :label: C1. Un switch KVM permet de :
+    - Connecter plusieurs serveurs à un seul clavier, écran et souris
+    - Amplifier le signal réseau entre deux armoires
+    - Alimenter les équipements en cas de coupure électrique
+    - Segmenter le réseau en VLANs
+    ```
+    """
+    required_arguments = 0
+    optional_arguments = 1
+    has_content = True
+    option_spec = {
+        "label": directives.unchanged,
+    }
+
+    def run(self):
+        env = getattr(self.state.document.settings, "env", None)
+        docname = env.docname if env else "page"
+        data_id = self.arguments[0] if self.arguments else ""
+        if not data_id:
+            data_id = slugify(f"{docname}-qcm-L{self.lineno}")
+
+        label = self.options.get("label", "")
+        items = []
+        for line in self.content:
+            line = line.strip()
+            if line.startswith("- "):
+                items.append(line[2:].strip())
+            elif line.startswith("-") and len(line) > 1:
+                items.append(line[1:].strip())
+
+        node = qcm_answer_node()
+        node["data_id"] = data_id
+        node["label"]   = label
+        node["items"]   = items
+        return [node]
+
 # ---------------------------------------------------------------------------
 # Visitors HTML
 # ---------------------------------------------------------------------------
@@ -136,10 +182,50 @@ def depart_answer_latex(self, node):  # SkipNode -> rien
     pass
 
 def visit_export_latex(self, node: export_answers_node):
-    # En PDF, on ne met rien (pas de bouton).
     raise nodes.SkipNode
 
 def depart_export_latex(self, node):
+    pass
+
+# ---------------------------------------------------------------------------
+# Visitors qcm_answer
+# ---------------------------------------------------------------------------
+
+def visit_qcm_answer_html(self, node: qcm_answer_node):
+    data_id = node["data_id"]
+    label   = node["label"]
+    items   = node["items"]
+
+    attrs = f'data-id="{data_id}"'
+    if label:
+        attrs += f' data-label="{self.encode(label)}"'
+
+    self.body.append(f'<div class="tardis-qcm-answer" {attrs}>')
+    self.body.append('<ul class="tardis-qcm-answer-list">')
+    for idx, item in enumerate(items):
+        txt = self.encode(item)
+        self.body.append(
+            f'<li><label>'
+            f'<input type="checkbox" class="tardis-qcm-check" data-idx="{idx}"/> {txt}'
+            f'</label></li>'
+        )
+    self.body.append('</ul></div>')
+    raise nodes.SkipNode
+
+def depart_qcm_answer_html(self, node):
+    pass
+
+def visit_qcm_answer_latex(self, node: qcm_answer_node):
+    label = node.get("label", "")
+    if label:
+        self.body.append(r'\noindent\textbf{%s}\par' % self.encode(label) + '\n')
+    self.body.append(r'\begin{itemize}' + '\n')
+    for item in node["items"]:
+        self.body.append(r'\item $\square$~' + self.encode(item) + '\n')
+    self.body.append(r'\end{itemize}' + '\n\n')
+    raise nodes.SkipNode
+
+def depart_qcm_answer_latex(self, node):
     pass
 
 # ---------------------------------------------------------------------------
@@ -157,6 +243,12 @@ def setup(app):
         html=(visit_export_html, depart_export_html),
         latex=(visit_export_latex, depart_export_latex),
     )
+    app.add_node(
+        qcm_answer_node,
+        html=(visit_qcm_answer_html, depart_qcm_answer_html),
+        latex=(visit_qcm_answer_latex, depart_qcm_answer_latex),
+    )
     app.add_directive("answer", AnswerBlockDirective)
     app.add_directive("export-answers", ExportAnswersDirective)
+    app.add_directive("qcm-answer", QcmAnswerDirective)
     return {"parallel_read_safe": True, "parallel_write_safe": True}

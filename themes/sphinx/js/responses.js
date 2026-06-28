@@ -56,6 +56,29 @@
     });
   }
 
+  // --------- qcm-answer: autosave ----------
+  function initQcmAnswerAutosave() {
+    $$(".tardis-qcm-answer").forEach(block => {
+      const id = block.dataset.id;
+      if (!id) return;
+
+      const saved = localStorage.getItem(KEY_PREFIX + "qcm:" + id);
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          $$(".tardis-qcm-check", block).forEach((cb, idx) => {
+            cb.checked = !!state[idx];
+          });
+        } catch (e) {}
+      }
+
+      block.addEventListener("change", () => {
+        const state = $$(".tardis-qcm-check", block).map(cb => cb.checked);
+        localStorage.setItem(KEY_PREFIX + "qcm:" + id, JSON.stringify(state));
+      });
+    });
+  }
+
   // --------- export ----------
   function getBlockText(block) {
     // 1) Monaco (préféré)
@@ -75,14 +98,22 @@
     lines.push(`_Export du ${dateISO}_`);
     lines.push("");
 
-    $$(".answer-block").forEach(block => {
+    $$(".answer-block, .tardis-qcm-answer").forEach(block => {
       const label = getBlockLabel(block);
-      const txt = getBlockText(block);
-
       lines.push(`## ${label}`);
-      lines.push("```");
-      lines.push((txt || "").trim());
-      lines.push("```");
+
+      if (block.classList.contains("tardis-qcm-answer")) {
+        $$("li", block).forEach(li => {
+          const cb = li.querySelector(".tardis-qcm-check");
+          const txt = li.querySelector("label").textContent.trim();
+          lines.push(`- ${cb?.checked ? "[x]" : "[ ]"} ${txt}`);
+        });
+      } else {
+        const txt = getBlockText(block);
+        lines.push("```");
+        lines.push((txt || "").trim());
+        lines.push("```");
+      }
       lines.push("");
     });
 
@@ -110,10 +141,10 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Si Monaco n’a pas remplacé les textareas, on active l’autosave fallback
     if (!window.MONACO_ANSWER?.getValue) {
       initTextareaFallbackAutosave();
     }
+    initQcmAnswerAutosave();
     bindExport();
   });
 })();
