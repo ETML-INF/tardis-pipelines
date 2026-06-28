@@ -121,7 +121,8 @@ class QcmAnswerDirective(Directive):
     optional_arguments = 1
     has_content = True
     option_spec = {
-        "label": directives.unchanged,
+        "label":  directives.unchanged,
+        "single": directives.flag,
     }
 
     def run(self):
@@ -131,8 +132,9 @@ class QcmAnswerDirective(Directive):
         if not data_id:
             data_id = slugify(f"{docname}-qcm-L{self.lineno}")
 
-        label = self.options.get("label", "")
-        items = []
+        label  = self.options.get("label", "")
+        single = "single" in self.options
+        items  = []
         for line in self.content:
             line = line.strip()
             if line.startswith("- "):
@@ -144,6 +146,7 @@ class QcmAnswerDirective(Directive):
         node["data_id"] = data_id
         node["label"]   = label
         node["items"]   = items
+        node["single"]  = single
         return [node]
 
 
@@ -244,10 +247,14 @@ def visit_qcm_answer_html(self, node: qcm_answer_node):
     data_id = node["data_id"]
     label   = node["label"]
     items   = node["items"]
+    single  = node.get("single", False)
 
+    input_type = "radio" if single else "checkbox"
     attrs = f'data-id="{data_id}"'
     if label:
         attrs += f' data-label="{self.encode(label)}"'
+    if single:
+        attrs += ' data-single="1"'
 
     label_html = f'<p class="answer-label">{self.encode(label)}</p>' if label else ""
     self.body.append(f'<div class="tardis-qcm-answer" {attrs}>')
@@ -257,7 +264,8 @@ def visit_qcm_answer_html(self, node: qcm_answer_node):
         txt = self.encode(item)
         self.body.append(
             f'<li><label>'
-            f'<input type="checkbox" class="tardis-qcm-check" data-idx="{idx}"/> {txt}'
+            f'<input type="{input_type}" class="tardis-qcm-check" '
+            f'name="{data_id}" data-idx="{idx}"/> {txt}'
             f'</label></li>'
         )
     self.body.append('</ul></div>')
@@ -267,12 +275,14 @@ def depart_qcm_answer_html(self, node):
     pass
 
 def visit_qcm_answer_latex(self, node: qcm_answer_node):
-    label = node.get("label", "")
+    label  = node.get("label", "")
+    single = node.get("single", False)
+    marker = r'$\bigcirc$' if single else r'$\square$'
     if label:
         self.body.append(r'\noindent\textbf{%s}\par' % self.encode(label) + '\n')
     self.body.append(r'\begin{itemize}' + '\n')
     for item in node["items"]:
-        self.body.append(r'\item $\square$~' + self.encode(item) + '\n')
+        self.body.append(r'\item ' + marker + r'~' + self.encode(item) + '\n')
     self.body.append(r'\end{itemize}' + '\n\n')
     raise nodes.SkipNode
 

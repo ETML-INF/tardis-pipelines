@@ -80,21 +80,25 @@
   // --------- qcm-answer: autosave ----------
   function initQcmAnswerAutosave() {
     $$(".tardis-qcm-answer").forEach(block => {
-      const id = block.dataset.id;
+      const id     = block.dataset.id;
+      const single = block.dataset.single === "1";
       if (!id) return;
 
       const saved = localStorage.getItem(KEY_PREFIX + "qcm:" + id);
       if (saved) {
         try {
           const state = JSON.parse(saved);
-          $$(".tardis-qcm-check", block).forEach((cb, idx) => {
-            cb.checked = !!state[idx];
+          $$(".tardis-qcm-check", block).forEach((inp, idx) => {
+            inp.checked = single ? state === idx : !!state[idx];
           });
         } catch (e) {}
       }
 
       block.addEventListener("change", () => {
-        const state = $$(".tardis-qcm-check", block).map(cb => cb.checked);
+        const inputs = $$(".tardis-qcm-check", block);
+        const state  = single
+          ? inputs.findIndex(i => i.checked)
+          : inputs.map(i => i.checked);
         localStorage.setItem(KEY_PREFIX + "qcm:" + id, JSON.stringify(state));
       });
     });
