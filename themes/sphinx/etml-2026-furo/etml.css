@@ -430,7 +430,38 @@ article pre {
 }
 
 /* ----------------------------------------------------------
-   13. Texte lacunaire (hole-answer)
+   13. QCM exportable (qcm-answer)
+---------------------------------------------------------- */
+
+.tardis-qcm-answer-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.tardis-qcm-answer-list li {
+    margin: 0.35rem 0;
+}
+
+.tardis-qcm-check {
+    appearance: auto;
+    -webkit-appearance: auto;
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 0.5em;
+    vertical-align: middle;
+    accent-color: var(--color-brand-primary);
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+body[data-theme="dark"] .tardis-qcm-check {
+    background-color: #1e293b;
+    color-scheme: dark;
+}
+
+/* ----------------------------------------------------------
+   14. Texte lacunaire (hole-answer)
 ---------------------------------------------------------- */
 
 .hole-input {
@@ -464,7 +495,7 @@ article pre {
 }
 
 /* ----------------------------------------------------------
-   14. Impression
+   15. Impression
 ---------------------------------------------------------- */
 
 @media print {
