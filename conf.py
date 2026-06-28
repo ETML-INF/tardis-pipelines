@@ -105,7 +105,7 @@ elif ict_module:
     html_baseurl = f"/moduleICT/{ict_module}/cours/"
 else:
     html_baseurl = "/cours/"
-html_favicon = 'favicon.ico'
+html_favicon = os.path.join("themes", "sphinx", SPHINX_THEME, "favicon.ico")
 html_static_path = [
     os.path.join("themes", "sphinx", SPHINX_THEME),
     os.path.join("themes", "sphinx", "js"),
