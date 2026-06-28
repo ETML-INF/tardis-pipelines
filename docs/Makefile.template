@@ -20,6 +20,7 @@ MANIFEST_DIR := b-UnitesEnseignement/_build/manifests
 
 # Configuration depuis .env
 ICT_MODULE := $(shell [ -f .env ] && grep '^ICT_MODULE=' .env | cut -d= -f2 || printf '%b\n' "346")
+GOATCOUNTER_URL := $(shell [ -f .env ] && grep '^GOATCOUNTER_URL=' .env | cut -d= -f2 || echo "")
 BRANCH_NAME := $(shell git branch --show-current 2>/dev/null || printf '%b\n' "main")
 BRANCH_PREFIX := $(shell if [ "$(BRANCH_NAME)" = "main" ] || [ "$(BRANCH_NAME)" = "master" ]; then printf '%b\n' ""; else printf '%b\n' "/$(BRANCH_NAME)"; fi)
 
@@ -234,7 +235,7 @@ build-docs: setup venv-create
 	@printf '%b\n' "$(BLUE)📚 Compilation de la documentation Sphinx...$(NC)"
 	@printf '%b\n' "  Module ICT: $(ICT_MODULE)"
 	@mkdir -p "$(BUILD_DIR)"
-	ICT_MODULE=$(ICT_MODULE) $(PYTHON) -m sphinx \
+	ICT_MODULE=$(ICT_MODULE) GOATCOUNTER_URL=$(GOATCOUNTER_URL) $(PYTHON) -m sphinx \
 		-c tardis-pipelines \
 		-b html \
 		"$(DOCS_DIR)" \
@@ -259,7 +260,7 @@ build-docs-pdf: setup venv-create
 	fi
 	@printf '%b\n' "  Module ICT: $(ICT_MODULE)"
 	@mkdir -p "$(BUILD_DIR)/cours-pdf" "$(PDF_DIR)/support_de_cours"
-	ICT_MODULE=$(ICT_MODULE) $(PYTHON) -m sphinx \
+	ICT_MODULE=$(ICT_MODULE) GOATCOUNTER_URL=$(GOATCOUNTER_URL) $(PYTHON) -m sphinx \
 		-M latexpdf \
 		"$(DOCS_DIR)" \
 		"$(BUILD_DIR)/cours-pdf" \
