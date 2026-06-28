@@ -20,9 +20,12 @@ def on_builder_inited(app):
     if app.builder.format != 'html':
         return
 
-    gc_url = os.getenv('GOATCOUNTER_URL', '').rstrip('/')
+    gc_url = os.getenv('GOATCOUNTER_URL', '').strip().rstrip('/')
     if not gc_url:
         return
+
+    if not gc_url.startswith(('http://', 'https://')):
+        gc_url = 'https://' + gc_url
 
     # Génère : <script async src="{gc_url}/count.js"
     #                   data-goatcounter="{gc_url}/count"></script>
