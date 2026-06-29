@@ -6,7 +6,7 @@ import YAML from 'yaml';
 
 const SRC_DIR = process.env.SRC_DIR || '../b-UnitesEnseignement';
 const OUT_DIR = process.env.OUT_DIR || '../_build_local/tardis/manifests';
-const ALLOWED_TYPES = new Set(['accroche', 'exo', 'activity', 'tp', 'slides', 'reading']);
+const ALLOWED_TYPES = new Set(['accroche', 'exo', 'activity', 'tp', 'slides', 'lecture']);
 
 const stripBOM = s => s.replace(/^﻿/, '');
 const normalizeQuotes = s => s.replace(/[""]/g, '"').replace(/['']/g, "'");
