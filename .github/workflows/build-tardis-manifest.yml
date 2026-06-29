@@ -76,7 +76,7 @@ jobs:
 
           const SRC_DIR = process.env.SRC_DIR || '.';
           const OUT_DIR = process.env.OUT_DIR || '_build/manifests';
-          const ALLOWED_TYPES = new Set(['accroche','exo','activity','tp','slides','reading']);
+          const ALLOWED_TYPES = new Set(['accroche','exo','activity','tp','slides','lecture']);
 
           const stripBOM = s => s.replace(/^\uFEFF/, '');
           const normalizeQuotes = s => s.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
