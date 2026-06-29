@@ -11,7 +11,7 @@ try:
 except ImportError:
     _md = None
 
-HOLE_RE = re.compile(r'\[___\]')
+HOLE_RE = re.compile(r'\[(_+)\]')
 
 # ---------------------------------------------------------------------------
 # Utilitaires
@@ -303,8 +303,15 @@ def visit_hole_answer_html(self, node: hole_answer_node):
     inputs_html = []
     def make_placeholder(m):
         idx = len(inputs_html)
+        count = len(m.group(1))
+        if count >= 8:
+            cls = "hole-input hole-input--lg"
+        elif count >= 5:
+            cls = "hole-input hole-input--md"
+        else:
+            cls = "hole-input"
         inputs_html.append(
-            f'<input type="text" class="hole-input" '
+            f'<input type="text" class="{cls}" '
             f'data-block="{data_id}" data-idx="{idx}" />'
         )
         return f"TARDISHOLE{idx:04d}"
