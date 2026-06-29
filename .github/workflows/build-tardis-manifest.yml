@@ -190,6 +190,7 @@ jobs:
                 success_criteria: data.success_criteria ?? null,
                 duree: data.duree ?? null,
                 materiel: Array.isArray(data.materiel) ? data.materiel : [],
+                facilitation: data.facilitation ?? null,
               };
 
               if (entry.id && entry.title && entry.seq) {
