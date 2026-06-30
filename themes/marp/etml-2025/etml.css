@@ -587,7 +587,7 @@ section.video {
   gap: 0.5rem;
 }
 section.video header, section.video footer, section.video::after {
-  opacity: 0.35;
+  display: none !important;
 }
 section.video h2 {
   font-size: 1.05rem;
