@@ -577,6 +577,37 @@ section.activity ol{
 section.activity ul, section.activity ol{ padding-left:1rem; }
 section.activity li{ margin-bottom:.4rem; }
 
+/* Video — slide dédiée à l'intégration d'une vidéo (YouTube nocookie ou locale) */
+section.video {
+  background: #0d1117;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0.5rem 1.2rem 0.7rem;
+  gap: 0.5rem;
+}
+section.video header, section.video footer, section.video::after {
+  opacity: 0.35;
+}
+section.video h2 {
+  font-size: 1.05rem;
+  color: #9ab3cc;
+  margin: 0;
+  padding: 0 0 0 0.65rem;
+  border-left: 3px solid var(--brand-accent);
+  font-weight: 600;
+  text-shadow: none;
+  flex-shrink: 0;
+}
+section.video iframe,
+section.video video {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  border: none;
+  border-radius: 6px;
+}
+
 /* ── Tableaux — Accent orange ───────────────────────────────────────────── */
 section table {
   width: 92%;

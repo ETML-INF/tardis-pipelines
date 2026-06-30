@@ -38,6 +38,7 @@ align_ict: ["ICT-117-OO1"]
 | `schema` | Image pleine slide | Image centrée à 92% de la largeur |
 | `activity` | Consigne d'activité | Fond blanc, texte compact, `h2` en majuscules |
 | `quote` | Citation | Centré, italique |
+| `video` | Vidéo YouTube ou locale | Fond sombre, titre discret, iframe/video plein slide |
 
 **Utilisation :**
 
@@ -104,6 +105,35 @@ Toujours utiliser `![bg opacity:X]` pour mettre un mascot **en fond sous le text
 ```
 
 Valeurs d'opacité recommandées : `0.10`–`0.15` selon la lisibilité du texte sur le fond.
+
+### Intégrer une vidéo YouTube (classe `video`)
+
+Utiliser `youtube-nocookie.com` pour éviter les cookies de tracking — obligatoire en contexte scolaire.
+
+```markdown
+<!-- _class: video -->
+
+## Encapsulation OSI — 4 min
+
+<iframe
+  src="https://www.youtube-nocookie.com/embed/3kfrkuASMz4"
+  frameborder="0" allowfullscreen></iframe>
+```
+
+L'ID vidéo (`3kfrkuASMz4`) se trouve dans l'URL YouTube : `youtube.com/watch?v=`**`3kfrkuASMz4`**  
+Ou via **Partager → Intégrer** : l'URL contient `embed/IDENTIFIANT`.
+
+> Ne pas mettre de `width`/`height` sur l'iframe : le CSS les gère (flex, pleine hauteur).
+
+Pour une vidéo locale (fichier `.mp4` dans le repo) :
+
+```markdown
+<!-- _class: video -->
+
+## Démonstration configuration
+
+<video src="./demo.mp4" controls></video>
+```
 
 ### Ratio recommandé pour les images de fond
 
