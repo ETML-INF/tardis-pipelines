@@ -15,18 +15,53 @@ Ou avec la syntaxe backtick :
 Le fichier est résolu depuis html/ adjacent au source MD :
     <docdir>/html/cidr-explorer.html
 
+Paramétrage via options `data-*` (transmises telles quelles en attributs
+data-* sur un conteneur `<div data-sim>` qui enveloppe le fichier injecté —
+le script embarqué peut les lire via `document.querySelector('[data-sim]').dataset`) :
+
+    :::{html} network-sim.html
+    :data-router-lan-ip: 192.168.10.1
+    :data-clients: 4
+    :data-client1-ip: 192.168.10.10
+    :::
+
 Build HTML : lit et injecte le contenu brut du fichier dans la page.
 Build PDF/LaTeX : note statique italique [Vue interactive : cidr-explorer.html]
 Build Marp : non traité par Sphinx, le shortcode est ignoré nativement.
 """
 
 import os
+import re
 import logging
+from html import escape as html_escape
 
 from docutils import nodes
+from docutils.parsers.rst import directives
 from sphinx.util.docutils import SphinxDirective
 
 logger = logging.getLogger(__name__)
+
+# Attributs acceptés : uniquement data-* (évite l'injection d'attributs
+# arbitraires comme onclick/onmouseover via le champ MyST)
+_DATA_ATTR_RE = re.compile(r'^data-[a-z0-9-]+$')
+
+
+class _DataOptions(dict):
+    """option_spec permissif : accepte n'importe quelle option data-*,
+    en nombre variable (ex. data-client1-ip, data-client2-ip, ...).
+
+    Doit rester "truthy" (non vide) : MyST ne cherche un bloc d'options
+    que si `bool(directive_class.option_spec)` est vrai.
+    """
+
+    def __bool__(self):
+        return True
+
+    def __contains__(self, key):
+        return True
+
+    def __getitem__(self, key):
+        return directives.unchanged
 
 
 # ---------------------------------------------------------------------------
@@ -42,12 +77,17 @@ class html_include_node(nodes.General, nodes.Element):
 # ---------------------------------------------------------------------------
 
 class HtmlIncludeDirective(SphinxDirective):
-    """Directive {html} — un seul argument obligatoire : le nom du fichier."""
+    """Directive {html} — un seul argument obligatoire : le nom du fichier.
+
+    Options facultatives `data-*` transmises en attributs data-* du
+    conteneur enveloppant le contenu injecté.
+    """
 
     required_arguments = 1
     optional_arguments = 0
     final_argument_whitespace = False
     has_content = False
+    option_spec = _DataOptions()
 
     def run(self):
         filename = self.arguments[0].strip()
@@ -72,9 +112,20 @@ class HtmlIncludeDirective(SphinxDirective):
             logger.warning("tardis_html: impossible de lire %s : %s", html_path, exc)
             return []
 
+        data_attrs = {}
+        for key, value in self.options.items():
+            if not _DATA_ATTR_RE.match(key):
+                logger.warning(
+                    "tardis_html: option ignorée (doit être 'data-*' en minuscules) : %s",
+                    key,
+                )
+                continue
+            data_attrs[key] = value
+
         node = html_include_node()
         node['filename'] = filename
         node['content'] = content
+        node['data_attrs'] = data_attrs
 
         # Signale la dépendance à Sphinx pour les rebuilds incrémentiels
         env.note_dependency(html_path)
@@ -87,7 +138,17 @@ class HtmlIncludeDirective(SphinxDirective):
 # ---------------------------------------------------------------------------
 
 def visit_html_include_html(self, node: html_include_node):
-    self.body.append(node['content'])
+    data_attrs = node.get('data_attrs') or {}
+    if data_attrs:
+        attrs = ' '.join(
+            '{}="{}"'.format(key, html_escape(value, quote=True))
+            for key, value in data_attrs.items()
+        )
+        self.body.append('<div data-sim {}>'.format(attrs))
+        self.body.append(node['content'])
+        self.body.append('</div>')
+    else:
+        self.body.append(node['content'])
     raise nodes.SkipNode
 
 
